@@ -1,2 +1,2 @@
 # FausEngine
-Graphics engine | Motor Grafico en su versión alfa
+Graphics Engine | Motor Grafico en su versión alfa
