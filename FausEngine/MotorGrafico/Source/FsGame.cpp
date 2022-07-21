@@ -191,7 +191,7 @@ glm::mat4 CalcularMatrizVista() {
 
 
 Shader* FsGame::GetShader() {
-    return &lightingShader;
+    return &MainShader;
 }
 
 void FsGame::Run(std::vector<FsObject*> _objetos) {
@@ -199,8 +199,21 @@ void FsGame::Run(std::vector<FsObject*> _objetos) {
     ValidarPathEngine();
     ValidarVentana();
     ValidarCamara();
-   
-    lightingShader.Load("../../../../MotorGrafico/Shaders/FsVertexShader.glsl", "../../../../MotorGrafico/Shaders/FsFragmentShader.glsl");
+
+    const char vertex[] = "/Shaders/FsVertexShader.glsl";
+    const char fragment[] = "/Shaders/FsFragmentShader.glsl";
+    const int sizeVertexMainShaderPath = sizeof(vertex) / sizeof(*vertex);
+    char* vertexMainShaderComplete = new char[sizeVertexMainShaderPath + pathFausEngine.length()];
+    strcpy(vertexMainShaderComplete, pathFausEngine.c_str());
+    strcat(vertexMainShaderComplete, vertex);
+
+    const int sizeFragmentMainShaderPath = sizeof(fragment) / sizeof(*fragment);
+    char* fragmentMainShaderComplete = new char[sizeFragmentMainShaderPath + pathFausEngine.length()];
+    strcpy(fragmentMainShaderComplete, pathFausEngine.c_str());
+    strcat(fragmentMainShaderComplete, fragment);
+
+
+    MainShader.Load(vertexMainShaderComplete, fragmentMainShaderComplete);
 
     for each (auto var in _objetos)
     {
@@ -221,13 +234,13 @@ void FsGame::Run(std::vector<FsObject*> _objetos) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
 
-        lightingShader.Use();
-        lightingShader.SetUniformMatrix4fv("model", glm::mat4(1.0));  // do not need to translate the models so just send the identity matrix
-        lightingShader.SetUniformMatrix4fv("view", CalcularMatrizVista());
-        lightingShader.SetUniformMatrix4fv("projection", projection);
-        lightingShader.SetUniform3f("eyePos", camera->GetCameraPosition());
-        lightingShader.SetUniform1i("pointLightCounter", 3);
-        lightingShader.SetUniform1i("spotLightCounter", 3);
+        MainShader.Use();
+        MainShader.SetUniformMatrix4fv("model", glm::mat4(1.0));  // do not need to translate the models so just send the identity matrix
+        MainShader.SetUniformMatrix4fv("view", CalcularMatrizVista());
+        MainShader.SetUniformMatrix4fv("projection", projection);
+        MainShader.SetUniform3f("eyePos", camera->GetCameraPosition());
+        MainShader.SetUniform1i("pointLightCounter", 3);
+        MainShader.SetUniform1i("spotLightCounter", 3);
 
 
         for each (auto var in _objetos)

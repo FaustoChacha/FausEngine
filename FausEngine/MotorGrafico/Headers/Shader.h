@@ -17,7 +17,7 @@ namespace FausEngine {
 		Shader();
 		~Shader();
 
-		bool Load(const char* vsFilename, const char* fsFilename);
+		bool Load(const char* vsFilename,const char* fsFilename);
 		void Use();
 
 		unsigned int GetShaderId() const;

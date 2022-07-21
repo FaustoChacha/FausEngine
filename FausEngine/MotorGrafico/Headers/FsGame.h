@@ -41,7 +41,7 @@ namespace FausEngine {
 		float GetMouseY();
 
 	private:
-		Shader lightingShader;
+		Shader MainShader;
 
 	};
 

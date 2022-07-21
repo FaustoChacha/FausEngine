@@ -21,7 +21,7 @@ Shader::~Shader()
 }
 
 
-bool Shader::Load(const char* vertexPath, const char* fragmentPath)
+bool Shader::Load(const char* vertexPath,  const char* fragmentPath)
 {
 	GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
