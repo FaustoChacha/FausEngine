@@ -1,0 +1,6 @@
+C:/Users/Fausto/Documents/Visual Studio 2019/Projects/FausEngine/MotorGrafico/out/build/x64-Debug/CMakeFiles/list_install_components.dir
+C:/Users/Fausto/Documents/Visual Studio 2019/Projects/FausEngine/MotorGrafico/out/build/x64-Debug/CMakeFiles/FausEngine.dir
+C:/Users/Fausto/Documents/Visual Studio 2019/Projects/FausEngine/MotorGrafico/out/build/x64-Debug/CMakeFiles/install/local.dir
+C:/Users/Fausto/Documents/Visual Studio 2019/Projects/FausEngine/MotorGrafico/out/build/x64-Debug/CMakeFiles/install.dir
+C:/Users/Fausto/Documents/Visual Studio 2019/Projects/FausEngine/MotorGrafico/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/Fausto/Documents/Visual Studio 2019/Projects/FausEngine/MotorGrafico/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
