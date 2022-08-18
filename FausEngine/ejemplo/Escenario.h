@@ -6,6 +6,7 @@
 #include"../MotorGrafico/Headers/FsDirectionalLight.h"
 #include"../MotorGrafico/Headers/FsPointLight.h"
 #include"../MotorGrafico/Headers/FsSpotLight.h"
+#include"../MotorGrafico/Headers/FsSkybox.h"
 
 #include<btBulletDynamicsCommon.h>//BT.........
 
@@ -29,15 +30,15 @@ public:
 
 private:
 	UserGame* gamereference;
-	std::string pathEngine = "../../../../MotorGrafico/";
-	std::string PathGame = "../../../../ejemplo/";
 	
 	FsMesh mNave, mCaja, mPiso;
 	FsMesh esferaLuz1, esferaLuz2, esferaLuz3, conoLuz1, conoLuz2, conoLuz3, cuboX, cuboY, cuboZ;
 	FsMesh player;
+
 	FsDireciontalLight luzDireccional;
 	FsPointLight pointLight[4];
 	FsSpotLight spotlight[4];
+	//FsSkybox sky;
 
 };
 

@@ -1,4 +1,7 @@
 #include"Escenario.h"
+//#include<iostream>
+//#include<filesystem>
+//namespace fs = std::filesystem;
 
 void CamaraFPS(float xMouseOffset, float yMouseOffset, FsCamera* cam, float dt, float t) {
 	float velocidad = 0.2f;
@@ -134,27 +137,27 @@ void Escenario4::Begin() {
 
 	//==============================MALLAS======================================
 	//piso
-	mPiso= FsMesh(PathGame+"/Models/plane.obj");
+	mPiso= FsMesh("Models/plane.obj");
 	mPiso.LoadMesh();
-	mPiso.material.LoadTexture(PathGame+"/Textures/Piso/PisoArena.png");
+	mPiso.material.LoadTexture("Textures/PisoArena.png");
 	mPiso.meshTransform = FsTransform({ 0, -0.5f, 0 }, { 0,0,0 }, { 10,1,10 });
 	mPiso.material.ambient = { 0.7f, 0.7f, 0.7f };
 	mPiso.material.specular = { 0.01f, 0.01f, 0.01f };
 	mPiso.material.shineness = 1;
 
 	//Nave
-	mNave = FsMesh(PathGame + "/Models/nave/nave.obj");
+	//mNave = FsMesh("Models/nave.obj");
 	//mNave.LoadMesh();
 	//mNave.material.LoadTexture(PathGame + "/Models/nave/nave.jpg");
-	mNave.meshTransform = { {-15.0f, 0.0f, 0.0f}, {0,0,0},{0.5f,0.5f,0.5f} };
+	//mNave.meshTransform = { {-15.0f, 0.0f, 0.0f}, {0,0,0},{0.5f,0.5f,0.5f} };
 	//mNave.material.ambient = { 1.1f, 1.1f, 1.1f };
 	//mNave.material.specular = { 1.0f, 1.1f, 1.1f };
 	//mNave.material.shineness = 500.0f;
 
 	//caja
-	mCaja = FsMesh(PathGame+"/Models/caja.obj");
+	mCaja = FsMesh("Models/caja.obj");
 	mCaja.LoadMesh();
-	mCaja.material.LoadTexture(PathGame+"/Textures/cajaTex.jpg");
+	mCaja.material.LoadTexture("Textures/cajaTex.jpg");
 	mCaja.meshTransform = { {15.0f, 0.0f, 0.0f}, {0,0,0},{0.5f,0.5f,0.5f } };
 	mCaja.material.ambient = { 0.1f, 0.1f, 0.1f };
 	mCaja.material.specular = { 0.1f, 0.1f, 0.1f };
@@ -162,7 +165,7 @@ void Escenario4::Begin() {
 
 	//======================MOVIMIENTO===========================
 	
-	cuboX = FsMesh(PathGame + "/Models/fCubo.obj");
+	cuboX = FsMesh("Models/fCubo.obj");
 	cuboX.LoadMesh();
 	cuboX.material.type = TypeMaterial::Unlit;
 	cuboX.material.color = {1,0,0};
@@ -176,7 +179,7 @@ void Escenario4::Begin() {
 	cuboZ.material.color = { 0,0,1 };
 	cuboZ.meshTransform = { {0, 0, 0},{0,0,0},{0.05f,0.05f,40} };
 
-	player= FsMesh(PathGame + "/Models/sphere.obj");
+	player= FsMesh("Models/sphere.obj");
 	player.LoadMesh();
 	player.material.type = TypeMaterial::Unlit;
 	player.material.color = {0.75f,0.1f,0.95f};
@@ -184,7 +187,7 @@ void Escenario4::Begin() {
 
 	//==================LUCES========================
 	if (true) {
-		esferaLuz1 = FsMesh(PathGame + "/Models/sphere.obj");
+		esferaLuz1 = FsMesh("Models/sphere.obj");
 		esferaLuz1.LoadMesh();
 		esferaLuz1.material.type = TypeMaterial::Unlit;
 		esferaLuz1.material.color = { 0.8f,0.8f,0.8f };
@@ -199,7 +202,7 @@ void Escenario4::Begin() {
 		esferaLuz3.material.color = { 0,0,1 };
 		esferaLuz3.meshTransform.position = { 0, 1, 5 };
 
-		conoLuz1 = FsMesh(PathGame + "/Models/Cono.obj");
+		conoLuz1 = FsMesh("Models/Cono.obj");
 		conoLuz1.LoadMesh();
 		conoLuz1.material.type = TypeMaterial::Unlit;
 		conoLuz1.meshTransform.position = { 0, 3, 0 };
@@ -254,6 +257,19 @@ void Escenario4::Begin() {
 		spotlight[2].Load();
 
 	}
+
+	//std::vector<std::string> caras = {
+	//"Textures/GalaxyRt.png",
+	//"Textures/GalaxyLf.png",
+	//"Textures/GalaxyUp.png",
+	//"Textures/GalaxyDn.png",
+	//"Textures/GalaxyBk.png",
+	//"Textures/GalaxyFt.png"
+	//};
+
+	//sky = FsSkybox(caras);
+	//sky.Load();
+	//gamereference->SetSkybox(sky);
 
 	
 }

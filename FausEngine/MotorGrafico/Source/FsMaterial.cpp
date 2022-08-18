@@ -1,6 +1,7 @@
 #include"../Headers/FsMaterial.h"
 #include"../Headers/FsGame.h"
 
+#define STB_IMAGE_IMPLEMENTATION
 #include "../Headers/stb_image.h"
 
 #include<GL/glew.h>

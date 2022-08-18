@@ -5,6 +5,7 @@
 #include"FsObject.h"
 #include"FsCamera.h"
 #include"FsShader.h"
+#include"FsSkybox.h"
 
 #include <string>
 #include<iostream>
@@ -22,6 +23,7 @@ namespace FausEngine {
 		void Run(std::vector<FsObject*>);
 
 		void SetCamera(FsCamera&);
+		void SetSkybox(FsSkybox&);
 		template<typename light> void LoadLight(light*);
 
 		static FsGame* GetInstance();

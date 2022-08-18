@@ -21,8 +21,11 @@ add_executable (FausExe
 	"ejemplo/Escenario.cpp"
 )
 
-target_link_libraries(FausExe FausEngine) #${CONAN_LIBS}
 
+
+target_link_libraries(FausExe FausEngine) #${CONAN_LIBS
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4251")
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17) 
 
 #[[

@@ -23,7 +23,9 @@ static FsGame* game;
 Window mainWindow;
 GLsizei width, height;
 FsCamera* camera;
+FsSkybox* skybox;
 FsShader MainShader;
+FsShader SkyboxShader;
 
 FsDireciontalLight* directionalLight;
 std::vector<FsPointLight*> pointlights;
@@ -32,8 +34,217 @@ std::vector<FsSpotLight*> spotLights;
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
 
+char* EmitirShader(int);
+
+
+
 //namespace fs = std::filesystem;
 
+char* EmitirShader(int n) {
+    //vertex MainShader
+    if (n == 0) {
+        char* vertexShader = "#version 330 core \n\
+        \n\
+        //orden en la inicializacion de buffers! (Mesh.h)\n\
+        layout(location = 0) in vec3 position;\n\
+        layout(location = 1) in vec3 normal;\n\
+        layout(location = 2) in vec2 texture;\n\
+        \n\
+        uniform mat4 model;\n\
+        uniform mat4 view;\n\
+        uniform mat4 projection;\n\
+        \n\
+        out vec3 FragPos;\n\
+        out vec3 Normal;\n\
+        out vec2 TexCoord;\n\
+        \n\
+        void main()\n\
+        {\n\
+            gl_Position = projection * view * model * vec4(position, 1.0f);\n\
+            Normal = mat3(transpose(inverse(model))) * normal;\n\
+            TexCoord = texture;\n\
+        \n\
+            FragPos = vec3(model * vec4(position, 1.0f));\n\
+        }";
+
+        return vertexShader;
+    }
+    //fragment Main sahder
+    if (n == 1) {
+        char* fragmentShader = "#version 330 core \n\#define MAX_POINT_LIGHTS 50\n\#define MAX_SPOT_LIGHTS 50\n\
+        in vec2 TexCoord;\n\
+        in vec3 FragPos;\n\
+        in vec3 Normal;\n\
+        \n\
+        out vec4 fragColor;\n\
+        \n\
+        struct Light {\n\
+	        vec3 ambient;\n\
+	        vec3 diffuse;\n\
+	        vec3 specular;\n\
+        };\n\
+        struct DirectionalLight\n\
+        {\n\
+	        Light base;\n\
+	        vec3 direction;\n\
+        };\n\
+        struct PointLight\n\
+        {\n\
+	        Light base;\n\
+	        vec3 position;\n\
+	        float constant;\n\
+	        float linear;\n\
+	        float exponent;\n\
+        };\n\
+        struct SpotLight\n\
+        {\n\
+	        Light base;\n\
+	        vec3 position;\n\
+	        vec3 direction;\n\
+	        float cosInnerCone;\n\
+	        float cosOuterCone;\n\
+	        float constant;\n\
+	        float linear;\n\
+	        float exponent;\n\
+        };\n\
+        struct Material\n\
+        {\n\
+	        vec3 ambient;\n\
+	        vec3 specular;\n\
+	        float shininess;\n\
+	        sampler2D texture;\n\
+        };\n\
+        uniform DirectionalLight directionalLight;\n\
+        uniform int pointLightCounter;\n\
+        uniform PointLight pointLights[MAX_POINT_LIGHTS];\n\
+        uniform int spotLightCounter;\n\
+        uniform SpotLight spotLights[MAX_SPOT_LIGHTS];\n\
+        uniform Material material;\n\
+        uniform vec3 eyePos;\n\
+        uniform bool lit;\n\
+        uniform vec3 color;\n\
+        uniform bool useTexture;\n\
+        //=====================Directional Light Calculation==========================\n\
+        vec3 calcDirectionalLight(DirectionalLight light, vec3 normal, vec3 eyePos)\n\
+        {\n\
+	        vec3 lightDir = normalize(-light.direction);  // direccion desde el fragment a la luz\n\
+	        // Diffuse \n\
+	        float Normal_Dot_Light = max(dot(normal, lightDir), 0.0);\n\
+	        vec3 diffuse = light.base.diffuse * Normal_Dot_Light * vec3(texture(material.texture, TexCoord));\n\
+	        // Specular\n\
+	        vec3 Dir_Eye_to_light = normalize(lightDir + eyePos);\n\
+	        float Normal_dot_dirEL = max(dot(normal, Dir_Eye_to_light), 0.0f);\n\
+	        vec3 specular = light.base.specular * material.specular * pow(Normal_dot_dirEL, material.shininess);\n\
+	        return (diffuse + specular);\n\
+        }\n\
+        //=====================Point Light Calculation==========================\n\
+        vec3 calcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 eyePos)\n\
+        {\n\
+	        vec3 lightDir = normalize(light.position - fragPos);\n\
+	        // Diffuse \n\
+	        float Normal_Dot_Light = max(dot(normal, lightDir), 0.0);\n\
+	        vec3 diffuse = light.base.diffuse * Normal_Dot_Light * vec3(texture(material.texture, TexCoord));\n\
+	        // Specular \n\
+	        vec3 Dir_Eye_to_light = normalize(lightDir + eyePos);\n\
+	        float Normal_dot_dirEL = max(dot(normal, Dir_Eye_to_light), 0.0f); \n\
+	        vec3 specular = light.base.specular * material.specular * pow(Normal_dot_dirEL, material.shininess);\n\
+	        // Attenuation\n\
+	        float d = length(light.position - FragPos);\n\
+	        float attenuation = 1.0f / (light.constant + light.linear * d + light.exponent * (d * d));\n\
+	        diffuse *= attenuation;\n\
+	        specular *= attenuation;\n\
+	        return (diffuse + specular);\n\
+        }\n\
+        //=====================Spot Light Calculation==========================\n\
+        vec3 calcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 eyePos)\n\
+        {\n\
+	        vec3 lightDir = normalize(light.position - fragPos);\n\
+	        vec3 spotDir = normalize(light.direction);\n\
+	        float cosDir = dot(-lightDir, spotDir);\n\
+	        //float spotIntensity = smoothstep(light.cosOuterCone, light.cosInnerCone, cosDir);\n\
+	        float spotIntensity = smoothstep(0.93f, 0.96f, cosDir);\n\
+	        // Diffuse \n\
+	        float Normal_Dot_Light = max(dot(normal, lightDir), 0.0);\n\
+	        vec3 diffuse = light.base.diffuse * Normal_Dot_Light * vec3(texture(material.texture, TexCoord));\n\
+	        // Specular\n\
+	        vec3 Dir_Eye_to_light = normalize(lightDir + eyePos);\n\
+	        float Normal_dot_dirEL = max(dot(normal, Dir_Eye_to_light), 0.0f);\n\
+	        vec3 specular = light.base.specular * material.specular * pow(Normal_dot_dirEL, material.shininess);\n\
+	        // Attenuation 1 / c + l * d + exp * d2\n\
+	        float d = length(light.position - FragPos);\n\
+	        float attenuation = 1.0f / (light.constant + light.linear * d + light.exponent * (d * d));\n\
+	        diffuse *= attenuation * spotIntensity;\n\
+	        specular *= attenuation * spotIntensity;\n\
+	        return (diffuse + specular);\n\
+        }\n\
+        //================================MAIN===============================\n\
+        void main()\n\
+        {\n\
+	        if (lit)\n\
+	        {\n\
+		        vec3 normal = normalize(Normal);\n\
+		        vec3 viewDir = normalize(eyePos - FragPos);\n\
+		        // Ambient \n\
+		        vec3 ambient = vec3(0.0f);\n\
+		        for (int i = 0; i < spotLightCounter; i++)\n\
+			        ambient = spotLights[i].base.ambient * material.ambient * vec3(texture(material.texture, TexCoord)) * directionalLight.base.ambient;\n\
+		        vec3 outColor = vec3(0.0f);\n\
+		        //Directional light\n\
+		        outColor += calcDirectionalLight(directionalLight, normal, viewDir);\n\
+		        //Pointlight\n\
+		        for (int i = 0; i < pointLightCounter; i++)\n\
+			        outColor += calcPointLight(pointLights[i], normal, FragPos, viewDir);\n\
+		        //Spotlight\n\
+		        for (int i = 0; i < spotLightCounter; i++)\n\
+			        outColor += calcSpotLight(spotLights[i], normal, FragPos, viewDir);\n\
+		        fragColor = vec4(ambient + outColor, 1.0f) * vec4(color, 1.0f);\n\
+	        }\n\
+	        else {\n\
+		        if (useTexture)\n\
+			        fragColor = vec4(color, 1.0f) * vec4(vec3(texture(material.texture, TexCoord)), 1.0f);\n\
+		        else\n\
+			        fragColor = vec4(color, 1.0f);\n\
+	        }\n\
+        }";
+    return fragmentShader;
+    }
+
+    if (n == 2) {
+        char* vertexSkyShader = "#version 330 core\n\
+        \n\
+        layout(location = 0) in vec3 pos;\n\
+        \n\
+        out vec3 TexCoords;\n\
+        \n\
+        uniform mat4 projection; \n\
+        uniform mat4 view;\n\
+        \n\
+        void main()\n\
+        {\n\
+            TexCoords = pos; \n\
+            gl_Position = projection * view * vec4(pos, 1.0);\n\
+        }";
+        return vertexSkyShader;
+    }
+
+    if (n==3) {
+        char* fragmentSkyShader = "#version 330\n\
+        \n\
+        in vec3 TexCoords;\n\
+        \n\
+        out vec4 colour;\n\
+        \n\
+        uniform samplerCube skybox;\n\
+        \n\
+        void main()\n\
+        {\n\
+            colour = texture(skybox, TexCoords);\n\
+        }";
+        return fragmentSkyShader;
+    }
+    
+    return "";
+}
 
 struct stat buffer;
 
@@ -93,6 +304,10 @@ void FsGame::SetCamera(FsCamera& cam) {
     camera = &cam;
 }
 
+void FsGame::SetSkybox(FsSkybox& sky) {
+    skybox = &sky;
+}
+
 template<> void FsGame::LoadLight<FsDireciontalLight>(FsDireciontalLight* light) {
     directionalLight = light;
 }
@@ -144,7 +359,7 @@ void FsGame::Run(std::vector<FsObject*> _objetos) {
 
     ValidarVentana();
     ValidarCamara();
-    ValidarLuzDireccional();
+    
 
     //std::string rutaFinal = fs::current_path().string();
     
@@ -152,7 +367,7 @@ void FsGame::Run(std::vector<FsObject*> _objetos) {
     {
         var->Begin();
     }
-
+    ValidarLuzDireccional();
 
     //const char vertex[] = "/Shaders/FsVertexShader.glsl";
     //const int sizeVertexMainShaderPath = sizeof(vertex) / sizeof(*vertex);
@@ -167,10 +382,12 @@ void FsGame::Run(std::vector<FsObject*> _objetos) {
     //strcat(fragmentMainShaderComplete, fragment);
 
     //MainShader.Load(vertexMainShaderComplete, fragmentMainShaderComplete);
-    MainShader.Load(/*nullptr, fragmentMainShaderComplete*/);
+    MainShader.Load(EmitirShader(0),EmitirShader(1));
+    SkyboxShader.Load(EmitirShader(2),EmitirShader(3));
     //delete[] /*vertexMainShaderComplete*/ fragmentMainShaderComplete;
 
     MainShader.Compile(pointlights.size(), spotLights.size());
+    SkyboxShader.Compile(0,0);
 
     FsVector3 frustrum = *camera->GetFrustrum();
     glm::mat4 projection = glm::perspective(frustrum.x, (float)width/(float)height, frustrum.y, frustrum.z);
