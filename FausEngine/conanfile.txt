@@ -1,8 +1,9 @@
 [requires]
+
 glfw/3.3.4
 glew/2.2.0
 glm/0.9.9.8
-bullet3/3.17
+freetype/2.11.1
 
 [generators]
 cmake

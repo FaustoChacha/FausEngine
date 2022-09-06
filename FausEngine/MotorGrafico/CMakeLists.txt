@@ -63,6 +63,15 @@ add_custom_command(
         ${CMAKE_BINARY_DIR}/bin/Textures
    )
 
+file(GLOB fonts ../ejemplo/Fonts/*.ttf)
+
+make_directory(${CMAKE_BINARY_DIR}/bin/Fonts)
+add_custom_command(
+    TARGET FausEngine PRE_BUILD 
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${fonts}
+        ${CMAKE_BINARY_DIR}/bin/Fonts
+   )
    #[[
 install(FILES 
 IMG DESTINATION ${CMAKE_BINARY_DIR}/bin/ejemplo

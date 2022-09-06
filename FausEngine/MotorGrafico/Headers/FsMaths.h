@@ -29,9 +29,11 @@ namespace FausEngine {
 		FsVector3 operator-=(FsVector3 _vector);
 		static FsVector3 Normalize(FsVector3);
 		static FsVector3 Cross(FsVector3, FsVector3);
+		static FsVector3 Distance(FsVector3, FsVector3);
 		static float toRadians(float);
 		static float toDegress(float);
 		static float Clamp(float value, float minVal, float maxVal);
+		
 		~FsVector3();
 	};
 

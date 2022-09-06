@@ -87,6 +87,10 @@ FsVector3 FsVector3::Cross(FsVector3 vector1, FsVector3 vector2) {
 	return FsVector3(resultado.x, resultado.y, resultado.z);
 }
 
+FsVector3 FsVector3::Distance(FsVector3 a, FsVector3 b) {
+	return {abs((a - b).x), abs((a - b).y), abs((a - b).z) };
+}
+
 float FsVector3::toRadians(float degress) {
 	return glm::radians(degress);
 }

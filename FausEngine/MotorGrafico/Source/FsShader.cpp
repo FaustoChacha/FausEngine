@@ -20,7 +20,6 @@ std::string ReadFile(const char*);
 FsShader::FsShader()
 {
 	ShaderID = 0;
-	
 }
 
 
@@ -100,6 +99,9 @@ void FsShader::Compile(int pointCount, int spotCount)
 	uVariablesLocation[uTypeVariables::uTexture] = glGetUniformLocation(ShaderID, "material.texture");
 	uVariablesLocation[uTypeVariables::uColor] = glGetUniformLocation(ShaderID, "color");
 	uVariablesLocation[uTypeVariables::uLit] = glGetUniformLocation(ShaderID, "lit");
+
+	uVariablesLocation[uTypeVariables::uOrtoProjection] = glGetUniformLocation(ShaderID, "projection");
+	uVariablesLocation[uTypeVariables::uTextColor] = glGetUniformLocation(ShaderID, "textColor");
 
 	//directional light
 	uVariablesLocation[uTypeVariables::uDir_direction] = glGetUniformLocation(ShaderID, "directionalLight.direction");

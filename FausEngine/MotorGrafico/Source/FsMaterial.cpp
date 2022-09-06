@@ -22,7 +22,7 @@ FsMaterial::FsMaterial()
 	type = TypeMaterial::Lit;
 	bind_TexToColor = false;
 	textureID = 0;
-	shader = FausEngine::FsGame::GetInstance()->GetShader();
+	shader = FausEngine::FsGame::GetInstance()->GetShader(0);
 }
 
 FsShader* FsMaterial::GetShader() {
@@ -38,7 +38,7 @@ FsMaterial::FsMaterial(FsVector3 ambient, FsVector3 specular, FsVector3 color, f
 	this->type = type;
 	this->bind_TexToColor = bind;
 	this->textureID = 0;
-	shader = FausEngine::FsGame::GetInstance()->GetShader();
+	shader = FausEngine::FsGame::GetInstance()->GetShader(0);
 }
 
 void LoadtextureAux(unsigned int& textureID, std::string  path) {

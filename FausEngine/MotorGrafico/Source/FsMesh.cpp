@@ -10,15 +10,20 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <map>
+//#include <btBulletDynamicsCommon.h>
 
 using namespace FausEngine;
+
+//std::map<int, btRigidBody*> rigidbodies;
 
 FsMesh::FsMesh()
 {
 	VBO = 0; VAO = 0; meshLoaded = false;
 
-	meshTransform = FsTransform({ 0,0,0 }, { 0,0,0 }, {1,1,1});
+	transform = FsTransform({ 0,0,0 }, { 0,0,0 }, {1,1,1});
 	material = FsMaterial();
+	collider = nullptr;
 	
 }
 
@@ -33,6 +38,12 @@ FsMesh::~FsMesh()
 	glDeleteBuffers(1, &VBO);
 }
 
+void FsMesh::SetCollider(FsCollider& c) {
+		collider = &c;
+		//tomo la posicion de la malla + la pos inicial del limite max/min del collider y allo la distancia entre el limiite y el centro de la malla
+		distanceCollider[0] = FsVector3::Distance(transform.position, (transform.position + collider->GetMax())); 
+		distanceCollider[1] = FsVector3::Distance(transform.position, (transform.position + collider->GetMin()));
+}
 
 void FsMesh::LoadMesh()
 {
@@ -149,8 +160,6 @@ void FsMesh::LoadMesh()
 	//return meshLoaded;
 }
 
-int FsMesh::algo()const { return a; }
-
 void FsMesh::Render()
 {
 	auto sh = material.GetShader();
@@ -159,11 +168,11 @@ void FsMesh::Render()
 
 	//Mesh Trasnform 
 	glm::mat4 mModel(1.0f);
-	mModel = glm::translate(mModel, glm::vec3(meshTransform.position.x, meshTransform.position.y, meshTransform.position.z));
-	mModel = glm::rotate(mModel, glm::radians<float>(meshTransform.rotation.x), glm::vec3(1, 0, 0));
-	mModel = glm::rotate(mModel, glm::radians<float>(meshTransform.rotation.y), glm::vec3(0, 1, 0));
-	mModel = glm::rotate(mModel, glm::radians<float>(meshTransform.rotation.z), glm::vec3(0, 0, 1));
-	mModel = glm::scale(mModel, glm::vec3(meshTransform.scale.x, meshTransform.scale.y, meshTransform.scale.z));
+	mModel = glm::translate(mModel, glm::vec3(transform.position.x, transform.position.y, transform.position.z));
+	mModel = glm::rotate(mModel, glm::radians<float>(transform.rotation.x), glm::vec3(1, 0, 0));
+	mModel = glm::rotate(mModel, glm::radians<float>(transform.rotation.y), glm::vec3(0, 1, 0));
+	mModel = glm::rotate(mModel, glm::radians<float>(transform.rotation.z), glm::vec3(0, 0, 1));
+	mModel = glm::scale(mModel, glm::vec3(transform.scale.x, transform.scale.y, transform.scale.z));
 	glUniformMatrix4fv( sh->GetUVariableLocation(uTypeVariables::uModel), 1, GL_FALSE, glm::value_ptr(mModel));
 
 	//Material setting
@@ -185,5 +194,12 @@ void FsMesh::Render()
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0,vertexElements.size()/8);
 	glBindVertexArray(0);
+
+	//Collider
+	if (collider) {
+		collider->SetMax(transform.position + distanceCollider[0]);
+		collider->SetMin(transform.position - distanceCollider[1]);
+	}
+
 }
 

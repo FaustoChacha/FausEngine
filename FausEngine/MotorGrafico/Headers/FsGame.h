@@ -27,7 +27,7 @@ namespace FausEngine {
 		template<typename light> void LoadLight(light*);
 
 		static FsGame* GetInstance();
-		FsShader* GetShader();
+		FsShader* GetShader(int);
 		FsCamera* GetCamera();
 
 		//window

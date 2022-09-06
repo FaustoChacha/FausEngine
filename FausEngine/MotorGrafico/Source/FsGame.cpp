@@ -5,6 +5,7 @@
 #include"../Headers/FsDirectionalLight.h"
 #include"../Headers/FsPointLight.h"
 #include"../Headers/FsSpotLight.h"
+#include"../Headers/FsText.h"
 
 #include <glm\gtc\type_ptr.hpp>
 #include<string>
@@ -16,6 +17,7 @@
 #include <algorithm>
 #include<cmath>
 
+
 using namespace FausEngine;
 
 static FsGame* game;
@@ -26,6 +28,7 @@ FsCamera* camera;
 FsSkybox* skybox;
 FsShader MainShader;
 FsShader SkyboxShader;
+FsShader TextShader;
 
 FsDireciontalLight* directionalLight;
 std::vector<FsPointLight*> pointlights;
@@ -34,9 +37,9 @@ std::vector<FsSpotLight*> spotLights;
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
 
+
+
 char* EmitirShader(int);
-
-
 
 //namespace fs = std::filesystem;
 
@@ -208,7 +211,7 @@ char* EmitirShader(int n) {
         }";
     return fragmentShader;
     }
-
+    //vertex skyshader
     if (n == 2) {
         char* vertexSkyShader = "#version 330 core\n\
         \n\
@@ -226,7 +229,7 @@ char* EmitirShader(int n) {
         }";
         return vertexSkyShader;
     }
-
+    //fragment skysahder
     if (n==3) {
         char* fragmentSkyShader = "#version 330\n\
         \n\
@@ -242,7 +245,34 @@ char* EmitirShader(int n) {
         }";
         return fragmentSkyShader;
     }
-    
+    //vertex textshader
+    if (n == 4) {
+        char* vertexTextShader="#version 330 core\n\
+        layout(location = 0) in vec4 vertex; \n\
+        out vec2 TexCoords;\n\
+        \n\
+        uniform mat4 projection;\n\
+        \n\
+        void main()\n\
+        {\n\
+            gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);\n\
+            TexCoords = vertex.zw;\n\
+        }";
+        return vertexTextShader;
+    }
+    //fragment textshader
+    if (n==5) {
+        char* fragmenttextShader = "#version 330 \n\
+            in vec2 TexCoords;\n\
+        uniform sampler2D text;\n\
+        uniform vec3 textColor;\n\
+        out vec4 color;\n\
+        void main() {\n\
+            vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);\n\
+            color = vec4(textColor, 1.0) * sampled;\n\
+        }";
+        return fragmenttextShader;
+    }
     return "";
 }
 
@@ -274,20 +304,21 @@ FsGame::~FsGame() {
 
 void ValidarCamara() {
     if (!camera) {
+        std::cout << "No exits camera." << std::endl;
         camera = new FsCamera(FsVector3(0.0f, 5.0f, 0.0f));
     }
 }
 
 void ValidarVentana() {
     if (!mainWindow.getWindowReference()) {
-        std::cout << "No exits a window, call Construct() function." << std::endl;
+        std::cout << "No exits window, call Construct() function." << std::endl;
         exit(3);
     }
 }
 
 void ValidarLuzDireccional() {
     if (!directionalLight) {
-        std::cout << "No exits a Directional light..." << std::endl;
+        std::cout << "No exits Directional light..." << std::endl;
         directionalLight = new FsDireciontalLight(FsVector3(0.0f, -0.4f, -0.17f), FsVector3(2, 2, 2), FsVector3(0.5f, 0.5f, 0.5f), FsVector3(0.5f, 0.5f, 0.5f));
     }
 }
@@ -351,8 +382,10 @@ glm::mat4 CalcularMatrizVista() {
 }
 
 
-FsShader* FsGame::GetShader() {
-    return &MainShader;
+FsShader* FsGame::GetShader(int n) {
+    if (n == 0) return &MainShader;
+    if (n == 1)return &TextShader;
+    return nullptr;
 }
 
 void FsGame::Run(std::vector<FsObject*> _objetos) {
@@ -360,13 +393,13 @@ void FsGame::Run(std::vector<FsObject*> _objetos) {
     ValidarVentana();
     ValidarCamara();
     
-
     //std::string rutaFinal = fs::current_path().string();
     
     for each (auto var in _objetos)
     {
         var->Begin();
     }
+
     ValidarLuzDireccional();
 
     //const char vertex[] = "/Shaders/FsVertexShader.glsl";
@@ -384,17 +417,80 @@ void FsGame::Run(std::vector<FsObject*> _objetos) {
     //MainShader.Load(vertexMainShaderComplete, fragmentMainShaderComplete);
     MainShader.Load(EmitirShader(0),EmitirShader(1));
     SkyboxShader.Load(EmitirShader(2),EmitirShader(3));
+    TextShader.Load(EmitirShader(4),EmitirShader(5));
     //delete[] /*vertexMainShaderComplete*/ fragmentMainShaderComplete;
 
     MainShader.Compile(pointlights.size(), spotLights.size());
     SkyboxShader.Compile(0,0);
+    TextShader.Compile(0,0);
 
     FsVector3 frustrum = *camera->GetFrustrum();
     glm::mat4 projection = glm::perspective(frustrum.x, (float)width/(float)height, frustrum.y, frustrum.z);
 
     unsigned int uPointLightCounter = glGetUniformLocation(MainShader.GetShaderId(), "pointLightCounter");
     unsigned int uSpotLightCounter = glGetUniformLocation(MainShader.GetShaderId(), "spotLightCounter");
-	
+
+    //===========================Texto===============================
+    TextShader.Use();
+    glm::mat4 ortoProjection = glm::ortho(0.0f, static_cast<float>(800), 0.0f, static_cast<float>(600));
+    glUniformMatrix4fv(TextShader.GetUVariableLocation(uTypeVariables::uOrtoProjection), 1,GL_FALSE,glm::value_ptr(ortoProjection));
+
+    //===================== sky box =====================
+    unsigned int vao, ibo, vbo;
+    if (skybox) {
+        // Mesh setting
+        unsigned int skyboxIndices[] = {
+            // front
+            0, 1, 2,
+            2, 1, 3,
+            // right
+            2, 3, 5,
+            5, 3, 7,
+            // back
+            5, 7, 4,
+            4, 7, 6,
+            // left
+            4, 6, 0,
+            0, 6, 1,
+            // top
+            4, 0, 5,
+            5, 0, 2,
+            // bottom
+            1, 6, 3,
+            3, 6, 7
+        };
+        float skyboxVertices[] = {
+            -1.0f, 1.0f, -1.0f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
+            -1.0f, -1.0f, -1.0f,	0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
+            1.0f, 1.0f, -1.0f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
+            1.0f, -1.0f, -1.0f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
+
+            -1.0f, 1.0f, 1.0f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
+            1.0f, 1.0f, 1.0f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
+            -1.0f, -1.0f, 1.0f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,
+            1.0f, -1.0f, 1.0f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f
+        };
+     
+        glGenVertexArrays(1, &vao);
+        glBindVertexArray(vao);
+
+        glGenBuffers(1, &ibo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(skyboxIndices[0]) * 36, skyboxIndices, GL_STATIC_DRAW);
+
+        glGenBuffers(1, &vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices[0]) * 64, skyboxVertices, GL_STATIC_DRAW);
+
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(skyboxVertices[0]) * 8, 0);
+        glEnableVertexAttribArray(0);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+        glBindVertexArray(0);
+    }
+
     while (!glfwWindowShouldClose(mainWindow.getWindowReference()))
     {
         GLfloat now = glfwGetTime();
@@ -403,10 +499,42 @@ void FsGame::Run(std::vector<FsObject*> _objetos) {
 
         glfwPollEvents(); 
         glViewport(0,0,width, height);
-        glClearColor(0.1f, 0.1f, 0.1f, 1);
+        //glClearColor(0.1f, 0.1f, 0.1f, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
 
+
+
+        //====================skybox======================
+        if (skybox ) {
+            if (skybox->on) {
+                glDepthMask(GL_FALSE);
+                SkyboxShader.Use();
+                //projection matrix
+                glUniformMatrix4fv(
+                    SkyboxShader.GetUVariableLocation(uTypeVariables::uProjection), 1, GL_FALSE, glm::value_ptr(projection));
+                //View matrix
+                glm::mat4 view = glm::mat4(glm::mat3(CalcularMatrizVista()));
+                glUniformMatrix4fv(
+                    SkyboxShader.GetUVariableLocation(uTypeVariables::uView), 1, GL_FALSE, glm::value_ptr(view));
+
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->GetTextureID());
+
+                glBindVertexArray(vao);
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+                glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+                glBindVertexArray(0);
+                glDepthMask(GL_TRUE);
+            }
+            else {
+                glClearColor(skybox->colour.x, skybox->colour.y, skybox->colour.z, 1);
+            }
+        }
+      
+
+
+        //========================Render scene============================
         MainShader.Use();
         //View matrix
         glUniformMatrix4fv(

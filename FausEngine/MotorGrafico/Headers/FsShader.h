@@ -19,7 +19,9 @@ namespace FausEngine {
 		//Point & Spot lights
 		uPoint_ambient, uPoint_diffuse, uPoint_specular, uPoint_position, 
 		uPoint_const, uPoint_lin, uPoint_exp,
-		uSpot_Dir
+		uSpot_Dir,
+		//text
+		uOrtoProjection, uTextColor
 	};
 
 	class EXPORTDLL FsShader
