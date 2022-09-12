@@ -4,14 +4,13 @@
 
 UserGame juego;
 
-std::vector<FsObject*> escenario4;
+std::vector<FsObject*> escePlataformas;
 
 int main() {
 	
-	escenario4.push_back(new Escenario4);
-
-	if(juego.Construct(1080, 720, "Game"))
-		juego.Run(escenario4);
+	escePlataformas.push_back(new Plataformas);
+	if(juego.Construct(1080, 720, "Space Plataform"))
+		juego.Run(escePlataformas);
 	
 }
 

@@ -24,6 +24,7 @@ FsMesh::FsMesh()
 	transform = FsTransform({ 0,0,0 }, { 0,0,0 }, {1,1,1});
 	material = FsMaterial();
 	collider = nullptr;
+	on = true;
 	
 }
 
@@ -41,8 +42,11 @@ FsMesh::~FsMesh()
 void FsMesh::SetCollider(FsCollider& c) {
 		collider = &c;
 		//tomo la posicion de la malla + la pos inicial del limite max/min del collider y allo la distancia entre el limiite y el centro de la malla
-		distanceCollider[0] = FsVector3::Distance(transform.position, (transform.position + collider->GetMax())); 
-		distanceCollider[1] = FsVector3::Distance(transform.position, (transform.position + collider->GetMin()));
+		distanceCollider[0] = collider->DistanceToPivot(transform.position, CollisionDirection::MAX);
+		distanceCollider[1] = collider->DistanceToPivot(transform.position, CollisionDirection::MIN);
+		distanceCollider[2] = collider->GetMax();
+		distanceCollider[3] = collider->GetMin();
+	
 }
 
 void FsMesh::LoadMesh()
@@ -87,7 +91,7 @@ void FsMesh::LoadMesh()
 					&p2, &t2, &n2,
 					&p3, &t3, &n3);
 				if (match != 9) {
-					std::cout << "File can't be read." << std::endl;
+					std::cout << "Mesh can't be read. (faces)" << std::endl;
 					//return false;
 				}
 					
@@ -162,6 +166,8 @@ void FsMesh::LoadMesh()
 
 void FsMesh::Render()
 {
+	if (on) {
+	
 	auto sh = material.GetShader();
 
 	if (!meshLoaded) return;
@@ -199,7 +205,39 @@ void FsMesh::Render()
 	if (collider) {
 		collider->SetMax(transform.position + distanceCollider[0]);
 		collider->SetMin(transform.position - distanceCollider[1]);
-	}
 
+		//basicamente tomo la PRIMERA poscion de MAX-MIN y en el eje respectivo solo sumo mas un radio
+		//mientras en los otros calculo la mitad entre MAX-Min y ubico 
+		auto max = distanceCollider[2];
+		auto min = distanceCollider[3];
+		auto pos = transform.position;
+		float radio = 0.5f;
+
+		auto right = collider->GetRight();
+		right.x = pos.x + (abs(max.x) + radio);
+		right.y = pos.y + ((max.y + min.y) / 2);
+		right.z = pos.z + ((max.z + min.z) / 2);
+		collider->SetRight(right);
+
+		auto left = collider->GetLeft();
+		left.x = pos.x - (abs(min.x) + radio);
+		left.y = pos.y + ((max.y + min.y) / 2);
+		left.z = pos.z + ((max.z + min.z) / 2);
+		collider->SetLeft(left);
+
+		auto up = collider->GetUp();
+		up.x = pos.x + ((max.x + min.x) / 2);
+		up.y = pos.y + (abs(max.y) + radio);
+		up.z = pos.z + ((max.z + min.z) / 2);
+		collider->SetUp(up);
+
+		auto down = collider->GetDown();
+		down.x = pos.x + ((max.x + min.x) / 2);
+		down.y = pos.y - (abs(min.y) + radio);
+		down.z = pos.z + ((max.z + min.z) / 2);
+		collider->SetDown(down);
+
+	}
+	}
 }
 

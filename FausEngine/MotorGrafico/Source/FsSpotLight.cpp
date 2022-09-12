@@ -20,6 +20,10 @@ void FsSpotLight::Load() {
 	FausEngine::FsGame::GetInstance()->LoadLight(this);
 }
 
+void FsPointLight::SetDiffuse(FsVector3 d) {
+	diffuse = d;
+}
+
 FsVector3* FsSpotLight::GetDirection() {
 	return &direction;
 }

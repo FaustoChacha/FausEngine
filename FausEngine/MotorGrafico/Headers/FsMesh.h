@@ -28,6 +28,8 @@ namespace FausEngine {
 		FsTransform transform;
 		FsMaterial material;
 
+		bool on;
+
 	private:
 		unsigned int VBO, VAO;
 		bool meshLoaded;
@@ -35,7 +37,7 @@ namespace FausEngine {
 		std::vector<float> elementosVertice;
 		std::vector<float> vertexElements;
 		FsCollider* collider = nullptr;
-		FsVector3 distanceCollider[2];
+		FsVector3 distanceCollider[4];
 	};
 
 }

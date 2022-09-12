@@ -22,29 +22,36 @@ using namespace FausEngine;
 
 
 
-class Escenario4 :public FsObject 
+class Plataformas :public FsObject 
 {
 public: 
-	Escenario4();
+	Plataformas();
 	void Begin()override;
 	void ControlFPS(float, float);
 	void ControlTPS(FsTransform &targetPos,float, float);
 	void Control2D(FsTransform&, float, float);
 
 	void Update(float, float)override;
-	~Escenario4();
+	~Plataformas();
 
 private:
 	UserGame* gamereference;
-	
-	FsMesh mNave, mCaja, mPiso, mCaja2, mCaja3;
-	FsMesh esferaLuz1, esferaLuz2, esferaLuz3, conoLuz1, conoLuz2, conoLuz3, cuboX, cuboY, cuboZ;
-	FsMesh player;
 
+	FsMesh player, mLuzPlayer;
+	FsVector3 colorVida;
+	FsCollider collPlayer;
 	FsMesh colMax1, colMin1;
+	FsVector3 posInicialPlayer;
+	int vidasPlayer=3;
+	FsMesh monedas[15];
+	FsCollider collMonedas[15];
+	int puntos=0;
+
+	FsMesh plataformas[14];
+	FsMesh complemento0;
+	FsCollider collPlataformas[14];
+	FsMesh refRight, refLeft;
 	FsMesh colMax2, colMin2;
-	FsMesh colMax3, colMin3;
-	FsCollider collPlayer, collCaja[3];
 
 	FsDireciontalLight luzDireccional;
 	FsPointLight pointLight[4];
@@ -52,15 +59,20 @@ private:
 	FsSkybox sky;
 
 	bool swCam=false;
-	bool colisiones[4];
 	bool* teclas;
-	int indexCollision;
+	int indexCollision=0;
+	int indexCollisionMOnedas=0;
 
 	FsText texto1, texto2;
 
 	bool jump=false;
 	float jumpLap;
+	int contadorTeclaEspacio=0;
+	float moveLinear = 0;
 };
+
+
+
 
 
 

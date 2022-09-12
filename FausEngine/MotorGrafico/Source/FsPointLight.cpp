@@ -43,6 +43,14 @@ float* FsPointLight::GetExponent()
 	return &exponent;
 }
 
+void FsPointLight::SetLinear(float l) {
+	linear = l;
+}
+
+void FsPointLight::SetPosition(FsVector3 p) {
+	position = p;
+}
+
 FsPointLight::~FsPointLight()
 {
 }
