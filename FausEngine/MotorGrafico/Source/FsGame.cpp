@@ -324,9 +324,9 @@ void ValidarLuzDireccional() {
 }
 
 
-bool FsGame::Construct(float _width, float _height, std::string name) {
+bool FsGame::Construct(float _width, float _height, std::string name, bool fullscreen) {
     width = _width; height = _height;
-    return mainWindow.createWindow(width, height, name);
+    return mainWindow.createWindow(width, height, name, fullscreen);
 }
 
 
@@ -401,18 +401,6 @@ void FsGame::Run(std::vector<FsObject*> _objetos) {
     }
 
     ValidarLuzDireccional();
-
-    //const char vertex[] = "/Shaders/FsVertexShader.glsl";
-    //const int sizeVertexMainShaderPath = sizeof(vertex) / sizeof(*vertex);
-    //char* vertexMainShaderComplete = new char[sizeVertexMainShaderPath + pathFausEngine.length()];
-    //strcpy(vertexMainShaderComplete, pathFausEngine.c_str());
-    //strcat(vertexMainShaderComplete, vertex);
-
-    //const char fragment[] = "/Shaders/FsFragmentShader.glsl";
-    //const int sizeFragmentMainShaderPath = sizeof(fragment) / sizeof(*fragment);
-    //char* fragmentMainShaderComplete = new char[sizeFragmentMainShaderPath + rutaFinal.length()];
-    //strcpy(fragmentMainShaderComplete, rutaFinal.c_str());
-    //strcat(fragmentMainShaderComplete, fragment);
 
     //MainShader.Load(vertexMainShaderComplete, fragmentMainShaderComplete);
     MainShader.Load(EmitirShader(0),EmitirShader(1));

@@ -1,5 +1,6 @@
 #ifndef FSSPOTLIGHT
 #define FSSPOTLIGHT
+//#pragma once
 
 #include"FsDLL.h"
 #include"FsPointLight.h"

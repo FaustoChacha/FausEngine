@@ -151,36 +151,39 @@ void Plataformas::Control2D(FsTransform& targetPos, float dt, float t) {
 	auto teclas = gamereference->GetKeys();
 	auto postemp = targetPos.position;
 
-	//std::cout << "D " << teclas[68] << std::endl;
-	if (teclas[68]) { // D
-		//player.transform.rotation.y -= 0.05f;
-		//player.transform.rotation.x -= 0.05f;
-		player.transform.rotation.y -= 0.25f; // animacion
-		targetPos.position.x -= 5 * dt;
-
+	if (teclas[32]) {// space
+		iniciar = true;
 	}
 
-	if (teclas[65]) { //A
-		//player.transform.rotation.y += 0.05f;
-		//player.transform.rotation.x += 0.05f;
-		player.transform.rotation.y += 0.25f; //animacion
-		targetPos.position.x += 5 * dt;
-		
+
+	if (iniciar) {
+		if (teclas[68]) { // D
+			player.transform.rotation.y -= 0.35f; // animacion
+			targetPos.position.x -= 5 * dt;
+
+		}
+
+		if (teclas[65]) { //A
+			player.transform.rotation.y += 0.35f; //animacion
+			targetPos.position.x += 5 * dt;
+
+		}
 	}
 
-	if (teclas[87]) { //w
-		player.transform.position.y += 5*dt;
-	}
 
-	if (teclas[83]) {//s
-		player.transform.position.y -= 5*dt;
-	}
+	//if (teclas[87]) { //w
+	//	player.transform.position.y += 5*dt;
+	//}
 
-	if (teclas[79]) {//O
-		std::cout << player.transform.position.x << " " <<
-			player.transform.position.y << " " <<
-			player.transform.position.z << std::endl;
-	}
+	//if (teclas[83]) {//s
+	//	player.transform.position.y -= 5*dt;
+	//}
+
+	//if (teclas[79]) {//O
+	//	std::cout << player.transform.position.x << " " <<
+	//		player.transform.position.y << " " <<
+	//		player.transform.position.z << std::endl;
+	//}
 }
 
 
@@ -361,99 +364,101 @@ void Plataformas::Begin() {
 	colMin2.material.color = { 1.0f,0.0f,0.0f };
 
 	//==============Monedas=======================
-	monedas[0] = FsMesh("Models/dona.obj");
-	monedas[0].LoadMesh();
-	monedas[0].material.type = TypeMaterial::Unlit;
-	monedas[0].material.color = {0.9f,0.4f,0.19f};
-	monedas[0].transform = { {-5, -3,0}, {0,90,0},{0.5f,0.5f,0.5f} };
-	collMonedas[0] = FsCollider({ 0.5f,0.5f,0.5f }, {-0.5f,-0.5f,-0.5f});
-	collMonedas[0].id = 0;
-	monedas[0].SetCollider(collMonedas[0]);
+	if (true) {
+		monedas[0] = FsMesh("Models/dona.obj");
+		monedas[0].LoadMesh();
+		monedas[0].material.type = TypeMaterial::Unlit;
+		monedas[0].material.color = { 0.9f,0.4f,0.19f };
+		monedas[0].transform = { {-5, -3,0}, {0,90,0},{0.5f,0.5f,0.5f} };
+		collMonedas[0] = FsCollider({ 0.5f,0.5f,0.5f }, { -0.5f,-0.5f,-0.5f });
+		collMonedas[0].id = 0;
+		monedas[0].SetCollider(collMonedas[0]);
 
-	monedas[1] = monedas[0];
-	monedas[1].transform.position = {-13,-3,0};
-	collMonedas[1] = collMonedas[0];
-	collMonedas[1].id = 1;
-	monedas[1].SetCollider(collMonedas[1]);
+		monedas[1] = monedas[0];
+		monedas[1].transform.position = { -13,-3,0 };
+		collMonedas[1] = collMonedas[0];
+		collMonedas[1].id = 1;
+		monedas[1].SetCollider(collMonedas[1]);
 
-	monedas[2] = monedas[0];
-	monedas[2].transform.position = { -20,-3,0 };
-	collMonedas[2] = collMonedas[0];
-	collMonedas[2].id = 2;
-	monedas[2].SetCollider(collMonedas[2]);
+		monedas[2] = monedas[0];
+		monedas[2].transform.position = { -20,-3,0 };
+		collMonedas[2] = collMonedas[0];
+		collMonedas[2].id = 2;
+		monedas[2].SetCollider(collMonedas[2]);
 
-	monedas[3] = monedas[0];
-	monedas[3].transform.position = { -29,-1,0 };
-	collMonedas[3] = collMonedas[0];
-	collMonedas[3].id = 3;
-	monedas[3].SetCollider(collMonedas[3]);
+		monedas[3] = monedas[0];
+		monedas[3].transform.position = { -29,-1,0 };
+		collMonedas[3] = collMonedas[0];
+		collMonedas[3].id = 3;
+		monedas[3].SetCollider(collMonedas[3]);
 
-	monedas[4] = monedas[0];
-	monedas[4].transform.position = { -35,1,0 };
-	collMonedas[4] = collMonedas[0];
-	collMonedas[4].id = 4;
-	monedas[4].SetCollider(collMonedas[4]);
+		monedas[4] = monedas[0];
+		monedas[4].transform.position = { -35,1,0 };
+		collMonedas[4] = collMonedas[0];
+		collMonedas[4].id = 4;
+		monedas[4].SetCollider(collMonedas[4]);
 
-	monedas[5] = monedas[0];
-	monedas[5].transform.position = { -43,-3,0 };
-	collMonedas[5] = collMonedas[0];
-	collMonedas[5].id = 5;
-	monedas[5].SetCollider(collMonedas[5]);
+		monedas[5] = monedas[0];
+		monedas[5].transform.position = { -43,-3,0 };
+		collMonedas[5] = collMonedas[0];
+		collMonedas[5].id = 5;
+		monedas[5].SetCollider(collMonedas[5]);
 
-	monedas[6] = monedas[0];
-	monedas[6].transform.position = { -50,-3,0 };
-	collMonedas[6] = collMonedas[0];
-	collMonedas[6].id = 6;
-	monedas[6].SetCollider(collMonedas[6]);
+		monedas[6] = monedas[0];
+		monedas[6].transform.position = { -50,-3,0 };
+		collMonedas[6] = collMonedas[0];
+		collMonedas[6].id = 6;
+		monedas[6].SetCollider(collMonedas[6]);
 
-	monedas[7] = monedas[0];
-	monedas[7].transform.position = { -56,-1,0 };
-	collMonedas[7] = collMonedas[0];
-	collMonedas[7].id = 7;
-	monedas[7].SetCollider(collMonedas[7]);
+		monedas[7] = monedas[0];
+		monedas[7].transform.position = { -56,-1,0 };
+		collMonedas[7] = collMonedas[0];
+		collMonedas[7].id = 7;
+		monedas[7].SetCollider(collMonedas[7]);
 
-	monedas[8] = monedas[0];
-	monedas[8].transform.position = { -64,-6,0 };
-	collMonedas[8] = collMonedas[0];
-	collMonedas[8].id = 8;
-	monedas[8].SetCollider(collMonedas[8]);
+		monedas[8] = monedas[0];
+		monedas[8].transform.position = { -64,-6,0 };
+		collMonedas[8] = collMonedas[0];
+		collMonedas[8].id = 8;
+		monedas[8].SetCollider(collMonedas[8]);
 
-	monedas[9] = monedas[0];
-	monedas[9].transform.position = { -77,-10,0 };
-	collMonedas[9] = collMonedas[0];
-	collMonedas[9].id = 9;
-	monedas[9].SetCollider(collMonedas[9]);
+		monedas[9] = monedas[0];
+		monedas[9].transform.position = { -77,-10,0 };
+		collMonedas[9] = collMonedas[0];
+		collMonedas[9].id = 9;
+		monedas[9].SetCollider(collMonedas[9]);
 
-	monedas[10] = monedas[0];
-	monedas[10].transform.position = { -90,-6,0 };
-	collMonedas[10] = collMonedas[0];
-	collMonedas[10].id = 10;
-	monedas[10].SetCollider(collMonedas[10]);
+		monedas[10] = monedas[0];
+		monedas[10].transform.position = { -90,-6,0 };
+		collMonedas[10] = collMonedas[0];
+		collMonedas[10].id = 10;
+		monedas[10].SetCollider(collMonedas[10]);
 
-	monedas[11] = monedas[0];
-	monedas[11].transform.position = { -96,-2,0 };
-	collMonedas[11] = collMonedas[0];
-	collMonedas[11].id = 11;
-	monedas[11].SetCollider(collMonedas[11]);
+		monedas[11] = monedas[0];
+		monedas[11].transform.position = { -96,-2,0 };
+		collMonedas[11] = collMonedas[0];
+		collMonedas[11].id = 11;
+		monedas[11].SetCollider(collMonedas[11]);
 
-	monedas[12] = monedas[0];
-	monedas[12].transform.position = { -102,2,0 };
-	collMonedas[12] = collMonedas[0];
-	collMonedas[12].id = 12;
-	monedas[12].SetCollider(collMonedas[12]);
+		monedas[12] = monedas[0];
+		monedas[12].transform.position = { -102,2,0 };
+		collMonedas[12] = collMonedas[0];
+		collMonedas[12].id = 12;
+		monedas[12].SetCollider(collMonedas[12]);
 
-	monedas[13] = monedas[0];
-	monedas[13].transform.position = { -110,2,0 };
-	collMonedas[13] = collMonedas[0];
-	collMonedas[13].id = 13;
-	monedas[13].SetCollider(collMonedas[13]);
+		monedas[13] = monedas[0];
+		monedas[13].transform.position = { -110,2,0 };
+		collMonedas[13] = collMonedas[0];
+		collMonedas[13].id = 13;
+		monedas[13].SetCollider(collMonedas[13]);
 
-	monedas[14] = monedas[0];
-	monedas[14].transform.position = { -118,2,0 };
-	collMonedas[14] = collMonedas[0];
-	collMonedas[14].id = 14;
-	monedas[14].SetCollider(collMonedas[14]);
-
+		monedas[14] = monedas[0];
+		monedas[14].transform.position = { -118,2,0 };
+		collMonedas[14] = collMonedas[0];
+		collMonedas[14].id = 14;
+		monedas[14].SetCollider(collMonedas[14]);
+	}
+	
 
 	//=================SKYBOX======================
 	std::vector<std::string> caras = {
@@ -470,8 +475,9 @@ void Plataformas::Begin() {
 
 	//===================== TEXTO =====================
 
-	texto1= FsText("Fonts/waltographUI.ttf", 50, "Press Enter", FsVector2(150, 275), FsVector3(1, 0, 0));
-	texto2= FsText("Fonts/waltographUI.ttf", 50, std::to_string(puntos), FsVector2(20, 520), FsVector3(0, 0, 1));
+	texto1= FsText("Fonts/SpaceMission-rgyw9.otf", 50, "P r e s s  S p a c e", FsVector2(150, 500), FsVector3(1, 0, 1));
+	texto3 = FsText("Fonts/SpaceMission-rgyw9.otf", 50, "A - D  t o  m o v e", FsVector2(150, 400), FsVector3(1, 0, 1));
+	texto2= FsText("Fonts/waltographUI.ttf", 50, std::to_string(puntos), FsVector2(20, 520), FsVector3(1, 1, 1));
 
 	//LUZCES================
 	luzDireccional = FsDireciontalLight(
@@ -498,7 +504,8 @@ void Plataformas::Update(float deltaTime, float time) {
 
 	
 
-	float move = 1 * sin(1 * time);
+	
+
 	if (vidasPlayer==3) {
 		moveLinear = (sin(2 * time) / 4) + 0.25f;
 	}
@@ -509,13 +516,13 @@ void Plataformas::Update(float deltaTime, float time) {
 		moveLinear = (sin(6 * time) / 4) + 0.25f;
 	}
 	
-
-	if (teclas[86]) { // v
-		swCam = !swCam;
-		teclas[86] = false;
-	}
-	if (!swCam)	Control2D(player.transform, deltaTime, time);
-	else ControlTPS(player.transform, deltaTime, time);
+	Control2D(player.transform, deltaTime, time);
+	//if (teclas[86]) { // v
+	//	swCam = !swCam;
+	//	teclas[86] = false;
+	//}
+	//if (!swCam)	Control2D(player.transform, deltaTime, time);
+	//else ControlTPS(player.transform, deltaTime, time);
 
 	//===========================FISICA================================
 	//detector colisiones---------------------------
@@ -528,7 +535,7 @@ void Plataformas::Update(float deltaTime, float time) {
 			}
 		} 
 	}
-
+	//colisiones moneadas
 	for each (FsCollider var in collMonedas)
 	{
 		if (collPlayer.CheckCollision(var)) {
@@ -558,6 +565,7 @@ void Plataformas::Update(float deltaTime, float time) {
 			contadorTeclaEspacio = 0;
 		}
 	}
+
 	//reinicio--------------
 	if (player.transform.position.y < -15) {
 		player.transform.position = posInicialPlayer;
@@ -571,11 +579,23 @@ void Plataformas::Update(float deltaTime, float time) {
 		if (vidasPlayer==0) {
 			exit(3);
 		}
-		//plataformas[4].transform.position = { -50.5f, -5.0f, 0.0f };
-		//plataformas[5].transform.position = { -58, -2, 0};
+	}
+	
+	//movimiento ocsilaTORIO PLATAFORMAS 4,5,6
+	if (moveOsci) {
+		movePlataform += 0.01f;
+	}
+	else {
+		movePlataform -= 0.01f;
+	}
+
+	if (movePlataform <= -3) {
+		moveOsci = true;
+	}
+	if (movePlataform>=3) {
+		moveOsci = false;
 	}
 	//direccion de colision-------------------------
-	
 	float repulsion = 5.0f;
 	if (collPlayer.GetDirection(collPlataformas[indexCollision])==CollisionDirection::RIGHT){
 		player.transform.position.x += repulsion *deltaTime;
@@ -588,15 +608,15 @@ void Plataformas::Update(float deltaTime, float time) {
 	if (collPlayer.GetDirection(collPlataformas[indexCollision]) == CollisionDirection::UP) {
 		player.transform.position.y += 0.0f * deltaTime;
 		if (indexCollision == 4) {
-			player.transform.position.y += move * deltaTime;
+			player.transform.position.y += movePlataform * deltaTime;
 		}
 
 		if (indexCollision == 5) {
-			player.transform.position.y -= move * deltaTime;
+			player.transform.position.y -= movePlataform * deltaTime;
 		}
 
 		if (indexCollision == 6) {
-			player.transform.position.y += move * deltaTime;
+			player.transform.position.y += movePlataform * deltaTime;
 		}
 	}
 
@@ -728,11 +748,11 @@ void Plataformas::Update(float deltaTime, float time) {
 	plataformas[1].Render();
 	plataformas[2].Render();
 	plataformas[3].Render();
-	plataformas[4].transform.position.y += move * deltaTime;
+	plataformas[4].transform.position.y += movePlataform * deltaTime;
 	plataformas[4].Render();
-	plataformas[5].transform.position.y -= move * deltaTime;
+	plataformas[5].transform.position.y -= movePlataform * deltaTime;
 	plataformas[5].Render();
-	plataformas[6].transform.position.y += move * deltaTime;
+	plataformas[6].transform.position.y += movePlataform * deltaTime;
 	plataformas[6].Render();
 	plataformas[7].Render();
 	plataformas[8].Render();
@@ -774,7 +794,11 @@ void Plataformas::Update(float deltaTime, float time) {
 	monedas[14].transform.rotation.y += 0.2f;
 	monedas[14].Render();
 
-	//texto1.Render();
+	if (!iniciar) {
+		texto1.Render();
+		texto3.Render();
+	} 
+
 	texto2.Render();
 	texto2.SetText(std::to_string(puntos));
 

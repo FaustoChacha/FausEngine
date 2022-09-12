@@ -19,7 +19,7 @@ namespace FausEngine {
 		FsGame();
 		~FsGame();
 
-		bool Construct(float width, float height, std::string name);
+		bool Construct(float width, float height, std::string name, bool fullscreen);
 		void Run(std::vector<FsObject*>);
 
 		void SetCamera(FsCamera&);

@@ -7,6 +7,9 @@
 #include "FsDLL.h"
 #include "FsMaths.h"
 #include "FsMaterial.h"
+#include "FsCollider.h"
+//#pragma warning
+
 
 namespace FausEngine {
 
@@ -19,19 +22,22 @@ namespace FausEngine {
 		~FsMesh();
 
 		void LoadMesh();
+		void SetCollider(FsCollider&);
 		void Render();
-		int algo()const;
 
-		FsTransform meshTransform;
+		FsTransform transform;
 		FsMaterial material;
+
+		bool on;
 
 	private:
 		unsigned int VBO, VAO;
 		bool meshLoaded;
 		std::string path;
-		int a;
 		std::vector<float> elementosVertice;
 		std::vector<float> vertexElements;
+		FsCollider* collider = nullptr;
+		FsVector3 distanceCollider[4];
 	};
 
 }

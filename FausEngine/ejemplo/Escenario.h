@@ -63,12 +63,15 @@ private:
 	int indexCollision=0;
 	int indexCollisionMOnedas=0;
 
-	FsText texto1, texto2;
+	FsText texto1, texto2, texto3;
 
 	bool jump=false;
 	float jumpLap;
 	int contadorTeclaEspacio=0;
 	float moveLinear = 0;
+	bool iniciar=false;
+	bool moveOsci=false;
+	float movePlataform=0;
 };
 
 

@@ -21,7 +21,7 @@ Window::Window(){}
 
 bool* Window::getKeys() { return keys; }
 
-bool Window::createWindow(GLint windowWidth, GLint windowHeight, std::string tit)
+bool Window::createWindow(GLint windowWidth, GLint windowHeight, std::string tit, bool fullScreen)
 {
 	widthWindow = windowWidth;
 	heightWindow = windowHeight;
@@ -43,7 +43,13 @@ bool Window::createWindow(GLint windowWidth, GLint windowHeight, std::string tit
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	mainWindow = glfwCreateWindow(widthWindow, heightWindow, nombre.c_str(), NULL, NULL);
+	if (fullScreen) {
+		mainWindow = glfwCreateWindow(widthWindow, heightWindow, nombre.c_str(), glfwGetPrimaryMonitor(), NULL);
+	}
+	else {
+		mainWindow = glfwCreateWindow(widthWindow, heightWindow, nombre.c_str(), NULL, NULL);
+	}
+	
 	if (!mainWindow)
 	{
 		glfwTerminate();

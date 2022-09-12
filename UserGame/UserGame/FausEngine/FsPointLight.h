@@ -18,6 +18,9 @@ namespace FausEngine {
 		float* GetConstant();
 		float* GetLinear();
 		float* GetExponent();
+		void SetPosition(FsVector3);
+		void SetDiffuse(FsVector3);
+		void SetLinear(float);
 
 	protected:
 		FsVector3 position;

@@ -9,25 +9,65 @@ add_executable (UserGame "main.cpp" "UserGame.h" "UserGame.cpp" "Escenario.h" "E
 
 target_link_libraries(UserGame ${CMAKE_CURRENT_LIST_DIR}/FausEngine/Libs/FausEngine.lib)
 
-#[[
-make_directory(${CMAKE_BINARY_DIR}/UserGame/Shaders)
-file(GLOB FSSHADERS ${CMAKE_CURRENT_LIST_DIR}/FausEngine/Shaders/*.glsl)
-file(GLOB IMG ${CMAKE_CURRENT_LIST_DIR}/FausEngine/Shaders/*.png)
+##################### MALLAS
 
-
+file(GLOB MODELS Assets/Models/*.obj)
+make_directory(${CMAKE_BINARY_DIR}/UserGame/Models)
 add_custom_command(
-    TARGET UserGame POST_BUILD
+    TARGET UserGame PRE_BUILD 
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${FSSHADERS}
-        ${CMAKE_BINARY_DIR}/UserGame/shaders
+        ${MODELS}
+        ${CMAKE_BINARY_DIR}/UserGame/Models
    )
 
+   ##################TEXTURAS
+file(GLOB pngTEX Assets/Textures/*.png)
+make_directory(${CMAKE_BINARY_DIR}/UserGame/Textures)
 add_custom_command(
-    TARGET UserGame POST_BUILD
+    TARGET UserGame PRE_BUILD 
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${IMG}
-        ${CMAKE_BINARY_DIR}/UserGame/shaders
+        ${pngTEX}
+        ${CMAKE_BINARY_DIR}/UserGame/Textures
    )
 
-   ]]
-# TODO: Add tests and install targets if needed.
+file(GLOB jpgTEX Assets/Textures/*.jpg)
+make_directory(${CMAKE_BINARY_DIR}/UserGame/Textures)
+add_custom_command(
+    TARGET UserGame PRE_BUILD 
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${jpgTEX}
+        ${CMAKE_BINARY_DIR}/UserGame/Textures
+   )
+
+   ########################FUENTES
+file(GLOB fonts Assets/Fonts/*.ttf)
+
+make_directory(${CMAKE_BINARY_DIR}/UserGame/Fonts)
+add_custom_command(
+    TARGET UserGame PRE_BUILD 
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${fonts}
+        ${CMAKE_BINARY_DIR}/UserGame/Fonts
+   )
+
+file(GLOB fontsOTF Assets/Fonts/*.otf)
+
+make_directory(${CMAKE_BINARY_DIR}/UserGame/Fonts)
+add_custom_command(
+    TARGET UserGame PRE_BUILD 
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${fontsOTF}
+        ${CMAKE_BINARY_DIR}/UserGame/Fonts
+   )
+
+   ################## DLL
+   
+file(GLOB fsdll FausEngine/Libs/FausEngine.dll)
+
+make_directory(${CMAKE_BINARY_DIR}/UserGame)
+add_custom_command(
+    TARGET UserGame PRE_BUILD 
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${fsdll}
+        ${CMAKE_BINARY_DIR}/UserGame
+   )
