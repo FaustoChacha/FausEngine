@@ -40,7 +40,7 @@ namespace FausEngine {
 		~FsCollider();
 
 		int id;
-		//bool on;
+		bool on;
 
 	private:
 		FsVector3 max, min;

@@ -12,6 +12,7 @@
 #include"FsSkybox.h"
 #include"FsCollider.h"
 #include"FsText.h"
+#include"FsImage2D.h"
 
 //#include<btBulletDynamicsCommon.h>//BT.........
 
@@ -61,21 +62,30 @@ private:
 	FsSpotLight spotlight[4];
 	FsSkybox sky;
 
+	FsText texto1, texto2, texto3;
+	FsImage2D imgVidas[3];
+	FsImage2D imgMenu, imgMenuPress, imgGanaste, imgPressEscape, imgPause;
+
+	FsMesh item;
+	FsCollider collItem;
+
 	bool swCam = false;
 	bool* teclas;
 	int indexCollision = 0;
 	int indexCollisionMOnedas = 0;
 
-	FsText texto1, texto2, texto3;
-
 	bool jump = false;
 	float jumpLap;
+	int powerJump = 22;
+	float timePowerJump = 0.0f;
+	FsVector3 colorPower = { 1,1,1 };
 	int contadorTeclaEspacio = 0;
 	float moveLinear = 0;
 	bool iniciar = false;
 	bool moveOsci = false;
 	float movePlataform = 0;
-};
 
+	bool pausa = true;
+};
 
 #endif

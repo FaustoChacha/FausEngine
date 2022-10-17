@@ -21,7 +21,9 @@ namespace FausEngine {
 		uPoint_const, uPoint_lin, uPoint_exp,
 		uSpot_Dir,
 		//text
-		uOrtoProjection, uTextColor
+		uOrtoProjection, uTextColor,
+		//imagen
+		utexture
 	};
 
 	class EXPORTDLL FsShader

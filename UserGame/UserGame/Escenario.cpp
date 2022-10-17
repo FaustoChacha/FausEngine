@@ -152,11 +152,12 @@ void Plataformas::Control2D(FsTransform& targetPos, float dt, float t) {
 	auto postemp = targetPos.position;
 
 	if (teclas[32]) {// space
+		if (!iniciar) pausa = false;
 		iniciar = true;
 	}
 
 
-	if (iniciar) {
+	if (!pausa) {
 		if (teclas[68]) { // D
 			player.transform.rotation.y -= 0.35f; // animacion
 			targetPos.position.x -= 5 * dt;
@@ -219,6 +220,15 @@ void Plataformas::Begin() {
 
 	colMin1 = colMax1;
 	colMin1.material.color = { 0.5f,0.5f,0.5f };
+
+	//item----
+	item = FsMesh("Models/fSphere.obj");
+	item.LoadMesh();
+	item.material.type = TypeMaterial::Unlit;
+	item.material.color = { 1,1,1 };
+	item.transform.position = { -77, -7,0 };
+	collItem = FsCollider({ 0.3f,0.3f,0.3f }, { -0.3f,-0.3f,-0.3f });
+	item.SetCollider(collItem);
 
 
 	//=======PLATAFORMAS======
@@ -479,6 +489,35 @@ void Plataformas::Begin() {
 	texto3 = FsText("Fonts/SpaceMission-rgyw9.otf", 50, "A - D  t o  m o v e", FsVector2(150, 400), FsVector3(1, 0, 1));
 	texto2 = FsText("Fonts/waltographUI.ttf", 50, std::to_string(puntos), FsVector2(20, 520), FsVector3(1, 1, 1));
 
+	//=================== imagenes======================
+	imgVidas[0].LoadImage("Textures/vida1.png");
+	imgVidas[0].SetScale({ 0.15f,0.2f,1 });
+	float y = -0.7f;
+	imgVidas[0].SetPosition({ 0.3,y,0 });
+
+	imgVidas[1] = imgVidas[0];
+	imgVidas[1].SetPosition({ 0.55, y,0 });
+
+	imgVidas[2] = imgVidas[0];
+	imgVidas[2].SetPosition({ 0.8, y,0 });
+
+	imgMenu.LoadImage("Textures/menu.png");
+	imgMenu.SetScale({ 2,2,2 });
+
+	imgMenuPress.LoadImage("Textures/PressSpace.png");
+	imgMenuPress.SetPosition({ 0,-0.65f,0 });
+	imgMenuPress.SetScale({ 1,0.25f,1 });
+
+	imgGanaste.LoadImage("Textures/ganaste.png");
+	imgGanaste.SetScale({ 2,2,2 });
+
+	imgPressEscape.LoadImage("Textures/PressEscape.png");
+	imgPressEscape.SetPosition({ 0,-0.65f,0 });
+	imgPressEscape.SetScale({ 1,0.25f,1 });
+
+	imgPause.LoadImage("Textures/Pause.png");
+	imgPause.SetScale({ 0.75f,0.2f,1 });
+
 	//LUZCES================
 	luzDireccional = FsDireciontalLight(
 		FsVector3(0.2f, -1, 0.2f),
@@ -501,11 +540,9 @@ void Plataformas::Begin() {
 
 
 void Plataformas::Update(float deltaTime, float time) {
+	//ControlFPS(deltaTime, time);
 
-
-
-
-
+	//luz intermitente
 	if (vidasPlayer == 3) {
 		moveLinear = (sin(2 * time) / 4) + 0.25f;
 	}
@@ -530,9 +567,6 @@ void Plataformas::Update(float deltaTime, float time) {
 	{
 		if (collPlayer.CheckCollision(var)) {
 			indexCollision = var.id;
-			if (indexCollision == 13) {
-				exit(3);
-			}
 		}
 	}
 	//colisiones moneadas
@@ -544,27 +578,34 @@ void Plataformas::Update(float deltaTime, float time) {
 	}
 
 	//gravedad----------------------------
-	if (!collPlayer.CheckCollision(collPlataformas[indexCollision])) {
-		player.transform.position.y -= 15 * deltaTime;
+	if (!pausa) {
+		if (!collPlayer.CheckCollision(collPlataformas[indexCollision])) {
+			player.transform.position.y -= 15 * deltaTime;
+		}
 	}
+
 	//salto---------------
-	if (teclas[32]) { // space
-		if (collPlayer.CheckCollision(collPlataformas[indexCollision])) {
+	if (!pausa) {
+		if (teclas[32]) { // space
+			//pausa = false;
+			if (collPlayer.CheckCollision(collPlataformas[indexCollision])) {
+				teclas[32] = false;
+				jump = true;
+				jumpLap = time + 0.5f;
+				contadorTeclaEspacio++;
+				if (contadorTeclaEspacio > 1)contadorTeclaEspacio = 0;
+			}
+		}
+		if (jump && contadorTeclaEspacio == 1) {
 			teclas[32] = false;
-			jump = true;
-			jumpLap = time + 0.5f;
-			contadorTeclaEspacio++;
-			if (contadorTeclaEspacio > 1)contadorTeclaEspacio = 0;
+			player.transform.position.y += powerJump * deltaTime;
+			if (time >= jumpLap) {
+				jump = false;
+				contadorTeclaEspacio = 0;
+			}
 		}
 	}
-	if (jump && contadorTeclaEspacio == 1) {
-		teclas[32] = false;
-		player.transform.position.y += 22 * deltaTime;
-		if (time >= jumpLap) {
-			jump = false;
-			contadorTeclaEspacio = 0;
-		}
-	}
+
 
 	//reinicio--------------
 	if (player.transform.position.y < -15) {
@@ -582,18 +623,26 @@ void Plataformas::Update(float deltaTime, float time) {
 	}
 
 	//movimiento ocsilaTORIO PLATAFORMAS 4,5,6
-	if (moveOsci) {
-		movePlataform += 0.01f;
+	if (!pausa) {
+		if (moveOsci) {
+			movePlataform += 0.01f;
+		}
+		else {
+			movePlataform -= 0.01f;
+		}
+		if (movePlataform <= -1) {
+			moveOsci = true;
+		}
+		if (movePlataform >= 1) {
+			moveOsci = false;
+		}
+		//item
+		item.transform.scale.x += sin(time) * deltaTime;
+		item.transform.scale.y += sin(time) * deltaTime;
+		item.transform.scale.z += sin(time) * deltaTime;
 	}
 	else {
-		movePlataform -= 0.01f;
-	}
-
-	if (movePlataform <= -1) {
-		moveOsci = true;
-	}
-	if (movePlataform >= 1) {
-		moveOsci = false;
+		movePlataform = 0;
 	}
 
 	//direccion de colision-------------------------
@@ -608,6 +657,7 @@ void Plataformas::Update(float deltaTime, float time) {
 
 	if (collPlayer.GetDirection(collPlataformas[indexCollision]) == CollisionDirection::UP) {
 		player.transform.position.y += 0.0f * deltaTime;
+		//para plataformas en movimiento
 		if (indexCollision == 4) {
 			player.transform.position.y += movePlataform * deltaTime;
 		}
@@ -620,11 +670,11 @@ void Plataformas::Update(float deltaTime, float time) {
 			player.transform.position.y += movePlataform * deltaTime;
 		}
 	}
-
+	//colision platafortmas
 	if (collPlayer.GetDirection(collPlataformas[indexCollision]) == CollisionDirection::DOWN) {
 		player.transform.position.y -= repulsion * deltaTime;
 	}
-
+	//colision monedas
 	if (collPlayer.GetDirection(collMonedas[indexCollisionMOnedas]) == CollisionDirection::RIGHT || collPlayer.GetDirection(collMonedas[indexCollisionMOnedas]) == CollisionDirection::UP || collPlayer.GetDirection(collMonedas[indexCollisionMOnedas]) == CollisionDirection::DOWN || collPlayer.GetDirection(collMonedas[indexCollisionMOnedas]) == CollisionDirection::LEFT) {
 		if (indexCollisionMOnedas == 0) {
 			if (monedas[0].on) {
@@ -721,9 +771,31 @@ void Plataformas::Update(float deltaTime, float time) {
 
 	}
 
+	//item
+	if (player.transform.position.x < -70) {
+		if (collPlayer.CheckCollision(collItem)) {
+			powerJump = 32;
+			item.on = false;
+			collItem.on = false;
+		}
+	}
+	if (powerJump == 32) {
+		timePowerJump += 0.01f;
+		pointLight[0].SetDiffuse(colorPower);
+		mLuzPlayer.material.color = colorPower;
 
-	//colMax1.transform.position = collMonedas[0].GetMax();
-	//colMin1.transform.position = collMonedas[0].GetMin();
+		if (timePowerJump > 50) {
+			powerJump = 22;
+		}
+
+	}
+	else {
+		pointLight[0].SetDiffuse(colorVida);
+		mLuzPlayer.material.color = colorVida;
+	}
+
+	//colMax1.transform.position = collItem.GetMax();
+	//colMin1.transform.position = collItem.GetMin();
 	//colMax1.Render();
 	//colMin1.Render();
 	//colMax2.transform.position = collPlataformas[0].GetMax();
@@ -735,10 +807,13 @@ void Plataformas::Update(float deltaTime, float time) {
 	//refRight.transform.position = collPlataformas[1].GetDown();
 	//refRight.Render();
 
-	orbitar(-10, 10, mLuzPlayer.transform, player.transform, deltaTime, time, 20);
-	mLuzPlayer.material.color = colorVida;
+	if (!pausa) {
+		orbitar(-10, 10, mLuzPlayer.transform, player.transform, deltaTime, time, 20);
+	}
+
+	//mLuzPlayer.material.color = colorVida;
 	mLuzPlayer.Render();
-	pointLight[0].SetDiffuse(colorVida);
+	//pointLight[0].SetDiffuse(colorVida);
 	pointLight[0].SetLinear(moveLinear);
 	pointLight[0].SetPosition(player.transform.position);
 
@@ -762,7 +837,6 @@ void Plataformas::Update(float deltaTime, float time) {
 	plataformas[11].Render();
 	plataformas[12].Render();
 	plataformas[13].Render();
-
 
 	monedas[0].transform.rotation.y += 0.2f;
 	monedas[0].Render();
@@ -795,12 +869,48 @@ void Plataformas::Update(float deltaTime, float time) {
 	monedas[14].transform.rotation.y += 0.2f;
 	monedas[14].Render();
 
+	item.Render();
+
 	if (!iniciar) {
-		texto1.Render();
-		texto3.Render();
+		pausa = true;
+		if ((int)time % 2 == 0) {
+			imgMenuPress.Render();
+		}
+		imgMenu.Render();
 	}
+
+	if (indexCollision == 13) {
+		pausa = true;
+		if ((int)time % 2 == 0) {
+			imgPressEscape.Render();
+		}
+		imgGanaste.Render();
+	}
+
 
 	texto2.Render();
 	texto2.SetText(std::to_string(puntos));
+
+	if (vidasPlayer == 3) {
+		imgVidas[0].Render();
+		imgVidas[1].Render();
+		imgVidas[2].Render();
+	}
+	if (vidasPlayer == 2) {
+		imgVidas[1].Render();
+		imgVidas[2].Render();
+	}
+	if (vidasPlayer == 1) {
+		imgVidas[2].Render();
+	}
+
+	if (teclas[80]) {//p
+		pausa = !pausa;
+		teclas[80] = false;
+	}
+
+	if (pausa)imgPause.Render();
+
+
 
 }
