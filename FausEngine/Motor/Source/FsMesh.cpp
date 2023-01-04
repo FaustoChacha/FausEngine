@@ -25,7 +25,7 @@ FsMesh::FsMesh()
 	material = FsMaterial();
 	collider = nullptr;
 	on = true;
-	
+	shader = std::make_shared<FsShader>(FausEngine::FsGame::GetInstance()->GetShader(0));
 }
 
 FsMesh::FsMesh(std::string _path)
@@ -45,16 +45,20 @@ FsMesh::~FsMesh()
 }
 
 void FsMesh::SetCollider(FsCollider& c) {
-		collider = &c;
-		//tomo la posicion de la malla + la pos inicial del limite max/min del collider y allo la distancia entre el limiite y el centro de la malla
-		distanceCollider[0] = collider->DistanceToPivot(transform.position, CollisionDirection::MAX);
-		distanceCollider[1] = collider->DistanceToPivot(transform.position, CollisionDirection::MIN);
-		distanceCollider[2] = collider->GetMax();
-		distanceCollider[3] = collider->GetMin();
+	//collider = &c;
+	//collider = std::make_shared<FsCollider>(c);
+	collider.reset(&c);
+	//tomo la posicion de la malla + la pos inicial del limite max/min del collider y allo la distancia entre el limiite y el centro de la malla
+	distanceCollider[0] = collider->DistanceToPivot(transform.position, CollisionDirection::MAX);
+	distanceCollider[1] = collider->DistanceToPivot(transform.position, CollisionDirection::MIN);
+	distanceCollider[2] = collider->GetMax();
+	distanceCollider[3] = collider->GetMin();
 }
 
 void FsMesh::LoadMesh()
 {
+	shader = std::make_shared<FsShader>(FausEngine::FsGame::GetInstance()->GetShader(0));
+
 	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
 	std::vector<glm::vec3> tempVertices;
 	std::vector<glm::vec2> tempUVs;
@@ -175,7 +179,8 @@ void FsMesh::Render()
 
 	if (on) {
 	
-		auto sh = material.GetShader();
+		//auto sh = material.GetShader();
+		auto sh = shader;
 
 		//Mesh Trasnform 
 		glm::mat4 mModel(1.0f);
@@ -208,6 +213,7 @@ void FsMesh::Render()
 
 		//Collider---------------------------------------
 		if (collider) {
+			
 			collider->SetMax(transform.position + distanceCollider[0]);
 			collider->SetMin(transform.position - distanceCollider[1]);
 

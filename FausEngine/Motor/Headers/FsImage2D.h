@@ -20,7 +20,8 @@ namespace FausEngine {
 	private:
 		unsigned int textureID;
 		unsigned int vbo, ibo, vao;
-		FsShader* shader;
+		//FsShader* shader;
+		std::shared_ptr<FsShader> shader;
 		FsTransform transform;
 	};
 }

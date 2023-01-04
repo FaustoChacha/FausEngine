@@ -5,14 +5,16 @@ using namespace FausEngine;
 
 FsDireciontalLight:: FsDireciontalLight():FsLight() {
 	direction = FsVector3(0.0f, -0.4f, -0.17f);
-    shader = FsGame::GetInstance()->GetShader(0);
+    //shader = FsGame::GetInstance()->GetShader(0);
+	//shader.reset(FsGame::GetInstance()->GetShader(0));
 }
 
 FsDireciontalLight::FsDireciontalLight(FsVector3 _direction, FsVector3 _ambient, FsVector3 _diffuse, FsVector3 _specular):
 	FsLight(_ambient, _diffuse, _specular)
 {
 	this->direction = _direction;
-    this->shader = FsGame::GetInstance()->GetShader(0);
+    //this->shader = FsGame::GetInstance()->GetShader(0);
+	//shader.reset(FsGame::GetInstance()->GetShader(0));
 }
 
 void FsDireciontalLight::Load() 

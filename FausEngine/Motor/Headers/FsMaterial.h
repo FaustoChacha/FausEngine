@@ -20,7 +20,7 @@ namespace FausEngine {
 		FsMaterial(FsVector3 ambient, FsVector3 specular, FsVector3 color, float shineness, TypeMaterial type, bool bind);
 		~FsMaterial();
 		bool LoadTexture(std::string path);
-		FsShader* GetShader();
+		//FsShader* GetShader();
 		unsigned int GetTexture();
 
 		FsVector3 ambient;
@@ -32,7 +32,8 @@ namespace FausEngine {
 		bool bind_TexToColor;
 
 	private:
-		FsShader *shader;
+		//FsShader *shader;
+		//std::shared_ptr<FsShader> shader;
 		unsigned int textureID;
 	};
 }

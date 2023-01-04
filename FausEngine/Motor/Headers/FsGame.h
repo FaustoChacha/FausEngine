@@ -2,7 +2,7 @@
 #define FSGAME
 
 #include"FsDLL.h"
-#include"FsObject.h"
+#include"FsScene.h"
 #include"FsCamera.h"
 #include"FsShader.h"
 #include"FsSkybox.h"
@@ -19,7 +19,7 @@ namespace FausEngine {
 		~FsGame();
 
 		bool Construct(float width, float height, std::string name, bool fullscreen);
-		void Run(std::vector<FsObject*>);
+		void Run(std::vector<FsScene*>);
 		void SetScene(int);
 
 		void SetCamera(FsCamera&);
@@ -27,7 +27,8 @@ namespace FausEngine {
 		template<typename light> void LoadLight(light*);
 
 		static FsGame* GetInstance();
-		FsShader* GetShader(int);
+		FsShader& GetShader(int);
+		//FsShader& GetSh(int);
 		FsCamera* GetCamera();
 
 		//window

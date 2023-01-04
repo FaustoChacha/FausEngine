@@ -17,7 +17,8 @@ FsCamera::FsCamera()
 	forward = FsVector3(0.0f, 0.0f, -1.0f);
 	up = FsVector3(0, 1, 0);
 	right = FsVector3(1, 0, 0);
-	frustrum = new FsVector3(glm::radians(60.0f), 0.1f, 1000.0f);
+	//frustrum = new FsVector3(glm::radians(60.0f), 0.1f, 1000.0f);
+	frustrum.reset(new FsVector3(glm::radians(60.0f), 0.1f, 1000.0f));
 	target = position + forward;
 }
 
@@ -30,14 +31,15 @@ FsCamera::FsCamera(FsVector3 startPosition)
 	forward = FsVector3(0.0f, 0.0f, -1.0f);
 	up = FsVector3(0,1,0);
 	right = FsVector3(1,0,0);
-	frustrum = new FsVector3(glm::radians(60.0f), 0.1f, 1000.0f);
+	//frustrum = new FsVector3(glm::radians(60.0f), 0.1f, 1000.0f);
+	frustrum.reset(new FsVector3(glm::radians(60.0f), 0.1f, 1000.0f));
 	target = position + forward;
 }
 
 //getters
 
-FsVector3* FsCamera::GetFrustrum() {
-	return frustrum;
+FsVector3 FsCamera::GetFrustrum() {
+	return *frustrum;
 }
 
 FsVector3 FsCamera::GetPosition(){

@@ -5,11 +5,11 @@
 
 namespace FausEngine {
 
-	class EXPORTDLL FsObject
+	class EXPORTDLL FsScene
 	{
 	public:
-		FsObject();
-		~FsObject();
+		FsScene();
+		~FsScene();
 
 		virtual void Begin() = 0;
 		virtual void Update(float deltaTime, float time) = 0;

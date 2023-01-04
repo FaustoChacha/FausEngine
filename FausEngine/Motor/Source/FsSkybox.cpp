@@ -56,5 +56,5 @@ unsigned int FsSkybox::GetTextureID() {
 
 FsSkybox::~FsSkybox()
 {
-    textureID = 0;
+    glDeleteTextures(1, &textureID);
 }

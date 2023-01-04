@@ -34,7 +34,8 @@ namespace FausEngine {
 		~FsText();
 
 	private:
-		FsShader* shader;
+		//FsShader* shader;
+		std::shared_ptr<FsShader> shader;
 		std::string text;
 		FsVector3 color;
 		FsVector2 position;

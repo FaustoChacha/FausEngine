@@ -1,4 +1,4 @@
-#include"../Motor/Headers/FsObject.h"
+#include"../Motor/Headers/FsScene.h"
 #include"../Motor/Headers/FsMaterial.h"
 #include"../Motor/Headers/FsMaths.h"
 #include"../ejemplo/UserGame.h"
@@ -22,7 +22,7 @@
 using namespace std;
 using namespace FausEngine;
 
-class Inicio : public FsObject
+class Inicio : public FsScene
 {
 public:
 	Inicio();
@@ -38,7 +38,7 @@ private:
 
 
 
-class Plataformas :public FsObject 
+class Plataformas :public FsScene
 {
 public: 
 	Plataformas();

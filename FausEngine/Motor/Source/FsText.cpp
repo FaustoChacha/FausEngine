@@ -15,14 +15,16 @@ float scale;
 
 FsText::FsText()
 {
-	shader= FsGame::GetInstance()->GetShader(1);
+	//shader= &FsGame::GetInstance()->GetShader(1);
+	shader = std::make_shared<FsShader>(FsGame::GetInstance()->GetShader(1));
 	text = "FausEngine";
 	color = {1,1,1};
 	position = {0,0};
 }
 
 FsText::FsText(std::string font, int size, std::string text, FsVector2 pos, FsVector3 color) {
-	shader = FsGame::GetInstance()->GetShader(1);
+	//shader = &FsGame::GetInstance()->GetShader(1);
+	shader = std::make_shared<FsShader>(FsGame::GetInstance()->GetShader(1));
 	this->text = text;
 	this->color = color;
 	scale = 1.0;
@@ -196,4 +198,9 @@ FsVector2 FsText::GetPosition() {
 
 FsText::~FsText()
 {
+	//auto i = Characters.begin();
+	//while (i != Characters.end()) {
+	//	glDeleteTextures(1, &i->second.texture);
+	//	++i;
+	//}
 }

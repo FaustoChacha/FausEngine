@@ -19,6 +19,7 @@ FsCollider::FsCollider(FsVector3 max, FsVector3 min) {
 	this->max = max;
 	this->min = min;
 	id = 0;
+	on = true;
 }
 
 

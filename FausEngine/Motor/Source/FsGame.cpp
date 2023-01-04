@@ -23,7 +23,7 @@
 using namespace FausEngine;
 
 static FsGame* game;
-int scene = 0;
+int index_scene = 0;
 int begin = 0;
 
 Window mainWindow;
@@ -415,18 +415,22 @@ glm::mat4 CalcularMatrizVista() {
 }
 
 void FsGame::SetScene(int s) {
-    scene = s;
+    index_scene = s;
     begin = 0;
 }
 
-FsShader* FsGame::GetShader(int n) {
-    if (n == 0) return &MainShader;
-    if (n == 1)return &TextShader;
-    if (n == 2) return &ImageShader;
-    return nullptr;
+FsShader& FsGame::GetShader(int n) {
+    if (n == 0) return MainShader;
+    if (n == 1) return TextShader;
+    if (n == 2) return ImageShader;
+    //return nullptr;
 }
 
-void FsGame::Run(std::vector<FsObject*> escena) {
+//FsShader FsGame::GetSh(int) {
+//    return ImageShader;
+//}
+
+void FsGame::Run(std::vector<FsScene*> escena) {
 
     ValidarVentana();
     ValidarCamara();
@@ -439,7 +443,7 @@ void FsGame::Run(std::vector<FsObject*> escena) {
     unsigned int uPointLightCounter = 0;
     unsigned int uSpotLightCounter = 0;
 
-    FsVector3 frustrum = *camera->GetFrustrum();
+    FsVector3 frustrum = camera->GetFrustrum();
     glm::mat4 projection = glm::perspective(frustrum.x, (float)width/(float)height, frustrum.y, frustrum.z);
 
     //===========================Texto===============================
@@ -454,8 +458,9 @@ void FsGame::Run(std::vector<FsObject*> escena) {
     while (!glfwWindowShouldClose(mainWindow.getWindowReference()))
     {
         if (begin == 0) {
-            if (scene > escena.size() || scene < 0) exit(3);
-            escena[scene]->Begin();
+            if (index_scene > escena.size() || index_scene < 0) exit(3);
+            
+            escena[index_scene]->Begin();
 
             MainShader.Compile(pointlights.size(), spotLights.size());
             SkyboxShader.Compile(0, 0);
@@ -624,12 +629,20 @@ void FsGame::Run(std::vector<FsObject*> escena) {
             }
         }
 
-        escena[scene]->Update(deltaTime, now);
+        escena[index_scene]->Update(deltaTime, now);
 
         glUseProgram(0);
         glfwSwapBuffers(mainWindow.getWindowReference());
     }
-   
+
+    // ========== liberar memoria =================
+    delete skybox, camera, directionalLight, game;
+
+    for (auto i = 0; i < spotLights.size(); i++)
+        delete spotLights[i];
+
+    for (auto i = 0; i < pointlights.size(); i++)
+        delete pointlights[i];
 	
 }
 

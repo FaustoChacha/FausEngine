@@ -1,7 +1,8 @@
-cmake_minimum_required (VERSION 3.2)
+cmake_minimum_required(VERSION 3.21.0)
 #include(GenerateExportHeader)
 
 project(FausEngine )
+#find_package(IntelDPCPP REQUIRED)
 
 ################# CONAN SETUP ###########################
 find_program(conan conan)
@@ -24,6 +25,7 @@ target_link_libraries(FausExe FausEngine) #${CONAN_LIBS
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4251")
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17) 
+
 
 #[[
 add_custom_command(

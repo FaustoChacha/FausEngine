@@ -11,7 +11,8 @@ using namespace FausEngine;
 
 FsImage2D::FsImage2D()
 {
-	shader = FausEngine::FsGame::GetInstance()->GetShader(2);
+	shader = std::make_shared<FsShader>(FausEngine::FsGame::GetInstance()->GetShader(2));
+
 	vbo = 0; ibo = 0; vao = 0;
 	textureID = 0;
 	transform = FsTransform();
@@ -19,6 +20,8 @@ FsImage2D::FsImage2D()
 
 void FsImage2D::LoadImage(std::string path)
 {
+	shader = std::make_shared<FsShader>(FausEngine::FsGame::GetInstance()->GetShader(2));
+
 	int width, height, bitDepth;
 
 	unsigned char* texData = stbi_load(path.c_str(), &width, &height, &bitDepth, 0);
@@ -127,4 +130,5 @@ void FsImage2D::SetScale(FsVector3 v) {
 
 FsImage2D::~FsImage2D()
 {
+	glDeleteTextures(1,&textureID);
 }

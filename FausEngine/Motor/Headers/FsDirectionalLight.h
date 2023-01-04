@@ -5,6 +5,7 @@
 #include "FsMaths.h"
 #include "FsLight.h"
 #include "FsShader.h"
+#include<iostream>
 
 namespace FausEngine {
 	class EXPORTDLL FsDireciontalLight : public FsLight
@@ -20,7 +21,8 @@ namespace FausEngine {
 		~FsDireciontalLight();
 
 	private:
-		FsShader* shader;
+		//FsShader* shader;
+		//std::shared_ptr<FsShader> shader;
 		FsVector3 direction;
 	};
 }

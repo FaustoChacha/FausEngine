@@ -3,6 +3,7 @@
 
 #include "FsDLL.h"
 #include "FsMaths.h"
+#include <iostream>
 
 namespace FausEngine {
 
@@ -12,7 +13,7 @@ namespace FausEngine {
 		FsCamera();
 		FsCamera(FsVector3 position);
 
-		FsVector3* GetFrustrum();
+		FsVector3 GetFrustrum();
 		FsVector3 GetPosition();
 		float GetPitch();
 		float GetYaw();
@@ -37,7 +38,8 @@ namespace FausEngine {
 
 	private:
 		FsVector3 position;
-		FsVector3* frustrum; //fovy, near, far
+		std::shared_ptr<FsVector3> frustrum;
+		//FsVector3* frustrum; //fovy, near, far
 		FsVector3 target;
 
 		// Directions (auto normalice)

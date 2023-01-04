@@ -15,19 +15,20 @@ using namespace FausEngine;
 
 FsMaterial::FsMaterial()
 {
-	ambient = {0.5f,0.5f ,0.5f };
+	ambient = { 0.5f,0.5f ,0.5f };
 	specular = { 0.1f, 0.1f, 0.1f };
-	color = {1.0f, 1.0f, 1.0f };
+	color = { 1.0f, 1.0f, 1.0f };
 	shineness = 1;
 	type = TypeMaterial::Lit;
 	bind_TexToColor = false;
 	textureID = 0;
-	shader = FausEngine::FsGame::GetInstance()->GetShader(0);
+	//shader = &FausEngine::FsGame::GetInstance()->GetShader(0);
+	//shader = std::make_shared<FsShader>(FausEngine::FsGame::GetInstance()->GetShader(0));
 }
 
-FsShader* FsMaterial::GetShader() {
-	return shader;
-}
+//FsShader* FsMaterial::GetShader() {
+//	return shader;
+//}
 
 FsMaterial::FsMaterial(FsVector3 ambient, FsVector3 specular, FsVector3 color, float shineness, TypeMaterial type, bool bind)
 {
@@ -38,7 +39,7 @@ FsMaterial::FsMaterial(FsVector3 ambient, FsVector3 specular, FsVector3 color, f
 	this->type = type;
 	this->bind_TexToColor = bind;
 	this->textureID = 0;
-	shader = FausEngine::FsGame::GetInstance()->GetShader(0);
+	//shader = std::make_shared<FsShader>(FausEngine::FsGame::GetInstance()->GetShader(0));
 }
 
 void LoadtextureAux(unsigned int& textureID, std::string  path) {
@@ -135,7 +136,5 @@ bool FsMaterial::LoadTexture(std::string path)
 
 FsMaterial::~FsMaterial()
 {
-	//texture
 	glDeleteTextures(1, &textureID);
-	textureID = 0;
 }
