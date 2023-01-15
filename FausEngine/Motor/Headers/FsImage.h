@@ -4,18 +4,19 @@
 #include"FsDLL.h"
 #include<iostream>
 #include"FsShader.h"
+#include"FsLog.h"
 
 namespace FausEngine {
-	class EXPORTDLL FsImage2D 
+	class EXPORTDLL FsImage
 	{
 	public:
-		FsImage2D();
+		FsImage();
 		void LoadImage(std::string path);
 		void SetPosition(FsVector3);
 		void SetRotation(FsVector3);
 		void SetScale(FsVector3);
 		void Render();
-		~FsImage2D();
+		~FsImage();
 
 	private:
 		unsigned int textureID;
@@ -23,6 +24,7 @@ namespace FausEngine {
 		//FsShader* shader;
 		std::shared_ptr<FsShader> shader;
 		FsTransform transform;
+		FsLog logger;
 	};
 }
 

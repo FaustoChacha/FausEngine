@@ -4,6 +4,7 @@
 #include"FsDLL.h"
 #include"FsMaths.h"
 #include"FsShader.h"
+#include"FsLog.h"
 #include<iostream>
 
 namespace FausEngine {
@@ -35,6 +36,7 @@ namespace FausEngine {
 		//FsShader *shader;
 		//std::shared_ptr<FsShader> shader;
 		unsigned int textureID;
+		FsLog logger;
 	};
 }
 

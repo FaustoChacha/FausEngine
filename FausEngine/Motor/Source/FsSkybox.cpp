@@ -4,6 +4,7 @@
 //#define STB_IMAGE_IMPLEMENTATION
 #include "../Headers/stb_image.h"
 #include<iostream>
+#include <sstream>
 
 using namespace FausEngine;
 
@@ -12,14 +13,20 @@ FsSkybox::FsSkybox()
 	textureID = 0;
     on = true;
     colour = {1,1,1};
+    logger.CreateLogger("FsLogger","log-FsSkybox");
 }
 
 FsSkybox::FsSkybox(std::vector <std::string> caras)
 {
 	pathFaces = caras;
+    logger.CreateLogger("FsLogger", "log-FsSkybox");
 }
 
 void FsSkybox::Load() {
+    const void* address = static_cast<const void*>(this);
+    std::stringstream ss;
+    ss << address;
+
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 
@@ -36,8 +43,11 @@ void FsSkybox::Load() {
         }
         else
         {
-            std::cout << "Skybox failed, path:: " << pathFaces[i] << std::endl;
+            logger.SetName("Skybox: " + ss.str());
+            logger.SetMessage("Skybox failed, path: "+ pathFaces[i], 1);
+            //std::cout << "Skybox failed, path:: " << pathFaces[i] << std::endl;
             stbi_image_free(data);
+            return;
         }
     }
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -47,6 +57,9 @@ void FsSkybox::Load() {
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
     FsGame::GetInstance()->SetSkybox(*this);
+
+    logger.SetName("Skybox: " + ss.str());
+    logger.SetMessage("Loaded skybox. ", 0);
 }
 
 unsigned int FsSkybox::GetTextureID() {

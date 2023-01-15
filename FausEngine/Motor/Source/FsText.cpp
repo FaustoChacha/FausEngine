@@ -7,6 +7,7 @@
 #include<glm/gtc/type_ptr.hpp> 
 
 #include <ft2build.h>
+#include <sstream>
 #include FT_FREETYPE_H  
 
 using namespace FausEngine;
@@ -20,9 +21,15 @@ FsText::FsText()
 	text = "FausEngine";
 	color = {1,1,1};
 	position = {0,0};
+	logger.CreateLogger("FsText","log-FsText");
 }
 
-FsText::FsText(std::string font, int size, std::string text, FsVector2 pos, FsVector3 color) {
+FsText::FsText(std::string path, int size, std::string text, FsVector2 pos, FsVector3 color) {
+	logger.CreateLogger("FsText", "log-FsText");
+	const void* address = static_cast<const void*>(this);
+	std::stringstream ss;
+	ss << address;
+
 	//shader = &FsGame::GetInstance()->GetShader(1);
 	shader = std::make_shared<FsShader>(FsGame::GetInstance()->GetShader(1));
 	this->text = text;
@@ -33,14 +40,21 @@ FsText::FsText(std::string font, int size, std::string text, FsVector2 pos, FsVe
 	//inicializar freetype
 	FT_Library ft;
 
-	// Corroboro
-	if (FT_Init_FreeType(&ft))
-		std::cout << "FsText not initialise" << std::endl;
+	// Corroboro que freetype este iniciado
+	if (FT_Init_FreeType(&ft)) {
+		logger.SetName("Text: " + ss.str());
+		logger.SetMessage("FsText not initialise", 1);
+
+	}
+		
 
 	// Cargo la fuente/font
 	FT_Face face;
-	if (FT_New_Face(ft, font.c_str(), 0, &face))
-		std::cout << "Failed to load font: "<< font.c_str() << std::endl;
+	if (FT_New_Face(ft, path.c_str(), 0, &face)) {
+		logger.SetName("Text: " + ss.str());
+		logger.SetMessage("Failed to load font: " +path, 1);
+	}
+		
 
 	// se establece el tamano en pixels
 	FT_Set_Pixel_Sizes(face, 0, size);
@@ -54,7 +68,9 @@ FsText::FsText(std::string font, int size, std::string text, FsVector2 pos, FsVe
 
 		// cargo el glifo
 		if (FT_Load_Char(face, i, FT_LOAD_RENDER)) {
-			std::cout << "Failed to load glyph: "<< face << std::endl;
+			//std::cout << "Failed to load glyph: "<< face << std::endl;
+			logger.SetName("Text: " + ss.str());
+			logger.SetMessage("Failed to load glyph. ", 1);
 			continue;
 		}
 
@@ -111,7 +127,8 @@ FsText::FsText(std::string font, int size, std::string text, FsVector2 pos, FsVe
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-
+	logger.SetName("Text: " + ss.str());
+	logger.SetMessage("Loaded Text. "+path, 0);
 }
 
 

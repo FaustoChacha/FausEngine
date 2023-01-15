@@ -4,6 +4,7 @@
 #include"FsDLL.h"
 #include"FsMaths.h"
 #include"FsShader.h"
+#include"FsLog.h"
 
 #include <map>
 #include <iostream>
@@ -41,6 +42,8 @@ namespace FausEngine {
 		FsVector2 position;
 
 		std::map<char, Character> Characters;
+
+		FsLog logger;
 	};
 
 

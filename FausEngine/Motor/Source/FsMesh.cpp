@@ -25,6 +25,7 @@ FsMesh::FsMesh()
 	material = FsMaterial();
 	collider = nullptr;
 	on = true;
+	logger.CreateLogger("FsMesh","log-FsMesh");
 	shader = std::make_shared<FsShader>(FausEngine::FsGame::GetInstance()->GetShader(0));
 }
 
@@ -36,6 +37,7 @@ FsMesh::FsMesh(std::string _path)
 	material = FsMaterial();
 	collider = nullptr;
 	on = true;
+	logger.CreateLogger("FsMesh", "log-FsMesh");
 }
 
 FsMesh::~FsMesh()
@@ -57,6 +59,11 @@ void FsMesh::SetCollider(FsCollider& c) {
 
 void FsMesh::LoadMesh()
 {
+
+	const void* address = static_cast<const void*>(this);
+	std::stringstream ss;
+	ss << address;
+
 	shader = std::make_shared<FsShader>(FausEngine::FsGame::GetInstance()->GetShader(0));
 
 	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
@@ -99,8 +106,9 @@ void FsMesh::LoadMesh()
 					&p2, &t2, &n2,
 					&p3, &t3, &n3);
 				if (match != 9) {
-					std::cout << "Mesh can't be read. (faces)" << std::endl;
-					//return false;
+					logger.SetName("Mesh: "+ ss.str());
+					logger.SetMessage("Mesh can't be read. (faces)",1);
+					return;
 				}
 					
 				vertexIndices.push_back(p1);
@@ -159,6 +167,11 @@ void FsMesh::LoadMesh()
 		glBindVertexArray(0);
 
 		meshLoaded = true;
+
+
+		logger.SetName("Mesh: " + ss.str());
+		logger.SetMessage("Loaded mesh. " +path, 0);
+
 		//return meshLoaded;
 	}
 	else
@@ -166,6 +179,8 @@ void FsMesh::LoadMesh()
 		//std::cout << "Path not found. " << path << std::endl;
 		//log.Logger("Path not found.","FsMesh: ");
 		meshLoaded = false;
+		logger.SetName("Mesh: " + path);
+		logger.SetMessage("Path not found ", 1);
 		//return meshLoaded;
 	}
 

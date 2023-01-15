@@ -5,6 +5,7 @@
 #include"../Headers/FsDirectionalLight.h"
 #include"../Headers/FsPointLight.h"
 #include"../Headers/FsSpotLight.h"
+#include"../Headers/FsLog.h"
 
 #include <glm\gtc\type_ptr.hpp>
 #include<string>
@@ -42,6 +43,7 @@ std::vector<FsSpotLight*> spotLights;
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
 
+FsLog logger;
 
 
 char* EmitirShader(int);
@@ -327,6 +329,7 @@ glm::mat4 CalcularMatrizVista();
 FsGame::FsGame() {
     
     if (!game) game = this;
+    logger.CreateLogger("Camara","log-FsGame");
 }
 
 FsGame::~FsGame() {
@@ -337,14 +340,18 @@ FsGame::~FsGame() {
 
 void ValidarCamara() {
     if (!camera) {
-        std::cout << "No exits camera." << std::endl;
+        logger.SetMessage("No exits camera (default camera activate). ",1);
         camera = new FsCamera(FsVector3(0.0f, 5.0f, 0.0f));
+    }
+    else {
+        logger.SetMessage("Camera created. ", 0);
     }
 }
 
 void ValidarVentana() {
     if (!mainWindow.getWindowReference()) {
-        std::cout << "No exits window, call Construct() function." << std::endl;
+        logger.SetName("Window");
+        logger.SetMessage("No exits window, call Construct() function.", 2);
         exit(3);
     }
 }
@@ -636,13 +643,13 @@ void FsGame::Run(std::vector<FsScene*> escena) {
     }
 
     // ========== liberar memoria =================
-    delete skybox, camera, directionalLight, game;
+    //delete skybox, camera, directionalLight, game;
 
-    for (auto i = 0; i < spotLights.size(); i++)
-        delete spotLights[i];
+    //for (auto i = 0; i < spotLights.size(); i++)
+    //    delete spotLights[i];
 
-    for (auto i = 0; i < pointlights.size(); i++)
-        delete pointlights[i];
+    //for (auto i = 0; i < pointlights.size(); i++)
+    //    delete pointlights[i];
 	
 }
 

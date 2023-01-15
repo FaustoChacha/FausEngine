@@ -41,7 +41,7 @@ namespace FausEngine {
 		//FsCollider* collider = nullptr;
 		std::shared_ptr<FsCollider> collider;
 		FsVector3 distanceCollider[4];
-		FsLog log;
+		FsLog logger;
 	};
 
 }

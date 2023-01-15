@@ -3,6 +3,7 @@
 
 #include"FsDLL.h"
 #include"FsMaths.h"
+#include"FsLog.h"
 #include<string>
 #include<vector>
 
@@ -23,6 +24,7 @@ namespace FausEngine {
 		
 		unsigned int textureID;
 		std::vector<std::string> pathFaces;
+		FsLog logger;
 	};
 }
 #endif // !FSSKYBOX

@@ -1,6 +1,7 @@
-#include"../Headers/FsImage2D.h"
+#include"../Headers/FsImage.h"
 #include "../Headers/stb_image.h"
 #include"../Headers/FsGame.h"
+
 
 #include<GL/glew.h>
 #include<glm/glm.hpp>
@@ -9,25 +10,29 @@
 using namespace FausEngine;
 
 
-FsImage2D::FsImage2D()
+FsImage::FsImage()
 {
 	shader = std::make_shared<FsShader>(FausEngine::FsGame::GetInstance()->GetShader(2));
 
 	vbo = 0; ibo = 0; vao = 0;
 	textureID = 0;
 	transform = FsTransform();
+	
+	logger.CreateLogger("FsImage","log-FsImage");
 }
 
-void FsImage2D::LoadImage(std::string path)
+void FsImage::LoadImage(std::string path)
 {
 	shader = std::make_shared<FsShader>(FausEngine::FsGame::GetInstance()->GetShader(2));
-
+	
 	int width, height, bitDepth;
 
 	unsigned char* texData = stbi_load(path.c_str(), &width, &height, &bitDepth, 0);
 	if (!texData)
 	{
-		std::cout << "Failed to find: %s" << path << std::endl;
+		logger.SetName(path);
+		logger.SetMessage("Falied to find: "+path, 1);
+		return;
 	}
 
 	stbi_set_flip_vertically_on_load(true);
@@ -50,7 +55,9 @@ void FsImage2D::LoadImage(std::string path)
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else {
-		std::cout << "Number channels not found. " << std::endl;
+		logger.SetName("Image " + std::to_string(textureID));
+		logger.SetMessage("Number channels not found." + path, 1);
+		return;
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -94,9 +101,12 @@ void FsImage2D::LoadImage(std::string path)
 	//transparencia
 	//glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	logger.SetName("Image " + std::to_string(textureID));
+	logger.SetMessage("Loaded image: " + path, 0);
+
 }
 
-void FsImage2D::Render() {
+void FsImage::Render() {
 
 	shader->Use();
 
@@ -116,19 +126,19 @@ void FsImage2D::Render() {
 	glBindVertexArray(0);
 }
 
-void FsImage2D::SetPosition(FsVector3 pos) {
+void FsImage::SetPosition(FsVector3 pos) {
 	transform.position = pos;
 }
 
-void FsImage2D::SetRotation(FsVector3 v) {
+void FsImage::SetRotation(FsVector3 v) {
 	transform.rotation = v;
 }
 
-void FsImage2D::SetScale(FsVector3 v) {
+void FsImage::SetScale(FsVector3 v) {
 	transform.scale = v;
 }
 
-FsImage2D::~FsImage2D()
+FsImage::~FsImage()
 {
 	glDeleteTextures(1,&textureID);
 }

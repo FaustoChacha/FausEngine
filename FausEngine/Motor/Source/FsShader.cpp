@@ -10,12 +10,8 @@
 
 using namespace FausEngine;
 
-std::string ReadFile(const char*);
+//std::string ReadFile(const char*);
 
-
-
-//========================================================================================
-//========================================================================================
 
 FsShader::FsShader()
 {
@@ -45,7 +41,7 @@ bool FsShader::Load(const char* vertexPath,  const char* fragmentPath)
 	if (!result) {
 		GLchar log[1024] = { 0 };
 		glGetShaderInfoLog(vertShader, sizeof(log), NULL, log);
-		std::cerr << "(Vertex) Error compilling: " << log << std::endl;
+		//std::cerr << "(Vertex) Error compilling: " << log << std::endl;
 		return false;
 	}
 
@@ -62,7 +58,7 @@ bool FsShader::Load(const char* vertexPath,  const char* fragmentPath)
 	if (!result) {
 		GLchar log[1024] = { 0 };
 		glGetShaderInfoLog(fragShader, sizeof(log), NULL, log);
-		std::cerr << "(Fragment) Error compilling: " << log << std::endl;
+		//std::cerr << "(Fragment) Error compilling: " << log << std::endl;
 		return false;
 	}
 
@@ -76,7 +72,7 @@ bool FsShader::Load(const char* vertexPath,  const char* fragmentPath)
 	if (!result) {
 		GLchar log[1024] = { 0 };
 		glGetShaderInfoLog(ShaderID, sizeof(log), NULL, log);
-		std::cerr << "(ShaderID) Error compilling: " << log << std::endl;
+		//std::cerr << "(ShaderID) Error compilling: " << log << std::endl;
 		return false;
 	}
 
@@ -162,25 +158,25 @@ unsigned int FsShader::GetUSpotLocation(uTypeVariables var, int index) {
 	return uSpotLights[index][var];
 }
 
-std::string ReadFile(const char* filePath)
-{
-	std::string content="";
-	std::ifstream fileStream(filePath, std::ios::in);
-
-	if (fileStream.is_open()) {
-		std::string line = "";
-		while (!fileStream.eof())
-		{
-			std::getline(fileStream, line);
-			content.append(line + "\n");
-		}
-		fileStream.close();
-	}
-	else {
-		std::cout << "Failed to read file. " << filePath << std::endl;
-	}
-	return content;
-}
+//std::string ReadFile(const char* filePath)
+//{
+//	std::string content="";
+//	std::ifstream fileStream(filePath, std::ios::in);
+//
+//	if (fileStream.is_open()) {
+//		std::string line = "";
+//		while (!fileStream.eof())
+//		{
+//			std::getline(fileStream, line);
+//			content.append(line + "\n");
+//		}
+//		fileStream.close();
+//	}
+//	else {
+//		//std::cout << "Failed to read file. " << filePath << std::endl;
+//	}
+//	return content;
+//}
 
 
 

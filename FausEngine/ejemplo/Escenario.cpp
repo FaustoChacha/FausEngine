@@ -49,8 +49,7 @@ Plataformas::~Plataformas()
 
 
 void Plataformas::Begin() {
-	log.Logger("Mensaje","Escenario: ");
-	log2.Logger("Mensaje2", "Escenario: ");
+	
 	//==============================MALLAS======================================
 
 	//colMax1 = FsMesh("Models/fSphere.obj");

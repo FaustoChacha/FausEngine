@@ -9,7 +9,7 @@
 #include"../Motor/Headers/FsSkybox.h"
 #include"../Motor/Headers/FsCollider.h"
 #include"../Motor/Headers/FsText.h"
-#include"../Motor/Headers/FsImage2D.h"
+#include"../Motor/Headers/FsImage.h"
 #include"../Motor/Headers/FsLog.h"
 
 #include"../ejemplo/Jugador.h"
@@ -33,7 +33,8 @@ public:
 private:
 	std::unique_ptr<UserGame> gameReference;
 	bool* teclas;
-	FsImage2D imgenMenu, imgMenuPress;
+	FsImage imgenMenu, imgMenuPress;
+	FsLog log;
 };
 
 
@@ -67,8 +68,8 @@ private:
 	FsSkybox sky;
 
 	FsText texto1, texto2, texto3;
-	FsImage2D imgVidas[3];
-	FsImage2D imgGanaste, imgPressEscape, imgPause;
+	FsImage imgVidas[3];
+	FsImage imgGanaste, imgPressEscape, imgPause;
 
 	FsMesh item;
 	FsCollider collItem;
@@ -90,7 +91,6 @@ private:
 	float movePlataform=0;
 
 	bool pausa = false;
-	FsLog log, log2;
 
 	bool colisionalguna;
 };

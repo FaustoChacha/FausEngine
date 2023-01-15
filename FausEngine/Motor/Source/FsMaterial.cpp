@@ -8,6 +8,8 @@
 #include<glm/glm.hpp>
 #include<glm/gtc/type_ptr.hpp> 
 
+#include <sstream>
+
 //#include<filesystem>
 
 using namespace FausEngine;
@@ -24,11 +26,9 @@ FsMaterial::FsMaterial()
 	textureID = 0;
 	//shader = &FausEngine::FsGame::GetInstance()->GetShader(0);
 	//shader = std::make_shared<FsShader>(FausEngine::FsGame::GetInstance()->GetShader(0));
+	logger.CreateLogger("FsMaterial","log-FsMaterial");
 }
 
-//FsShader* FsMaterial::GetShader() {
-//	return shader;
-//}
 
 FsMaterial::FsMaterial(FsVector3 ambient, FsVector3 specular, FsVector3 color, float shineness, TypeMaterial type, bool bind)
 {
@@ -39,63 +39,26 @@ FsMaterial::FsMaterial(FsVector3 ambient, FsVector3 specular, FsVector3 color, f
 	this->type = type;
 	this->bind_TexToColor = bind;
 	this->textureID = 0;
+	logger.CreateLogger("FsMaterial", "log-FsMaterial");
 	//shader = std::make_shared<FsShader>(FausEngine::FsGame::GetInstance()->GetShader(0));
-}
-
-void LoadtextureAux(unsigned int& textureID, std::string  path) {
-	int width, height, bitDepth;
-
-	unsigned char* texData = stbi_load(path.c_str(), &width, &height, &bitDepth, 0);
-	if (!texData)
-	{
-		std::cout << "Failed to find: %s" << path << std::endl;
-	}
-
-	stbi_set_flip_vertically_on_load(true);
-
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	if (texData) {
-		GLint formato{};
-		if (bitDepth == 1)formato = GL_RED;
-		if (bitDepth == 3)formato = GL_RGB; //JPG
-		if (bitDepth == 4)formato = GL_RGBA; //PNG
-
-		glTexImage2D(GL_TEXTURE_2D, 0, formato, width, height, 0, formato, GL_UNSIGNED_BYTE, texData);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else {
-		std::cout << "Number channels not found. " << std::endl;
-	}
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-	stbi_image_free(texData);
-
 }
 
 unsigned int FsMaterial::GetTexture() {
 	return textureID;
 }
 
-//static std::string FausEngine::GetPath() {
-//	return fs::current_path().string();
-//}
-
 bool FsMaterial::LoadTexture(std::string path)
 {
 	int width, height, bitDepth;
+	const void* address = static_cast<const void*>(this);
+	std::stringstream ss;
+	ss << address;
 
 	unsigned char* texData = stbi_load(path.c_str(), &width, &height, &bitDepth, 0);
 	if (!texData)
 	{
-		std::cout << "Failed to find: %s" << path << std::endl;
-		//LoadtextureAux(textureID, FausEngine::GetPath() + "/Shaders/TextureAux.png");
+		logger.SetName("Material " + ss.str());
+		logger.SetMessage("Texture material falied to find: " + path, 1);
 		this->type = TypeMaterial::Unlit;
 		this->color = { 0.75f,0.1f,0.95f };
 		return false;
@@ -121,8 +84,8 @@ bool FsMaterial::LoadTexture(std::string path)
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else {
-		std::cout << "Number channels not found. " << std::endl;
-		//LoadtextureAux(textureID, FausEngine::GetPath() + "/Shaders/TextureAux.png");
+		logger.SetName("Material " + ss.str());
+		logger.SetMessage("Number channels not found." + path, 1);
 		this->type = TypeMaterial::Unlit;
 		this->color = { 0.75f,0.1f,0.95f };
 		return false;
@@ -130,6 +93,9 @@ bool FsMaterial::LoadTexture(std::string path)
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	stbi_image_free(texData);
+
+	logger.SetName("Material " + ss.str());
+	logger.SetMessage("Loaded material: " + path, 0);
 
 	return true;
 }
