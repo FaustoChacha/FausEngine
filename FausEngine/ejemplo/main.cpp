@@ -5,20 +5,22 @@
 UserGame juego;
 
 std::vector<FsScene*> escenas;
-//std::vector<Plataformas> vec;
-//Plataformas plat;
+
 int main() {
 
-	escenas.push_back(new Inicio());
+	//escenas.push_back(new Inicio());
 	escenas.push_back(new Plataformas());
+	//escenas.push_back(new Test);
 
-	//vec.push_back(plat);
 
-	if (juego.Construct(1080, 720, "Space Plataform", false))
+	if (juego.Construct(1080, 720, "Space Plataform", false)) {
 		juego.Run(escenas);
+		//escenas[1].~shared_ptr();
+	}
+		
 
-	for (auto i = 0; i < escenas.size(); i++)
-		delete escenas[i];
+	//for (auto i = 0; i < escenas.size(); i++)
+	//	delete escenas[i];
 	
 }
 

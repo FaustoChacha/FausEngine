@@ -25,7 +25,7 @@ namespace FausEngine {
 	{
 	public:
 		FsText();
-		FsText(std::string font, int size, std::string text, FsVector2 position, FsVector3 color);
+		void Load(std::string font, int size, std::string text, FsVector2 position, FsVector3 color);
 		void Render();
 		void SetPosition(FsVector2);
 		void SetText(std::string);

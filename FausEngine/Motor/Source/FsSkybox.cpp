@@ -16,13 +16,11 @@ FsSkybox::FsSkybox()
     logger.CreateLogger("FsLogger","log-FsSkybox");
 }
 
-FsSkybox::FsSkybox(std::vector <std::string> caras)
+void FsSkybox::Load(std::vector <std::string> caras)
 {
 	pathFaces = caras;
     logger.CreateLogger("FsLogger", "log-FsSkybox");
-}
 
-void FsSkybox::Load() {
     const void* address = static_cast<const void*>(this);
     std::stringstream ss;
     ss << address;
@@ -56,7 +54,7 @@ void FsSkybox::Load() {
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-    FsGame::GetInstance()->SetSkybox(*this);
+    FsGame::GetReference()->SetSkybox(*this);
 
     logger.SetName("Skybox: " + ss.str());
     logger.SetMessage("Loaded skybox. ", 0);

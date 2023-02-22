@@ -3,6 +3,7 @@
 
 #include"FsDLL.h"
 #include "FsMaths.h"
+#include<iostream>
 
 namespace FausEngine {
 	class EXPORTDLL FsLight
@@ -11,13 +12,16 @@ namespace FausEngine {
 		FsLight();
 		FsLight(FsVector3 ambient, FsVector3 diffuse, FsVector3 specular);
 
-		virtual void Load();
-		virtual void Render();
+		//virtual void Load();
+		//virtual void Render();
 		bool on;
 		
-		FsVector3* GetAmbient();
-		FsVector3* GetDiffuse();
-		FsVector3* GetSpecular();
+		//FsVector3* GetAmbient();
+		//FsVector3* GetDiffuse();
+		//FsVector3* GetSpecular();
+		std::shared_ptr<FsVector3> GetAmbient();
+		std::shared_ptr<FsVector3> GetDiffuse();
+		std::shared_ptr<FsVector3> GetSpecular();
 
 		~FsLight();
 

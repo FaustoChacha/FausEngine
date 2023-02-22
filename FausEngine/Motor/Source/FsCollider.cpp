@@ -15,12 +15,12 @@ FsCollider::FsCollider()
 	on = true;
 }
 
-FsCollider::FsCollider(FsVector3 max, FsVector3 min) {
-	this->max = max;
-	this->min = min;
-	id = 0;
-	on = true;
-}
+//FsCollider::FsCollider(FsVector3 max, FsVector3 min) {
+//	this->max = max;
+//	this->min = min;
+//	id = 0;
+//	on = true;
+//}
 
 
 
@@ -108,7 +108,7 @@ CollisionDirection FsCollider::GetDirection(FsCollider& c) {
 			return CollisionDirection::DOWN;
 		}
 	}
-	return CollisionDirection::nada;
+	return CollisionDirection::no;
 }
 
 FsCollider::~FsCollider()

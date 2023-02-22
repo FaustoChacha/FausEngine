@@ -35,6 +35,7 @@ bool FsShader::Load(const char* vertexPath,  const char* fragmentPath)
 	//Compilar vertex shader
 	glShaderSource(vertShader, 1, &vertexPath, NULL);
 	glCompileShader(vertShader);
+	
 	//errores
 	GLint result = GL_FALSE;
 	glGetShaderiv(vertShader, GL_COMPILE_STATUS, &result);
@@ -78,6 +79,7 @@ bool FsShader::Load(const char* vertexPath,  const char* fragmentPath)
 
 	glDeleteShader(vertShader);
 	glDeleteShader(fragShader);
+	//delete vertexPath;
 
 	return true;	
 }

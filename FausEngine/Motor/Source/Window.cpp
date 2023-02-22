@@ -90,6 +90,10 @@ GLFWwindow* Window::getWindowReference() {
 	return mainWindow;
 }
 
+//std::shared_ptr<GLFWwindow> Window::getWindowReference() {
+//	return std::make_shared<GLFWwindow>(mainWindow);
+//}
+
 GLfloat Window::getXMouseOffset()
 {
 	GLfloat change = xMouseOffset;

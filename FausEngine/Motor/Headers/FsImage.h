@@ -11,7 +11,7 @@ namespace FausEngine {
 	{
 	public:
 		FsImage();
-		void LoadImage(std::string path);
+		void Load(std::string path);
 		void SetPosition(FsVector3);
 		void SetRotation(FsVector3);
 		void SetScale(FsVector3);

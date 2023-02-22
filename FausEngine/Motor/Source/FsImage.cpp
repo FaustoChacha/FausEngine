@@ -12,7 +12,7 @@ using namespace FausEngine;
 
 FsImage::FsImage()
 {
-	shader = std::make_shared<FsShader>(FausEngine::FsGame::GetInstance()->GetShader(2));
+	shader = FausEngine::FsGame::GetReference()->GetShader(2);
 
 	vbo = 0; ibo = 0; vao = 0;
 	textureID = 0;
@@ -21,9 +21,9 @@ FsImage::FsImage()
 	logger.CreateLogger("FsImage","log-FsImage");
 }
 
-void FsImage::LoadImage(std::string path)
+void FsImage::Load(std::string path)
 {
-	shader = std::make_shared<FsShader>(FausEngine::FsGame::GetInstance()->GetShader(2));
+	shader = FausEngine::FsGame::GetReference()->GetShader(2);
 	
 	int width, height, bitDepth;
 

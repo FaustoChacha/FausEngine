@@ -13,14 +13,14 @@ namespace FausEngine {
 		DOWN,
 		MAX,
 		MIN,
-		nada
+		no
 	};
 
 	class EXPORTDLL FsCollider
 	{
 	public:
 		FsCollider();
-		FsCollider(FsVector3 max, FsVector3 min);
+		//FsCollider(FsVector3 max, FsVector3 min);
 		bool CheckCollision(FsCollider&);
 		CollisionDirection GetDirection(FsCollider&);
 		FsVector3 GetRight();

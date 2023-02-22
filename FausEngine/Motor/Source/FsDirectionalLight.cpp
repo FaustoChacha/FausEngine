@@ -9,21 +9,31 @@ FsDireciontalLight:: FsDireciontalLight():FsLight() {
 	//shader.reset(FsGame::GetInstance()->GetShader(0));
 }
 
-FsDireciontalLight::FsDireciontalLight(FsVector3 _direction, FsVector3 _ambient, FsVector3 _diffuse, FsVector3 _specular):
-	FsLight(_ambient, _diffuse, _specular)
+//FsDireciontalLight::FsDireciontalLight(FsVector3 _direction, FsVector3 _ambient, FsVector3 _diffuse, FsVector3 _specular):
+//	FsLight(_ambient, _diffuse, _specular)
+//{
+//	this->direction = _direction;
+//    //this->shader = FsGame::GetInstance()->GetShader(0);
+//	//shader.reset(FsGame::GetInstance()->GetShader(0));
+//}
+
+void FsDireciontalLight::Load(FsVector3 direction, FsVector3 ambient, FsVector3 diffuse, FsVector3 specular)
 {
-	this->direction = _direction;
-    //this->shader = FsGame::GetInstance()->GetShader(0);
-	//shader.reset(FsGame::GetInstance()->GetShader(0));
+	this->direction = direction;
+	this->ambient = ambient;
+	this->diffuse = diffuse;
+	this->specular = specular;
+	FausEngine::FsGame::GetReference()->LoadLight(this);
+	
+	//FausEngine::FsGame::GetReference()->LoadDLight(std::make_shared<FsDireciontalLight>(*this));
 }
 
-void FsDireciontalLight::Load() 
-{
-	FausEngine::FsGame::GetInstance()->LoadLight(this);
-}
+//FsVector3* FsDireciontalLight::GetDirection() {
+//	return &direction;
+//}
 
-FsVector3* FsDireciontalLight::GetDirection() {
-	return &direction;
+std::shared_ptr<FsVector3> FsDireciontalLight::GetDirection() {
+	return std::make_shared<FsVector3>(direction);
 }
 
 void FsDireciontalLight::SetDirection(FsVector3 vector) {

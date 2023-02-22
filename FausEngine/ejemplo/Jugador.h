@@ -24,15 +24,14 @@ public:
 	void CamaraTPS(float dt, float t);
 	void OrbitarLuz(float offsetX, float offsetY, float dt, float t, float vel);
 	void SetColorLuz(FsVector3 color);
+	void SetPosition(FsVector3);
 	void SetNumVidas(int);
 	int GetNumVidas();
+	FsVector3 GetPosition();
 	void Init(bool&);
 	void Update(bool, float, float, bool);
 	FsCollider GetCollider();
 	~Jugador();
-
-	std::unique_ptr<FsTransform> transform;
-	//FsTransform* transform;
 
 private:
 	std::unique_ptr<UserGame> gameReference;
@@ -40,6 +39,7 @@ private:
 	int numeroVidas;
 
 	FsMesh mallaJugador;
+	FsMaterial matJugador, matLuz;
 	FsCollider collider;
 	FsPointLight luzPuntual;
 

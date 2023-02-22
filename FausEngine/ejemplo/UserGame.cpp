@@ -2,9 +2,9 @@
 
 UserGame::UserGame()
 {
-	camara = FsCamera(FsVector3(0.0f, 0.0f, -5.0f));
+	camara.SetPosition(FsVector3(0.0f, 0.0f, -12.0f));
 
-	SetCamera(camara);
+	//SetCamera(camara);
 	//PAUSA = true;
 }
 

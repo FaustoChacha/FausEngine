@@ -12,10 +12,11 @@ namespace FausEngine {
 	{
 	public:
 		FsDireciontalLight();
-		FsDireciontalLight(FsVector3 direction,FsVector3 ambient, FsVector3 diffuse, FsVector3 specular);
-		void Load()override;
+		//FsDireciontalLight(FsVector3 direction,FsVector3 ambient, FsVector3 diffuse, FsVector3 specular);
+		void Load(FsVector3 direction, FsVector3 ambient, FsVector3 diffuse, FsVector3 specular);
 
-		FsVector3* GetDirection();
+		//FsVector3* GetDirection();
+		std::shared_ptr<FsVector3> GetDirection();
 		void SetDirection(FsVector3);
 
 		~FsDireciontalLight();

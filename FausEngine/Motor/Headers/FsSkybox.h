@@ -12,9 +12,9 @@ namespace FausEngine {
 	{
 	public:
 		FsSkybox();
-		FsSkybox(std::vector<std::string>);
+		void Load(std::vector<std::string>);
 		unsigned int GetTextureID();
-		void Load();
+		//void Load();
 		~FsSkybox();
 
 		FsVector3 colour;

@@ -22,34 +22,36 @@ FsMesh::FsMesh()
 	VBO = 0; VAO = 0; meshLoaded = false;
 
 	transform = FsTransform({ 0,0,0 }, { 0,0,0 }, {1,1,1});
-	material = FsMaterial();
+	//material = FsMaterial();
 	collider = nullptr;
-	on = true;
+	on = false;
 	logger.CreateLogger("FsMesh","log-FsMesh");
-	shader = std::make_shared<FsShader>(FausEngine::FsGame::GetInstance()->GetShader(0));
+	shader = FausEngine::FsGame::GetReference()->GetShader(0);
 }
 
-FsMesh::FsMesh(std::string _path)
-{
-	path = _path;
-
-	transform = FsTransform({ 0,0,0 }, { 0,0,0 }, { 1,1,1 });
-	material = FsMaterial();
-	collider = nullptr;
-	on = true;
-	logger.CreateLogger("FsMesh", "log-FsMesh");
-}
+//FsMesh::FsMesh(std::string _path)
+//{
+//	path = _path;
+//
+//	transform = FsTransform({ 0,0,0 }, { 0,0,0 }, { 1,1,1 });
+//	material = FsMaterial();
+//	collider = nullptr;
+//	on = true;
+//	logger.CreateLogger("FsMesh", "log-FsMesh");
+//	shader = FausEngine::FsGame::GetReference()->GetShader(0);
+//}
 
 FsMesh::~FsMesh()
 {
+	
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 }
 
 void FsMesh::SetCollider(FsCollider& c) {
 	//collider = &c;
-	//collider = std::make_shared<FsCollider>(c);
-	collider.reset(&c);
+	collider = std::shared_ptr<FsCollider>(&c);
+	//collider.reset(&c);
 	//tomo la posicion de la malla + la pos inicial del limite max/min del collider y allo la distancia entre el limiite y el centro de la malla
 	distanceCollider[0] = collider->DistanceToPivot(transform.position, CollisionDirection::MAX);
 	distanceCollider[1] = collider->DistanceToPivot(transform.position, CollisionDirection::MIN);
@@ -57,14 +59,60 @@ void FsMesh::SetCollider(FsCollider& c) {
 	distanceCollider[3] = collider->GetMin();
 }
 
-void FsMesh::LoadMesh()
+void FsMesh::SetMaterial(FsMaterial& m) {
+	//mat = std::make_shared<FsMaterial>(&m);
+	mat = std::shared_ptr<FsMaterial>(&m);
+	//mat = std::move(std::make_unique<FsMaterial>(m));
+	//mat = &m;
+}
+
+void FsMesh::SetVisibility(bool b) {
+	on = b;
+}
+
+void FsMesh::SetPosition(FsVector3 v) {
+	transform.position = v;
+}
+
+void FsMesh::SetScale(FsVector3 v) {
+	transform.scale = v;
+}
+
+void FsMesh::SetRotation(FsVector3 v) {
+	transform.rotation = v;
+}
+
+void FsMesh::SetTransform(FsTransform t) {
+	transform = t;
+
+}
+
+FsTransform FsMesh::GetTransform() {
+	return transform;
+}
+bool FsMesh::GetVisibility(){
+	return on;
+}
+
+
+
+void FsMesh::Load(std::string p)
 {
+	path = p;
+
+	transform = FsTransform({ 0,0,0 }, { 0,0,0 }, { 1,1,1 });
+	//material = FsMaterial();
+	collider = nullptr;
+	on = true;
+	logger.CreateLogger("FsMesh", "log-FsMesh");
+	shader = FausEngine::FsGame::GetReference()->GetShader(0);
+
 
 	const void* address = static_cast<const void*>(this);
 	std::stringstream ss;
 	ss << address;
 
-	shader = std::make_shared<FsShader>(FausEngine::FsGame::GetInstance()->GetShader(0));
+	//shader = std::make_shared<FsShader>(FausEngine::FsGame::GetReference()->GetShader(0));
 
 	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
 	std::vector<glm::vec3> tempVertices;
@@ -195,7 +243,8 @@ void FsMesh::Render()
 	if (on) {
 	
 		//auto sh = material.GetShader();
-		auto sh = shader;
+		//auto sh = shader;
+
 
 		//Mesh Trasnform 
 		glm::mat4 mModel(1.0f);
@@ -204,22 +253,22 @@ void FsMesh::Render()
 		mModel = glm::rotate(mModel, glm::radians<float>(transform.rotation.y), glm::vec3(0, 1, 0));
 		mModel = glm::rotate(mModel, glm::radians<float>(transform.rotation.z), glm::vec3(0, 0, 1));
 		mModel = glm::scale(mModel, glm::vec3(transform.scale.x, transform.scale.y, transform.scale.z));
-		glUniformMatrix4fv( sh->GetUVariableLocation(uTypeVariables::uModel), 1, GL_FALSE, glm::value_ptr(mModel));
+		glUniformMatrix4fv(shader->GetUVariableLocation(uTypeVariables::uModel), 1, GL_FALSE, glm::value_ptr(mModel));
 
 		//Material setting
-		glUniform3f(sh->GetUVariableLocation(uTypeVariables::uAmbient),
-			material.ambient.x, material.ambient.y, material.ambient.z);
-		glUniform3f(sh->GetUVariableLocation(uTypeVariables::uSpecular),
-			material.specular.x, material.specular.y, material.specular.z);
-		glUniform3f(sh->GetUVariableLocation(uTypeVariables::uColor),
-			material.color.x, material.color.y, material.color.z);
-		glUniform1f(sh->GetUVariableLocation(uTypeVariables::uShininess), material.shineness);
-		glUniform1i(sh->GetUVariableLocation(uTypeVariables::uTexture), 0);
-		glUniform1i(sh->GetUVariableLocation(uTypeVariables::uLit), true ? material.type == TypeMaterial::Lit : false);
+		glUniform3f(shader->GetUVariableLocation(uTypeVariables::uAmbient),
+			mat->GetAmbient().x, mat->GetAmbient().y, mat->GetAmbient().z);
+		glUniform3f(shader->GetUVariableLocation(uTypeVariables::uSpecular),
+			mat->GetSpecular().x, mat->GetSpecular().y, mat->GetSpecular().z);
+		glUniform3f(shader->GetUVariableLocation(uTypeVariables::uColor),
+			mat->GetColor().x, mat->GetColor().y, mat->GetColor().z);
+		glUniform1f(shader->GetUVariableLocation(uTypeVariables::uShininess), mat->GetShine());
+		glUniform1i(shader->GetUVariableLocation(uTypeVariables::uTexture), 0);
+		glUniform1i(shader->GetUVariableLocation(uTypeVariables::uLit), mat->GetLit());
 
 		//Use Texture
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, material.GetTexture());
+		glBindTexture(GL_TEXTURE_2D, mat->GetTexture());
 
 		//Mesh
 		glBindVertexArray(VAO);
@@ -263,6 +312,8 @@ void FsMesh::Render()
 			down.z = pos.z + ((max.z + min.z) / 2);
 			collider->SetDown(down);
 		}
+
+		//shader.~shared_ptr();
 	}
 }
 

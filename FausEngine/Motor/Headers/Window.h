@@ -14,7 +14,9 @@ namespace FausEngine {
 		Window();
 		bool createWindow(GLint windowWidth, GLint windowHeight, std::string, bool fs);
 		GLFWwindow* getWindowReference();
+		//std::shared_ptr<GLFWwindow> getWindowReference();
 		bool* getKeys();
+
 		GLfloat getXMouseOffset();
 		GLfloat getYMouseOffset();
 		~Window();

@@ -10,7 +10,7 @@ using namespace FausEngine;
 
 FsCamera::FsCamera() 
 {
-	position = {0,1,-1};
+	position = {0,0,0};
 	yaw = 0;
 	pitch = 0;
 	roll = 0;
@@ -22,19 +22,19 @@ FsCamera::FsCamera()
 	target = position + forward;
 }
 
-FsCamera::FsCamera(FsVector3 startPosition)
-{
-	position = startPosition;
-	yaw = 0;
-	pitch = 0;
-	roll = 0;
-	forward = FsVector3(0.0f, 0.0f, -1.0f);
-	up = FsVector3(0,1,0);
-	right = FsVector3(1,0,0);
-	//frustrum = new FsVector3(glm::radians(60.0f), 0.1f, 1000.0f);
-	frustrum.reset(new FsVector3(glm::radians(60.0f), 0.1f, 1000.0f));
-	target = position + forward;
-}
+//FsCamera::FsCamera(FsVector3 startPosition)
+//{
+//	position = startPosition;
+//	yaw = 0;
+//	pitch = 0;
+//	roll = 0;
+//	forward = FsVector3(0.0f, 0.0f, -1.0f);
+//	up = FsVector3(0,1,0);
+//	right = FsVector3(1,0,0);
+//	//frustrum = new FsVector3(glm::radians(60.0f), 0.1f, 1000.0f);
+//	frustrum.reset(new FsVector3(glm::radians(60.0f), 0.1f, 1000.0f));
+//	target = position + forward;
+//}
 
 //getters
 

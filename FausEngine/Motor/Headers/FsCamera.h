@@ -11,7 +11,7 @@ namespace FausEngine {
 	{
 	public:
 		FsCamera();
-		FsCamera(FsVector3 position);
+		//FsCamera(FsVector3 position);
 
 		FsVector3 GetFrustrum();
 		FsVector3 GetPosition();

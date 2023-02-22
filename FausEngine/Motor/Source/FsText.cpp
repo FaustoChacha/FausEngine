@@ -17,21 +17,21 @@ float scale;
 FsText::FsText()
 {
 	//shader= &FsGame::GetInstance()->GetShader(1);
-	shader = std::make_shared<FsShader>(FsGame::GetInstance()->GetShader(1));
+	shader = FsGame::GetReference()->GetShader(1);
 	text = "FausEngine";
 	color = {1,1,1};
 	position = {0,0};
 	logger.CreateLogger("FsText","log-FsText");
 }
 
-FsText::FsText(std::string path, int size, std::string text, FsVector2 pos, FsVector3 color) {
+void FsText::Load(std::string path, int size, std::string text, FsVector2 pos, FsVector3 color) {
 	logger.CreateLogger("FsText", "log-FsText");
 	const void* address = static_cast<const void*>(this);
 	std::stringstream ss;
 	ss << address;
 
 	//shader = &FsGame::GetInstance()->GetShader(1);
-	shader = std::make_shared<FsShader>(FsGame::GetInstance()->GetShader(1));
+	shader = FsGame::GetReference()->GetShader(1);
 	this->text = text;
 	this->color = color;
 	scale = 1.0;
