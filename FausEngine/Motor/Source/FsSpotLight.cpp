@@ -30,6 +30,7 @@ void FsSpotLight::Load(FsVector3 ambient, FsVector3 diffuse, FsVector3 specular,
 	this->exponent = exponent;
 
 	FausEngine::FsGame::GetReference()->LoadLight(this);
+	FausEngine::FsGame::GetReference()->SetLog("Loaded spotlight. ",0);
 }
 
 void FsPointLight::SetDiffuse(FsVector3 d) {

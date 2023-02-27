@@ -21,11 +21,11 @@ FsText::FsText()
 	text = "FausEngine";
 	color = {1,1,1};
 	position = {0,0};
-	logger.CreateLogger("FsText","log-FsText");
+	//logger.CreateLogger("FsText","log-FsText");
 }
 
 void FsText::Load(std::string path, int size, std::string text, FsVector2 pos, FsVector3 color) {
-	logger.CreateLogger("FsText", "log-FsText");
+	//logger.CreateLogger("FsText", "log-FsText");
 	const void* address = static_cast<const void*>(this);
 	std::stringstream ss;
 	ss << address;
@@ -42,17 +42,18 @@ void FsText::Load(std::string path, int size, std::string text, FsVector2 pos, F
 
 	// Corroboro que freetype este iniciado
 	if (FT_Init_FreeType(&ft)) {
-		logger.SetName("Text: " + ss.str());
-		logger.SetMessage("FsText not initialise", 1);
-
+		//logger.SetName("Text: " + ss.str());
+		//logger.SetMessage("FsText not initialise", 1);
+		FausEngine::FsGame::GetReference()->SetLog("FsText not initialise: "+text, 1);
 	}
 		
 
 	// Cargo la fuente/font
 	FT_Face face;
 	if (FT_New_Face(ft, path.c_str(), 0, &face)) {
-		logger.SetName("Text: " + ss.str());
-		logger.SetMessage("Failed to load font: " +path, 1);
+		//logger.SetName("Text: " + ss.str());
+		//logger.SetMessage("Failed to load font: " +path, 1);
+		FausEngine::FsGame::GetReference()->SetLog("Failed to load font: " + path, 2);
 	}
 		
 
@@ -69,8 +70,9 @@ void FsText::Load(std::string path, int size, std::string text, FsVector2 pos, F
 		// cargo el glifo
 		if (FT_Load_Char(face, i, FT_LOAD_RENDER)) {
 			//std::cout << "Failed to load glyph: "<< face << std::endl;
-			logger.SetName("Text: " + ss.str());
-			logger.SetMessage("Failed to load glyph. ", 1);
+			//logger.SetName("Text: " + ss.str());
+			//logger.SetMessage("Failed to load glyph. ", 1);
+			FausEngine::FsGame::GetReference()->SetLog("Failed to load glyph. ", 2);
 			continue;
 		}
 
@@ -127,8 +129,9 @@ void FsText::Load(std::string path, int size, std::string text, FsVector2 pos, F
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	logger.SetName("Text: " + ss.str());
-	logger.SetMessage("Loaded Text. "+path, 0);
+	//logger.SetName("Text: " + ss.str());
+	//logger.SetMessage("Loaded Text. "+path, 0);
+	FausEngine::FsGame::GetReference()->SetLog("Loaded text: " + text, 0);
 }
 
 

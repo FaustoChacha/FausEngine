@@ -4,7 +4,6 @@
 #include"FsDLL.h"
 #include<iostream>
 #include"FsShader.h"
-#include"FsLog.h"
 
 namespace FausEngine {
 	class EXPORTDLL FsImage
@@ -24,7 +23,7 @@ namespace FausEngine {
 		//FsShader* shader;
 		std::shared_ptr<FsShader> shader;
 		FsTransform transform;
-		FsLog logger;
+		//FsLog logger;
 	};
 }
 

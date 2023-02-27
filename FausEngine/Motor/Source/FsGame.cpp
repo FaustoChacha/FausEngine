@@ -5,7 +5,7 @@
 #include"../Headers/FsDirectionalLight.h"
 #include"../Headers/FsPointLight.h"
 #include"../Headers/FsSpotLight.h"
-#include"../Headers/FsLog.h"
+//#include"../Headers/FsLog.h"
 
 #include <glm\gtc\type_ptr.hpp>
 #include<string>
@@ -19,6 +19,9 @@
 
 #include <algorithm>
 #include<cmath>
+
+#include "spdlog/sinks/basic_file_sink.h"
+#include"spdlog/spdlog.h"
 
 
 using namespace FausEngine;
@@ -42,17 +45,18 @@ std::vector<FsPointLight*> pointlights;
  //std::vector<FsPointLight&> pointlights;
 //std::vector<std::shared_ptr<FsPointLight>> pointlights;
 std::vector<FsSpotLight*> spotLights;
+std::vector<int> tipoLog;
+std::vector<std::string> msgsLog;
 //std::vector<std::shared_ptr<FsSpotLight>> spotLights;
+
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
 
-FsLog logger;
 
 
 char* EmitirShader(int);
 
-//namespace fs = std::filesystem;
 
 char* EmitirShader(int n) {
     //vertex MainShader
@@ -328,7 +332,7 @@ glm::mat4 CalcularMatrizVista();
 FsGame::FsGame() {
     if (!game) *game = *this;
 
-    logger.CreateLogger("Camara","log-FsGame");
+    //logger.CreateLogger("Game","GameLog");
     
 }
 
@@ -345,20 +349,24 @@ FsGame::~FsGame() {
 
 void ValidarCamara() {
     if (!camera) {
-        logger.SetMessage("No exits camera (default camera activate). ",1);
-        //camera = new FsCamera(FsVector3(0.0f, 5.0f, 0.0f));
+        //logger.SetName("Camera: ");
+        //logger.SetMessage("Not set camera (default camera activate). ",1);
+        FausEngine::FsGame::GetReference()->SetLog("Not set camera (default camera activate). ",1);
+
         camera.reset(new FsCamera());
         camera->SetPosition(FsVector3(0.0f, 0.0f, -5.0f));
     }
     else {
-        logger.SetMessage("Camera created. ", 0);
+        //logger.SetMessage("Camera created. ", 0);
+        FausEngine::FsGame::GetReference()->SetLog("Camera created. ", 0);
     }
 }
 
 void ValidarVentana() {
     if (!mainWindow.getWindowReference()) {
-        logger.SetName("Window");
-        logger.SetMessage("No exits window, call Construct() function.", 2);
+        //logger.SetName("Window");
+        //logger.SetMessage("No exits window, call Construct() function.", 2);
+        FausEngine::FsGame::GetReference()->SetLog("No exits window, call Construct() function. ", 2);
         exit(3);
     }
 }
@@ -388,17 +396,15 @@ void FsGame::SetSkybox(FsSkybox& sky) {
     skybox = &sky;
 }
 
+void FsGame::SetLog(std::string msg, int i) {
+    tipoLog.push_back(i);
+    msgsLog.push_back(msg);
+}
+
 template<> void FsGame::LoadLight<FsDireciontalLight>(FsDireciontalLight* light) {
 //template<> void FsGame::LoadLight<FsDireciontalLight>(std::shared_ptr<FsDireciontalLight> light) {
     directionalLight = light;
-    //directionalLight.reset(light);
 }
-//template<> void FsGame::LoadDLight<FsDireciontalLight>(std::shared_ptr<FsDireciontalLight> light) {
-//    //template<> void FsGame::LoadLight<FsDireciontalLight>(std::shared_ptr<FsDireciontalLight> light) {
-//    //directionalLight = light.get();
-//    directionalLight = light;
-//}
-
 
 
 template<> void FsGame::LoadLight<FsPointLight>(FsPointLight* light) {
@@ -406,16 +412,7 @@ template<> void FsGame::LoadLight<FsPointLight>(FsPointLight* light) {
     pointlights.push_back(light);
     //pointlights.push_back(std::shared_ptr<FsPointLight>(light));
 }
-//template<> void FsGame::LoadDLight<FsPointLight>(std::shared_ptr<FsPointLight> light) {
-//    //template<> void FsGame::LoadLight<FsDireciontalLight>(std::shared_ptr<FsDireciontalLight> light) {
-//    //pointlights.push_back(std::move(light));
-//    //pointlights.push_back(std::shared_ptr<FsPointLight>(new FsPointLight));
-//    //*pointlights[0]=*light;
-//}
 
-//template<> void FsGame::LoadRLight<FsPointLight>(FsPointLight& l) {
-//    pointlights.push_back(&l);
-//}
 
 template<> void FsGame::LoadLight<FsSpotLight>(FsSpotLight* light) {
 //template<> void FsGame::LoadLight<FsSpotLight>(std::shared_ptr<FsSpotLight> light) {
@@ -423,10 +420,6 @@ template<> void FsGame::LoadLight<FsSpotLight>(FsSpotLight* light) {
 }
 
 //-----------------Getters--------------------
-
-//FsGame* FsGame::GetReference() {
-//    return game;
-//}
 
 std::shared_ptr<FsGame> FsGame::GetReference() {
 
@@ -438,10 +431,6 @@ std::shared_ptr<FsCamera> FsGame::GetCamera() {
     return camera;
 }
 
-//FsCamera* FsGame::GetCamera(){
-//    return camera;
-//}
-
 
 bool FsGame::GetKeyPress(Keys k) {
     return mainWindow.getKeys()[(int)k];
@@ -450,6 +439,7 @@ bool FsGame::GetKeyPress(Keys k) {
 void FsGame::SetKeyRelease(Keys k) {
     mainWindow.getKeys()[(int)k] = false;
 }
+
 
 float FsGame::GetMouseX() {
     return mainWindow.getXMouseOffset();
@@ -488,7 +478,7 @@ void FsGame::Run(std::vector<FsScene*> escena) {
     SkyboxShader.Load(EmitirShader(2), EmitirShader(3));
     TextShader->Load(EmitirShader(4), EmitirShader(5));
     ImageShader->Load(EmitirShader(6), EmitirShader(7));
-
+    
     unsigned int uPointLightCounter = 0;
     unsigned int uSpotLightCounter = 0;
 
@@ -497,7 +487,6 @@ void FsGame::Run(std::vector<FsScene*> escena) {
 
     ////===================== sky box =====================
     unsigned int vao, ibo, vbo;
-
 
     //===========================Texto===============================
     TextShader->Use();
@@ -513,6 +502,26 @@ void FsGame::Run(std::vector<FsScene*> escena) {
             if (index_scene > escena.size() || index_scene < 0) exit(3);
             
             escena[index_scene]->Begin();
+
+            auto logger = spdlog::basic_logger_mt("FausEngine", "Logs/Log.txt");
+
+            for (int i = 0; i < msgsLog.size();i++) {
+                switch (tipoLog[i])
+                {
+                case 0:
+                    logger->info(msgsLog[i]);
+                    break;
+                case 1:
+                    logger->warn(msgsLog[i]);
+                    break;
+                case 2:
+                    logger->error(msgsLog[i]);
+                default:
+                    logger->info(msgsLog[i]);
+                    break;
+                }
+                
+            }
 
             MainShader->Compile(pointlights.size(), spotLights.size());
             SkyboxShader.Compile(0, 0);

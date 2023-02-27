@@ -6,13 +6,13 @@
 #include"FsCamera.h"
 #include"FsShader.h"
 #include"FsSkybox.h"
-
-#include"FsMesh.h"
+//#include"FsLog.h"
 
 //#include<stdio.h>
 #include <string>
 #include<iostream>
 #include<vector>
+#include<stdio.h>
 
 namespace FausEngine {
 
@@ -120,6 +120,7 @@ namespace FausEngine {
 
 		void SetCamera(FsCamera&);
 		void SetSkybox(FsSkybox&);
+		void SetLog(std::string, int);
 		template<typename light> void LoadLight(light*);
 		//template<typename light> void LoadDLight(std::shared_ptr<light>);
 		//template<typename light> void LoadRLight(light&);
@@ -128,6 +129,7 @@ namespace FausEngine {
 		static std::shared_ptr<FsGame> GetReference();
 		std::shared_ptr<FsShader> GetShader(int);
 		std::shared_ptr<FsCamera> GetCamera();
+		//std::shared_ptr<FsLog> GetLog();
 
 		//window
 		float GetMouseX();

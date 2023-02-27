@@ -25,7 +25,7 @@ FsMesh::FsMesh()
 	//material = FsMaterial();
 	collider = nullptr;
 	on = false;
-	logger.CreateLogger("FsMesh","log-FsMesh");
+	//logger.CreateLogger("FsMesh","log-FsMesh");
 	shader = FausEngine::FsGame::GetReference()->GetShader(0);
 }
 
@@ -104,7 +104,7 @@ void FsMesh::Load(std::string p)
 	//material = FsMaterial();
 	collider = nullptr;
 	on = true;
-	logger.CreateLogger("FsMesh", "log-FsMesh");
+	//logger.CreateLogger("FsMesh", "log-FsMesh");
 	shader = FausEngine::FsGame::GetReference()->GetShader(0);
 
 
@@ -154,8 +154,9 @@ void FsMesh::Load(std::string p)
 					&p2, &t2, &n2,
 					&p3, &t3, &n3);
 				if (match != 9) {
-					logger.SetName("Mesh: "+ ss.str());
-					logger.SetMessage("Mesh can't be read. (faces)",1);
+					//logger.SetName("Mesh: "+ ss.str());
+					//logger.SetMessage("Mesh can't be read. (faces)",1);
+					FausEngine::FsGame::GetReference()->SetLog("Mesh can't be read. (faces) " + path, 2);
 					return;
 				}
 					
@@ -216,9 +217,9 @@ void FsMesh::Load(std::string p)
 
 		meshLoaded = true;
 
-
-		logger.SetName("Mesh: " + ss.str());
-		logger.SetMessage("Loaded mesh. " +path, 0);
+		FausEngine::FsGame::GetReference()->SetLog("Loaded mesh: "+path, 0);
+		//logger.SetName("Mesh: " + ss.str());
+		//logger.SetMessage("Loaded mesh. " +path, 0);
 
 		//return meshLoaded;
 	}
@@ -227,8 +228,9 @@ void FsMesh::Load(std::string p)
 		//std::cout << "Path not found. " << path << std::endl;
 		//log.Logger("Path not found.","FsMesh: ");
 		meshLoaded = false;
-		logger.SetName("Mesh: " + path);
-		logger.SetMessage("Path not found ", 1);
+		//logger.SetName("Mesh: " + path);
+		//logger.SetMessage(" ", 1);
+		FausEngine::FsGame::GetReference()->SetLog("Path not found: "+path, 2);
 		//return meshLoaded;
 	}
 

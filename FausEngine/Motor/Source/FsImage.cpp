@@ -18,7 +18,7 @@ FsImage::FsImage()
 	textureID = 0;
 	transform = FsTransform();
 	
-	logger.CreateLogger("FsImage","log-FsImage");
+	//logger.CreateLogger("FsImage","log-FsImage");
 }
 
 void FsImage::Load(std::string path)
@@ -30,8 +30,9 @@ void FsImage::Load(std::string path)
 	unsigned char* texData = stbi_load(path.c_str(), &width, &height, &bitDepth, 0);
 	if (!texData)
 	{
-		logger.SetName(path);
-		logger.SetMessage("Falied to find: "+path, 1);
+		/*logger.SetName(path);
+		logger.SetMessage(, 1);*/
+		FausEngine::FsGame::GetReference()->SetLog("Falied to find: " + path,1);
 		return;
 	}
 
@@ -55,8 +56,9 @@ void FsImage::Load(std::string path)
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else {
-		logger.SetName("Image " + std::to_string(textureID));
-		logger.SetMessage("Number channels not found." + path, 1);
+		//logger.SetName("Image " + std::to_string(textureID));
+		//logger.SetMessage("Number channels not found." + path, 1);
+		FausEngine::FsGame::GetReference()->SetLog("Number channels not found. " + path, 1);
 		return;
 	}
 
@@ -101,8 +103,9 @@ void FsImage::Load(std::string path)
 	//transparencia
 	//glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	logger.SetName("Image " + std::to_string(textureID));
-	logger.SetMessage("Loaded image: " + path, 0);
+	//logger.SetName("Image " + std::to_string(textureID));
+	//logger.SetMessage("Loaded image: " + path, 0);
+	FausEngine::FsGame::GetReference()->SetLog("Loaded image: " + path, 0);
 
 }
 

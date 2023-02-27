@@ -10,7 +10,6 @@
 #include"../Motor/Headers/FsCollider.h"
 #include"../Motor/Headers/FsText.h"
 #include"../Motor/Headers/FsImage.h"
-#include"../Motor/Headers/FsLog.h"
 
 #include"../ejemplo/Jugador.h"
 
@@ -34,7 +33,7 @@ private:
 	std::unique_ptr<UserGame> gameReference;
 	bool* teclas;
 	FsImage imgenMenu, imgMenuPress;
-	FsLog log;
+	//FsLog log;
 };
 
 

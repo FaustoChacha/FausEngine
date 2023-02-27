@@ -24,7 +24,7 @@ FsMaterial::FsMaterial()
 	bind_TexToColor = false;
 	textureID = 0;
 	lit = false;
-	logger.CreateLogger("FsMaterial","log-FsMaterial");
+	//logger.CreateLogger("FsMaterial","log-FsMaterial");
 }
 
 
@@ -36,7 +36,7 @@ void FsMaterial::Load(FsVector3 ambient, FsVector3 specular, FsVector3 color, fl
 	this->shineness = shineness;
 	this->bind_TexToColor = bind;
 	this->textureID = 0;
-	logger.CreateLogger("FsMaterial", "log-FsMaterial");
+	//logger.CreateLogger("FsMaterial", "log-FsMaterial");
 
 	//Leer y cargar textura
 
@@ -48,8 +48,9 @@ void FsMaterial::Load(FsVector3 ambient, FsVector3 specular, FsVector3 color, fl
 	unsigned char* texData = stbi_load(path.c_str(), &width, &height, &bitDepth, 0);
 	if (!texData)
 	{
-		logger.SetName("Material " + ss.str());
-		logger.SetMessage("Texture material falied to find: " + path, 1);
+		//logger.SetName("Material " + ss.str());
+		//logger.SetMessage("Texture material falied to find: " + path, 1);
+		FausEngine::FsGame::GetReference()->SetLog("Texture material falied to find: "+path, 1);
 		//this->type = TypeMaterial::Unlit;
 		this->color = { 0.75f,0.1f,0.95f };
 		//return false;
@@ -75,8 +76,9 @@ void FsMaterial::Load(FsVector3 ambient, FsVector3 specular, FsVector3 color, fl
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else {
-		logger.SetName("Material " + ss.str());
-		logger.SetMessage("Number channels not found." + path, 1);
+		//logger.SetName("Material " + ss.str());
+		//logger.SetMessage("Number channels not found." + path, 1);
+		 FausEngine::FsGame::GetReference()->SetLog("Number channels not found: "+path, 1);
 		//this->type = TypeMaterial::Unlit;
 		this->color = { 0.75f,0.1f,0.95f };
 		//return false;
@@ -85,8 +87,9 @@ void FsMaterial::Load(FsVector3 ambient, FsVector3 specular, FsVector3 color, fl
 	glBindTexture(GL_TEXTURE_2D, 0);
 	stbi_image_free(texData);
 
-	logger.SetName("Material " + ss.str());
-	logger.SetMessage("Loaded material: " + path, 0);
+	//logger.SetName("Material " + ss.str());
+	//logger.SetMessage("Loaded material: " + path, 0);
+	FausEngine::FsGame::GetReference()->SetLog("Loaded material: " + path, 0);
 
 	//return true;
 	lit = true;

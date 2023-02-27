@@ -13,13 +13,13 @@ FsSkybox::FsSkybox()
 	textureID = 0;
     on = true;
     colour = {1,1,1};
-    logger.CreateLogger("FsLogger","log-FsSkybox");
+    //logger.CreateLogger("FsLogger","log-FsSkybox");
 }
 
 void FsSkybox::Load(std::vector <std::string> caras)
 {
 	pathFaces = caras;
-    logger.CreateLogger("FsLogger", "log-FsSkybox");
+    //logger.CreateLogger("FsLogger", "log-FsSkybox");
 
     const void* address = static_cast<const void*>(this);
     std::stringstream ss;
@@ -41,9 +41,10 @@ void FsSkybox::Load(std::vector <std::string> caras)
         }
         else
         {
-            logger.SetName("Skybox: " + ss.str());
-            logger.SetMessage("Skybox failed, path: "+ pathFaces[i], 1);
+            //logger.SetName("Skybox: " + ss.str());
+            //logger.SetMessage("Skybox failed, path: "+ pathFaces[i], 1);
             //std::cout << "Skybox failed, path:: " << pathFaces[i] << std::endl;
+            FausEngine::FsGame::GetReference()->SetLog("Skybox failed, path: " + pathFaces[i], 1);
             stbi_image_free(data);
             return;
         }
@@ -56,8 +57,9 @@ void FsSkybox::Load(std::vector <std::string> caras)
 
     FsGame::GetReference()->SetSkybox(*this);
 
-    logger.SetName("Skybox: " + ss.str());
-    logger.SetMessage("Loaded skybox. ", 0);
+    //logger.SetName("Skybox: " + ss.str());
+    //logger.SetMessage("Loaded skybox. ", 0);
+    FausEngine::FsGame::GetReference()->SetLog("Loaded skybox. ", 0);
 }
 
 unsigned int FsSkybox::GetTextureID() {

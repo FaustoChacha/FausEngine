@@ -38,7 +38,7 @@ void FsPointLight::Load(FsVector3 ambient, FsVector3 diffuse, FsVector3 specular
 	//FausEngine::FsGame::GetReference()->LoadDLight(std::make_shared<FsPointLight>(*this));
 	//FausEngine::FsGame::GetReference()->LoadRLight(*this);
 	FausEngine::FsGame::GetReference()->LoadLight(this);
-	
+	FausEngine::FsGame::GetReference()->SetLog("Loaded pointlight.", 0);
 	//std::shared_ptr< FsPointLight > self = shared_from_this();
 	//FausEngine::FsGame::GetReference()->LoadDLight(self);
 	//FausEngine::FsGame::GetReference()->LoadDLight(pointlightReference);

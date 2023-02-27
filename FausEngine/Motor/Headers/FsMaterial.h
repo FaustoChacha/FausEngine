@@ -4,15 +4,9 @@
 #include"FsDLL.h"
 #include"FsMaths.h"
 #include"FsShader.h"
-#include"FsLog.h"
 #include<iostream>
 
 namespace FausEngine {
-	enum class TypeMaterial
-	{
-		Lit,
-		Unlit,
-	};
 
 	class EXPORTDLL FsMaterial
 	{
@@ -48,7 +42,7 @@ namespace FausEngine {
 
 		bool bind_TexToColor;
 		bool lit;
-		FsLog logger;
+		//FsLog logger;
 	};
 }
 

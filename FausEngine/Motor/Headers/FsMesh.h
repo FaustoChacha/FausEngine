@@ -8,7 +8,6 @@
 #include "FsMaths.h"
 #include "FsMaterial.h"
 #include "FsCollider.h"
-#include "FsLog.h"
 //#pragma warning
 
 
@@ -51,7 +50,7 @@ namespace FausEngine {
 		std::string path;
 		FsTransform transform;
 		
-		FsLog logger;
+		//FsLog logger;
 	};
 
 }

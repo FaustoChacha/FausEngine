@@ -24,8 +24,10 @@ void FsDireciontalLight::Load(FsVector3 direction, FsVector3 ambient, FsVector3 
 	this->diffuse = diffuse;
 	this->specular = specular;
 	FausEngine::FsGame::GetReference()->LoadLight(this);
+	FausEngine::FsGame::GetReference()->SetLog("Loaded directional light.",0);
+	//FausEngine::FsGame::GetReference()->LoadDLight(&this);
 	
-	//FausEngine::FsGame::GetReference()->LoadDLight(std::make_shared<FsDireciontalLight>(*this));
+	//FausEngine::FsGame::GetReference()->LoadDLight(std::make_shared<FsDireciontalLight>(this));
 }
 
 //FsVector3* FsDireciontalLight::GetDirection() {
