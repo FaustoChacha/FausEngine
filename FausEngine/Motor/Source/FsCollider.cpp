@@ -5,14 +5,14 @@ using namespace FausEngine;
 
 FsCollider::FsCollider()
 {
-	max = {1,1,1};
-	min = {-1,-1,-1};
+	boundMax = {1,1,1};
+	boundMin = {-1,-1,-1};
 	id = 0;
 	right = { 0,0,0 };
 	left = {0,0,0};
 	down = {0,0,0};
 	up = {0,0,0};
-	on = true;
+	active = true;
 }
 
 //FsCollider::FsCollider(FsVector3 max, FsVector3 min) {
@@ -24,11 +24,27 @@ FsCollider::FsCollider()
 
 
 
-void FsCollider::SetMax(FsVector3 v) {
-	max = v;
+void FsCollider::Load(int i) {
+	id = i;
+	//boundMax = { 1,1,1 };
+	//boundMin = { -1,-1,-1 };
+	//id = 0;
+	//right = { 0,0,0 };
+	//left = { 0,0,0 };
+	//down = { 0,0,0 };
+	//up = { 0,0,0 };
+	//active = true;
 }
-void FsCollider::SetMin(FsVector3 v) {
-	min = v;
+
+void FsCollider::SetActive(bool on) {
+	active = on;
+}
+
+void FsCollider::SetBoundMax(FsVector3 v) {
+	boundMax = v;
+}
+void FsCollider::SetBoundMin(FsVector3 v) {
+	boundMin = v;
 }
 
 void FsCollider::SetRight(FsVector3 p) {
@@ -46,12 +62,16 @@ void FsCollider::SetDown(FsVector3 v) {
 	down = v;
 }
 
-FsVector3 FsCollider::GetMax() {
-	return max;
+bool FsCollider::GetActive() {
+	return active;
 }
 
-FsVector3 FsCollider::GetMin() {
-	return min;
+FsVector3 FsCollider::GetBoundMax() {
+	return boundMax;
+}
+
+FsVector3 FsCollider::GetBoundMin() {
+	return boundMin;
 }
 
 FsVector3 FsCollider::GetRight() {
@@ -74,37 +94,40 @@ FsVector3 FsCollider::GetDown() {
 	return down;
 }
 
+int FsCollider::GetId() {
+	return id;
+}
 
 
 bool FsCollider::CheckCollision(FsCollider& c) {
-	return(c.on && 
-		max.x >= c.min.x &&
-		min.x <= c.max.x &&
-		max.y >= c.min.y &&
-		min.y <= c.max.y &&
-		max.z >= c.min.z &&
-		min.z <= c.max.z
+	return(c.active && 
+		boundMax.x >= c.boundMin.x &&
+		boundMin.x <= c.boundMax.x &&
+		boundMax.y >= c.boundMin.y &&
+		boundMin.y <= c.boundMax.y &&
+		boundMax.z >= c.boundMin.z &&
+		boundMin.z <= c.boundMax.z
 		);
 }
 
 FsVector3 FsCollider::DistanceToPivot(FsVector3 _pivot, CollisionDirection m) {
 	pivot = _pivot;
-	if(m==CollisionDirection::MAX)	return FsVector3::Distance(_pivot, (_pivot + max));
-	if(m==CollisionDirection::MIN)  return FsVector3::Distance(_pivot, (_pivot + min));
+	if(m==CollisionDirection::MAX)	return FsVector3::Distance(_pivot, (_pivot + boundMax));
+	if(m==CollisionDirection::MIN)  return FsVector3::Distance(_pivot, (_pivot + boundMin));
 }
 
 CollisionDirection FsCollider::GetDirection(FsCollider& c) {
-	if (CheckCollision(c) && c.on) {
-		if (left.x <= c.GetMax().x && c.GetLeft().x <= min.x && left.y <= c.GetMax().y /*para Up*/ && up.y >= c.GetMax().y /*para down*/) {
+	if (CheckCollision(c) && c.active) {
+		if (left.x <= c.GetBoundMax().x && c.GetLeft().x <= boundMin.x && left.y <= c.GetBoundMax().y /*para Up*/ && up.y >= c.GetBoundMax().y /*para down*/) {
 			return CollisionDirection::RIGHT;
 		}
-		if (right.x >=c.GetMin().x && c.GetRight().x >= max.x && left.y <= c.GetMax().y /*para Up*/ && up.y >= c.GetMax().y/*para down*/) {
+		if (right.x >=c.GetBoundMin().x && c.GetRight().x >= boundMax.x && left.y <= c.GetBoundMax().y /*para Up*/ && up.y >= c.GetBoundMax().y/*para down*/) {
 			return CollisionDirection::LEFT;
 		}
-		if (down.y <= c.GetMax().y && c.GetUp().y <= max.y && left.y >= c.GetMax().y) {
+		if (down.y <= c.GetBoundMax().y && c.GetUp().y <= boundMax.y && left.y >= c.GetBoundMax().y) {
 			return CollisionDirection::UP;
 		}
-		if (up.y >= c.GetMin().y && c.GetDown().y >= min.y && left.y ) {
+		if (up.y >= c.GetBoundMin().y && c.GetDown().y >= boundMin.y && left.y ) {
 			return CollisionDirection::DOWN;
 		}
 	}

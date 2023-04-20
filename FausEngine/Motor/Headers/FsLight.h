@@ -10,24 +10,21 @@ namespace FausEngine {
 	{
 	public:
 		FsLight();
-		FsLight(FsVector3 ambient, FsVector3 diffuse, FsVector3 specular);
-
-		//virtual void Load();
-		//virtual void Render();
-		bool on;
 		
-		//FsVector3* GetAmbient();
-		//FsVector3* GetDiffuse();
-		//FsVector3* GetSpecular();
-		std::shared_ptr<FsVector3> GetAmbient();
-		std::shared_ptr<FsVector3> GetDiffuse();
-		std::shared_ptr<FsVector3> GetSpecular();
-
+		void SetActive(bool);
+		void SetAmbient(FsVector3);
+		void SetDiffuse(FsVector3);
+		void SetSpecular(FsVector3);
+		
+		bool GetActive();
+		FsVector3 GetAmbient();
+		FsVector3 GetDiffuse();
+		FsVector3 GetSpecular();
 		~FsLight();
 
 	protected:
 		FsVector3  ambient, diffuse, specular;
-		
+		bool active;
 	};
 }
 

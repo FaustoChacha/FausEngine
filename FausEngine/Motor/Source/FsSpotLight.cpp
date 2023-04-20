@@ -33,16 +33,12 @@ void FsSpotLight::Load(FsVector3 ambient, FsVector3 diffuse, FsVector3 specular,
 	FausEngine::FsGame::GetReference()->SetLog("Loaded spotlight. ",0);
 }
 
-void FsPointLight::SetDiffuse(FsVector3 d) {
-	diffuse = d;
+void FsSpotLight::SetDirection(FsVector3 dir) {
+	direction = dir;
 }
 
-//FsVector3* FsSpotLight::GetDirection() {
-//	return &direction;
-//}
-
-std::shared_ptr<FsVector3> FsSpotLight::GetDirection() {
-	return std::make_shared<FsVector3>(direction);
+FsVector3 FsSpotLight::GetDirection() {
+	return direction;
 }
 
 FsSpotLight::~FsSpotLight()

@@ -11,19 +11,22 @@ namespace FausEngine {
 	public:
 		FsImage();
 		void Load(std::string path);
+
 		void SetPosition(FsVector3);
 		void SetRotation(FsVector3);
 		void SetScale(FsVector3);
+		FsVector3 GetPosition();
+		FsVector3 GetRotation();
+		FsVector3 GetScale();
+
 		void Render();
 		~FsImage();
 
 	private:
 		unsigned int textureID;
 		unsigned int vbo, ibo, vao;
-		//FsShader* shader;
 		std::shared_ptr<FsShader> shader;
 		FsTransform transform;
-		//FsLog logger;
 	};
 }
 

@@ -40,14 +40,11 @@ std::shared_ptr<FsShader> TextShader(new FsShader);
 std::shared_ptr<FsShader> ImageShader(new FsShader);
 
 FsDireciontalLight* directionalLight;
-//std::shared_ptr<FsDireciontalLight> directionalLight(new FsDireciontalLight);
 std::vector<FsPointLight*> pointlights;
- //std::vector<FsPointLight&> pointlights;
-//std::vector<std::shared_ptr<FsPointLight>> pointlights;
 std::vector<FsSpotLight*> spotLights;
 std::vector<int> tipoLog;
 std::vector<std::string> msgsLog;
-//std::vector<std::shared_ptr<FsSpotLight>> spotLights;
+
 
 
 GLfloat deltaTime = 0.0f;
@@ -493,19 +490,17 @@ void FsGame::Run(std::vector<FsScene*> escena) {
     glm::mat4 ortoProjection = glm::ortho(0.0f, static_cast<float>(800), 0.0f, static_cast<float>(600));
     glUniformMatrix4fv(TextShader->GetUVariableLocation(uTypeVariables::uOrtoProjection), 1,GL_FALSE,glm::value_ptr(ortoProjection));
 
-
-
    
     while (!glfwWindowShouldClose(mainWindow.getWindowReference()))
     {
         if (begin == 0) {
             if (index_scene > escena.size() || index_scene < 0) exit(3);
-            
+
             escena[index_scene]->Begin();
 
             auto logger = spdlog::basic_logger_mt("FausEngine", "Logs/Log.txt");
 
-            for (int i = 0; i < msgsLog.size();i++) {
+            for (int i = 0; i < msgsLog.size(); i++) {
                 switch (tipoLog[i])
                 {
                 case 0:
@@ -520,7 +515,7 @@ void FsGame::Run(std::vector<FsScene*> escena) {
                     logger->info(msgsLog[i]);
                     break;
                 }
-                
+
             }
 
             MainShader->Compile(pointlights.size(), spotLights.size());
@@ -592,14 +587,14 @@ void FsGame::Run(std::vector<FsScene*> escena) {
         deltaTime = now - lastTime;
         lastTime = now;
 
-        glfwPollEvents(); 
-        glViewport(0,0,width, height);
+        glfwPollEvents();
+        glViewport(0, 0, width, height);
         //glClearColor(0.1f, 0.1f, 0.1f, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //====================skybox render======================
-        if (skybox ) {
-            if (skybox->on) {
+        if (skybox) {
+            if (skybox->GetActive()) {
                 glDepthMask(GL_FALSE);
                 SkyboxShader.Use();
                 //projection matrix
@@ -621,10 +616,10 @@ void FsGame::Run(std::vector<FsScene*> escena) {
                 glDepthMask(GL_TRUE);
             }
             else {
-                glClearColor(skybox->colour.x, skybox->colour.y, skybox->colour.z, 1);
+                glClearColor(skybox->GetColour().x, skybox->GetColour().y, skybox->GetColour().z, 1);
             }
         }
-      
+
         //========================Render scene============================
         MainShader->Use();
         //View matrix
@@ -639,34 +634,33 @@ void FsGame::Run(std::vector<FsScene*> escena) {
             camera->GetPosition().x, camera->GetPosition().y, camera->GetPosition().z);
 
         //Directional light
-        if (directionalLight && directionalLight->on) {
+        if (directionalLight && directionalLight->GetActive()) {
             glUniform3f(MainShader->GetUVariableLocation(uTypeVariables::uDir_direction),
-                directionalLight->GetDirection()->x, directionalLight->GetDirection()->y, directionalLight->GetDirection()->z);
+                directionalLight->GetDirection().x, directionalLight->GetDirection().y, directionalLight->GetDirection().z);
             glUniform3f(MainShader->GetUVariableLocation(uTypeVariables::uDir_ambient),
-                directionalLight->GetAmbient()->x, directionalLight->GetAmbient()->y, directionalLight->GetAmbient()->z);
+                directionalLight->GetAmbient().x, directionalLight->GetAmbient().y, directionalLight->GetAmbient().z);
             glUniform3f(MainShader->GetUVariableLocation(uTypeVariables::uDir_diffuse),
-                directionalLight->GetDiffuse()->x, directionalLight->GetDiffuse()->y, directionalLight->GetDiffuse()->z);
+                directionalLight->GetDiffuse().x, directionalLight->GetDiffuse().y, directionalLight->GetDiffuse().z);
             glUniform3f(MainShader->GetUVariableLocation(uTypeVariables::uDir_specular),
-                directionalLight->GetSpecular()->x, directionalLight->GetSpecular()->y, directionalLight->GetSpecular()->z);
+                directionalLight->GetSpecular().x, directionalLight->GetSpecular().y, directionalLight->GetSpecular().z);
         }
        
         //Point lights
         glUniform1i(uPointLightCounter, pointlights.size());    
-
         for (int i = 0; i < pointlights.size(); i++)
         {
-            if (pointlights[i]->on) {
+            if (pointlights[i]->GetActive()) {
                 glUniform3f(MainShader->GetUPointsLocation(uTypeVariables::uPoint_ambient, i),
-                    pointlights[i]->GetAmbient()->x, pointlights[i]->GetAmbient()->y, pointlights[i]->GetAmbient()->z);
+                    pointlights[i]->GetAmbient().x, pointlights[i]->GetAmbient().y, pointlights[i]->GetAmbient().z);
                 glUniform3f(MainShader->GetUPointsLocation(uTypeVariables::uPoint_diffuse, i),
-                    pointlights[i]->GetDiffuse()->x, pointlights[i]->GetDiffuse()->y, pointlights[i]->GetDiffuse()->z);
+                    pointlights[i]->GetDiffuse().x, pointlights[i]->GetDiffuse().y, pointlights[i]->GetDiffuse().z);
                 glUniform3f(MainShader->GetUPointsLocation(uTypeVariables::uPoint_specular, i),
-                    pointlights[i]->GetSpecular()->x, pointlights[i]->GetSpecular()->y, pointlights[i]->GetSpecular()->z);
+                    pointlights[i]->GetSpecular().x, pointlights[i]->GetSpecular().y, pointlights[i]->GetSpecular().z);
                 glUniform3f(MainShader->GetUPointsLocation(uTypeVariables::uPoint_position, i),
-                    pointlights[i]->GetPosition()->x, pointlights[i]->GetPosition()->y, pointlights[i]->GetPosition()->z);
-                glUniform1f(MainShader->GetUPointsLocation(uTypeVariables::uPoint_const, i), *pointlights[i]->GetConstant());
-                glUniform1f(MainShader->GetUPointsLocation(uTypeVariables::uPoint_lin, i), *pointlights[i]->GetLinear());
-                glUniform1f(MainShader->GetUPointsLocation(uTypeVariables::uPoint_exp, i), *pointlights[i]->GetExponent());
+                    pointlights[i]->GetPosition().x, pointlights[i]->GetPosition().y, pointlights[i]->GetPosition().z);
+                glUniform1f(MainShader->GetUPointsLocation(uTypeVariables::uPoint_const, i), pointlights[i]->GetConstant());
+                glUniform1f(MainShader->GetUPointsLocation(uTypeVariables::uPoint_lin, i), pointlights[i]->GetLinear());
+                glUniform1f(MainShader->GetUPointsLocation(uTypeVariables::uPoint_exp, i), pointlights[i]->GetExponent());
             }
         }
 
@@ -674,25 +668,24 @@ void FsGame::Run(std::vector<FsScene*> escena) {
         glUniform1i(uSpotLightCounter, spotLights.size());
         for (int i = 0; i < spotLights.size(); i++)
         {
-            if (spotLights[i]->on) {
+            if (spotLights[i]->GetActive()) {
                 glUniform3f(MainShader->GetUSpotLocation(uTypeVariables::uPoint_ambient, i),
-                    spotLights[i]->GetAmbient()->x, spotLights[i]->GetAmbient()->y, spotLights[i]->GetAmbient()->z);
+                    spotLights[i]->GetAmbient().x, spotLights[i]->GetAmbient().y, spotLights[i]->GetAmbient().z);
                 glUniform3f(MainShader->GetUSpotLocation(uTypeVariables::uPoint_diffuse, i),
-                    spotLights[i]->GetDiffuse()->x, spotLights[i]->GetDiffuse()->y, spotLights[i]->GetDiffuse()->z);
+                    spotLights[i]->GetDiffuse().x, spotLights[i]->GetDiffuse().y, spotLights[i]->GetDiffuse().z);
                 glUniform3f(MainShader->GetUSpotLocation(uTypeVariables::uPoint_specular, i),
-                    spotLights[i]->GetSpecular()->x, spotLights[i]->GetSpecular()->y, spotLights[i]->GetSpecular()->z);
+                    spotLights[i]->GetSpecular().x, spotLights[i]->GetSpecular().y, spotLights[i]->GetSpecular().z);
                 glUniform3f(MainShader->GetUSpotLocation(uTypeVariables::uPoint_position, i),
-                    spotLights[i]->GetPosition()->x, spotLights[i]->GetPosition()->y, spotLights[i]->GetPosition()->z);
+                    spotLights[i]->GetPosition().x, spotLights[i]->GetPosition().y, spotLights[i]->GetPosition().z);
                 glUniform3f(MainShader->GetUSpotLocation(uTypeVariables::uSpot_Dir, i),
-                    spotLights[i]->GetDirection()->x, spotLights[i]->GetDirection()->y, spotLights[i]->GetDirection()->z);
-                glUniform1f(MainShader->GetUSpotLocation(uTypeVariables::uPoint_const, i), *spotLights[i]->GetConstant());
-                glUniform1f(MainShader->GetUSpotLocation(uTypeVariables::uPoint_lin, i), *spotLights[i]->GetLinear());
-                glUniform1f(MainShader->GetUSpotLocation(uTypeVariables::uPoint_exp, i), *spotLights[i]->GetExponent());
+                    spotLights[i]->GetDirection().x, spotLights[i]->GetDirection().y, spotLights[i]->GetDirection().z);
+                glUniform1f(MainShader->GetUSpotLocation(uTypeVariables::uPoint_const, i), spotLights[i]->GetConstant());
+                glUniform1f(MainShader->GetUSpotLocation(uTypeVariables::uPoint_lin, i), spotLights[i]->GetLinear());
+                glUniform1f(MainShader->GetUSpotLocation(uTypeVariables::uPoint_exp, i), spotLights[i]->GetExponent());
             }
         }
 
         escena[index_scene]->Update(deltaTime, now);
-
 
         glUseProgram(0);
         glfwSwapBuffers(mainWindow.getWindowReference());

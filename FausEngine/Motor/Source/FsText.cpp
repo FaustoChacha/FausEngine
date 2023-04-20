@@ -20,11 +20,11 @@ FsText::FsText()
 	shader = FsGame::GetReference()->GetShader(1);
 	text = "FausEngine";
 	color = {1,1,1};
-	position = {0,0};
+	position = {0,0,0};
 	//logger.CreateLogger("FsText","log-FsText");
 }
 
-void FsText::Load(std::string path, int size, std::string text, FsVector2 pos, FsVector3 color) {
+void FsText::Load(std::string path, int size, std::string text, FsVector3 pos, FsVector3 color) {
 	//logger.CreateLogger("FsText", "log-FsText");
 	const void* address = static_cast<const void*>(this);
 	std::stringstream ss;
@@ -100,8 +100,8 @@ void FsText::Load(std::string path, int size, std::string text, FsVector2 pos, F
 
 		Character character = {
 			texture,
-			FsVector2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-			FsVector2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+			FsVector3(face->glyph->bitmap.width, face->glyph->bitmap.rows,0),
+			FsVector3(face->glyph->bitmap_left, face->glyph->bitmap_top,0),
 			face->glyph->advance.x
 		};
 
@@ -137,7 +137,7 @@ void FsText::Load(std::string path, int size, std::string text, FsVector2 pos, F
 
 
 void FsText::Render() {
-	FsVector2 textPos = this->position;
+	FsVector3 textPos = this->position;
 
 	//enable blending
 	// Colorfinal = ColorSource * AlphaSource + ColorDestination * 1- AlphaSource
@@ -196,7 +196,7 @@ void FsText::Render() {
 	glDisable(GL_BLEND);
 }
 
-void FsText::SetPosition(FsVector2 _position) {
+void FsText::SetPosition(FsVector3 _position) {
 	this->position = _position;
 }
 
@@ -212,7 +212,7 @@ FsVector3 FsText::GetColor() {
 	return color;
 }
 
-FsVector2 FsText::GetPosition() {
+FsVector3 FsText::GetPosition() {
 	return position;
 }
 

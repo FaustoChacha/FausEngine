@@ -20,30 +20,41 @@ namespace FausEngine {
 	{
 	public:
 		FsCollider();
-		//FsCollider(FsVector3 max, FsVector3 min);
+
 		bool CheckCollision(FsCollider&);
-		CollisionDirection GetDirection(FsCollider&);
-		FsVector3 GetRight();
-		FsVector3 GetLeft();
-		FsVector3 GetUp();
-		FsVector3 GetDown();
-		FsVector3 GetMax();
-		FsVector3 GetMin();
-		FsVector3 GetPivot();
 		FsVector3 DistanceToPivot(FsVector3 pivot, CollisionDirection m);
-		void SetMax(FsVector3);
-		void SetMin(FsVector3);
+		void Load(int id);
+
+		void SetActive(bool);
+		void SetBoundMax(FsVector3);
+		void SetBoundMin(FsVector3);
 		void SetRight(FsVector3);
 		void SetLeft(FsVector3);
 		void SetUp(FsVector3);
 		void SetDown(FsVector3);
+
+		CollisionDirection GetDirection(FsCollider&);
+		bool GetActive();
+		FsVector3 GetRight();
+		FsVector3 GetLeft();
+		FsVector3 GetUp();
+		FsVector3 GetDown();
+		FsVector3 GetBoundMax();
+		FsVector3 GetBoundMin();
+		FsVector3 GetPivot();
+		int GetId();
+		
 		~FsCollider();
 
-		int id;
-		bool on;
-
 	private:
-		FsVector3 max, min;
+		int id;
+		bool active;
+		bool colliderLoaded;
+
+		//bounds
+		FsVector3 boundMax, boundMin;
+
+		//directions
 		FsVector3 right;
 		FsVector3 left;
 		FsVector3 up;

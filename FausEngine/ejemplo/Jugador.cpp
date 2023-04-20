@@ -241,8 +241,8 @@ void Jugador::Init(bool &col) {
 	mallaJugador.SetTransform({ posInicialPlayer, {-90,0,0},{0.8f,0.8f,0.8f} });
 	mallaJugador.SetMaterial(matJugador);
 	//collider jugador
-	collider.SetMax({ 0.6f,0.75f,0.75f }); 
-	collider.SetMin({ -0.6f, -0.8f, -0.75f });
+	collider.SetBoundMax({ 0.6f,0.75f,0.75f }); 
+	collider.SetBoundMin({ -0.6f, -0.8f, -0.75f });
 	mallaJugador.SetCollider(collider);
 
 	//malla luz orbital
@@ -297,6 +297,10 @@ void Jugador::Update(bool pausa, float dt, float t, bool col) {
 	}
 
 	luzPuntual.SetPosition(mallaJugador.GetTransform().position);
+	//if (gameReference->GetKeyPress(Keys::L)) { // tecla D
+	//	luzPuntual.SetAmbient(FsVector3(0,0,0));
+	//}
+	//std::cout << luzPuntual.GetAmbient().x << std::endl;
 	mallaLuzOrbital.Render();
 	mallaJugador.Render();
 }

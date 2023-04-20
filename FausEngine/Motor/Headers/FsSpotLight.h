@@ -10,14 +10,12 @@ namespace FausEngine {
 	{
 	public:
 		FsSpotLight();
-		//FsSpotLight(FsVector3 ambient, FsVector3 diffuse, FsVector3 specular,
-		//	FsVector3 position,FsVector3 direction ,float constant, float linear, float exponent);
 		void Load(FsVector3 ambient, FsVector3 diffuse, FsVector3 specular,
 			FsVector3 position, FsVector3 direction, float constant, float linear, float exponent);
+		
+		void SetDirection(FsVector3);
+		FsVector3 GetDirection();
 		~FsSpotLight();
-
-		//FsVector3* GetDirection();
-		std::shared_ptr<FsVector3> GetDirection();
 
 	private:
 		FsVector3 direction;

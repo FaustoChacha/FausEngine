@@ -10,24 +10,19 @@ namespace FausEngine {
 	{
 	public:
 		FsPointLight();
-		//FsPointLight(FsVector3 ambient, FsVector3 diffuse, FsVector3 specular,
-		//	FsVector3 position, float constant, float linear, float exponent);
 		void Load(FsVector3 ambient, FsVector3 diffuse, FsVector3 specular,
 			FsVector3 position, float constant, float linear, float exponent);
-		~FsPointLight();
-
-		//FsVector3* GetPosition();
-		std::shared_ptr<FsVector3> GetPosition();
-		//float* GetConstant();
-		//float* GetLinear();
-		//float* GetExponent();
-		std::shared_ptr<float> GetConstant();
-		std::shared_ptr<float> GetLinear();
-		std::shared_ptr<float> GetExponent();
-	
+		
 		void SetPosition(FsVector3);
-		void SetDiffuse(FsVector3);
+		void SetConstant(float);
 		void SetLinear(float);
+		void SetExponent(float);
+
+		FsVector3 GetPosition();
+		float GetConstant();
+		float GetLinear();
+		float GetExponent();
+		~FsPointLight();
 
 	protected:
 		FsVector3 position;

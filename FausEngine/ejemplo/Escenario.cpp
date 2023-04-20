@@ -59,8 +59,8 @@ void Plataformas::Begin() {
 	//item.material.color = { 1,1,1 };
 	item.SetPosition({ -77, -7,0 });
 	item.SetMaterial(matItem);
-	collItem.SetMax({ 0.3f,0.3f,0.3f }); 
-	collItem.SetMin({-0.3f, -0.3f, -0.3f });
+	collItem.SetBoundMax({ 0.3f,0.3f,0.3f }); 
+	collItem.SetBoundMin({-0.3f, -0.3f, -0.3f });
 	item.SetCollider(collItem);
 
 
@@ -73,28 +73,24 @@ void Plataformas::Begin() {
 	//plataformas[0].Load();
 	matPla1.Load({0.1f,0.1f,0.1f}, {0.1f,0.1f,0.1f}, {1,1,1}, 2.5f,"Textures/plataforma1.png" ,false);
 	plataformas[0].SetMaterial(matPla1);
-
-	//plataformas[0].material.LoadTexture("Textures/plataforma1.png");
 	plataformas[0].SetTransform({ {0.0f, -8.0f, -2.5f}, {0,90,0},{0.5f,0.5f,0.5f } });
-	//plataformas[0].material.ambient = { 0.1f, 0.1f, 0.1f };
-	//plataformas[0].material.specular = { 0.1f, 0.1f, 0.1f };
-	//plataformas[0].material.shineness = 2.5f;
 	complemento0 = plataformas[0];
 	complemento0.SetPosition({ 
 		complemento0.GetTransform().position.x - 16, 
 		complemento0.GetTransform().position.y, 
 		complemento0.GetTransform().position.z });
 	//Collider 
-	collPlataformas[0].SetMax({ 7.75f,4.0f,4.0f }); 
-	collPlataformas[0].SetMin({ -24.1f, -4.0f, -4.0f });
-	collPlataformas[0].id = 0;
+	collPlataformas[0].Load(0);
+	collPlataformas[0].SetBoundMax({ 7.75f,4.0f,4.0f }); 
+	collPlataformas[0].SetBoundMin({ -24.1f, -4.0f, -4.0f });
+	//collPlataformas[0].id = 0;
 	plataformas[0].SetCollider(collPlataformas[0]);
 
 	plataformas[7] = plataformas[0];
 	plataformas[7].SetPosition( {-77,-15,-2.5f});
-	collPlataformas[7].SetMax({ 7.75f,4.0f,4.0f }); 
-	collPlataformas[7].SetMin({ -7.75f, -4.0f, -4.0f });
-	collPlataformas[7].id = 7;
+	collPlataformas[7].Load(7);
+	collPlataformas[7].SetBoundMax({ 7.75f,4.0f,4.0f }); 
+	collPlataformas[7].SetBoundMin({ -7.75f, -4.0f, -4.0f });
 	plataformas[7].SetCollider(collPlataformas[7]);
 
 	//plataforma mediana piramidal-----------------------------------------------------------
@@ -108,9 +104,9 @@ void Plataformas::Begin() {
 	//plataformas[1].material.shineness = 5;
 	plataformas[1].SetMaterial(matPla2);
 	//Collider 
-	collPlataformas[1].SetMax({ 1.5f,0.1f,1.0f }); 
-	collPlataformas[1].SetMin({ -1.5f, -1.5f, -1.5f});
-	collPlataformas[1].id = 1;
+	collPlataformas[1].Load(1);
+	collPlataformas[1].SetBoundMax({ 1.5f,0.1f,1.0f }); 
+	collPlataformas[1].SetBoundMin({ -1.5f, -1.5f, -1.5f});
 	plataformas[1].SetCollider(collPlataformas[1]);
 	//Referencia
 	refRight.Load("Models/fSphere.obj");
@@ -127,43 +123,47 @@ void Plataformas::Begin() {
 	plataformas[2] = plataformas[1];
 	plataformas[2].SetPosition({-35, -0.5f,0});
 	collPlataformas[2] = collPlataformas[1];
-	collPlataformas[2].id = 2;
+	collPlataformas[2].Load(2);
 	plataformas[2].SetCollider(collPlataformas[2]);
 
 	plataformas[3] = plataformas[1];
 	plataformas[3].SetPosition({ -43, -5,0 });
 	collPlataformas[3] = collPlataformas[1];
-	collPlataformas[3].id = 3;
+	collPlataformas[3].Load(3);
 	plataformas[3].SetCollider(collPlataformas[3]);
 
 	plataformas[8] = plataformas[1];
 	plataformas[8].SetPosition({-90, -8, 0});
+	
 	collPlataformas[8] = collPlataformas[1];
-	collPlataformas[8].id = 8;
+	collPlataformas[8].Load(8);
 	plataformas[8].SetCollider(collPlataformas[8]);
 
 	plataformas[9] = plataformas[1];
 	plataformas[9].SetPosition( { -96, -4, 0 });
+	
 	collPlataformas[9] = collPlataformas[1];
-	collPlataformas[9].id = 9;
+	collPlataformas[9].Load(9);
 	plataformas[9].SetCollider(collPlataformas[9]);
 
 	plataformas[10] = plataformas[1];
 	plataformas[10].SetPosition({ -102, 0, 0 });
+	
 	collPlataformas[10] = collPlataformas[1];
-	collPlataformas[10].id = 10;
+	collPlataformas[10].Load(10);
 	plataformas[10].SetCollider(collPlataformas[10]);
 
 	plataformas[11] = plataformas[1];
 	plataformas[11].SetPosition({ -110, 0, 0 });
+	collPlataformas[11].Load(11);
 	collPlataformas[11] = collPlataformas[1];
-	collPlataformas[11].id = 11;
 	plataformas[11].SetCollider(collPlataformas[11]);
 
 	plataformas[12] = plataformas[1];
 	plataformas[12].SetPosition( { -118, 0, 0 });
+	
 	collPlataformas[12] = collPlataformas[1];
-	collPlataformas[12].id = 12;
+	collPlataformas[12].Load(12);
 	plataformas[12].SetCollider(collPlataformas[12]);
 
 	//plataforma redonda pequena
@@ -179,21 +179,25 @@ void Plataformas::Begin() {
 	//plataformas[4].material.shineness = 5;
 	plataformas[4].SetMaterial(matPla3);
 	//Collider 
-	collPlataformas[4].SetMax({ 1.3f,0,1.0f }); 
-	collPlataformas[4].SetMin({ -1.3f, -0.25f, -1.0f });
-	collPlataformas[4].id = 4;
+	collPlataformas[4].Load(4);
+	collPlataformas[4].SetBoundMax({ 1.3f,0,1.0f }); 
+	collPlataformas[4].SetBoundMin({ -1.3f, -0.25f, -1.0f });
 	plataformas[4].SetCollider(collPlataformas[4]);
 
 	plataformas[5] = plataformas[4];
 	plataformas[5].SetPosition({-56, -2.5f, 0});
+	
 	collPlataformas[5] = collPlataformas[4];
-	collPlataformas[5].id = 5;
+	collPlataformas[5].Load(5);
+	//collPlataformas[5].id = 5;
 	plataformas[5].SetCollider(collPlataformas[5]);
 
 	plataformas[6] = plataformas[4];
 	plataformas[6].SetPosition({-64, -7,0});
+	
 	collPlataformas[6] = collPlataformas[4];
-	collPlataformas[6].id = 6;
+	collPlataformas[6].Load(6);
+	//collPlataformas[6].id = 6;
 	plataformas[6].SetCollider(collPlataformas[6]);
 
 	//plataforma final------------------
@@ -209,9 +213,10 @@ void Plataformas::Begin() {
 	//plataformas[13].material.shineness = 5;
 	plataformas[13].SetMaterial(matPla4);
 	//Collider 
-	collPlataformas[13].SetMax({ 2.0f,2,2.0f }); 
-	collPlataformas[13].SetMin({ 1.3f, 0.25f, 1.0f });
-	collPlataformas[13].id = 13;
+	collPlataformas[13].Load(13);
+	collPlataformas[13].SetBoundMax({ 2.0f,2,2.0f }); 
+	collPlataformas[13].SetBoundMin({ 1.3f, 0.25f, 1.0f });
+	//collPlataformas[13].id = 13;
 	plataformas[13].SetCollider(collPlataformas[13]);
 	}
 
@@ -233,93 +238,122 @@ void Plataformas::Begin() {
 		//monedas[0].material.color = { 0.9f,0.4f,0.19f };
 		monedas[0].SetTransform({ {-5, -3,0}, {0,90,0},{0.5f,0.5f,0.5f} });
 		monedas->SetMaterial(matMoneda);
-		collMonedas[0].SetMax({ 0.5f,0.5f,0.5f }); 
-		collMonedas[0].SetMin({ -0.5f, -0.5f, -0.5f });
-		collMonedas[0].id = 0;
+		collMonedas[0].Load(0);
+		collMonedas[0].SetBoundMax({ 0.5f,0.5f,0.5f }); 
+		collMonedas[0].SetBoundMin({ -0.5f, -0.5f, -0.5f });
+		//collMonedas[0].id = 0;
 		monedas[0].SetCollider(collMonedas[0]);
 
 		monedas[1] = monedas[0];
 		monedas[1].SetPosition( { -13,-3,0 });
+		
 		collMonedas[1] = collMonedas[0];
-		collMonedas[1].id = 1;
+		//collMonedas[1].id = 1;
+		collMonedas[1].Load(1);
 		monedas[1].SetCollider(collMonedas[1]);
 
 		monedas[2] = monedas[0];
 		monedas[2].SetPosition( { -20,-3,0 });
+		
 		collMonedas[2] = collMonedas[0];
-		collMonedas[2].id = 2;
+		//collMonedas[2].id = 2;
+		collMonedas[2].Load(2);
 		monedas[2].SetCollider(collMonedas[2]);
 
 		monedas[3] = monedas[0];
 		monedas[3].SetPosition({ -29,-1,0 });
+		
 		collMonedas[3] = collMonedas[0];
-		collMonedas[3].id = 3;
+		//collMonedas[3].id = 3;
+		collMonedas[3].Load(3);
 		monedas[3].SetCollider(collMonedas[3]);
 
 		monedas[4] = monedas[0];
 		monedas[4].SetPosition({ -35,1,0 });
+		
 		collMonedas[4] = collMonedas[0];
-		collMonedas[4].id = 4;
+		//collMonedas[4].id = 4;
+		collMonedas[4].Load(4);
 		monedas[4].SetCollider(collMonedas[4]);
 
 		monedas[5] = monedas[0];
 		monedas[5].SetPosition({ -43,-3,0 });
+		
 		collMonedas[5] = collMonedas[0];
-		collMonedas[5].id = 5;
+		//collMonedas[5].id = 5;
+		collMonedas[5].Load(5);
 		monedas[5].SetCollider(collMonedas[5]);
 
 		monedas[6] = monedas[0];
 		monedas[6].SetPosition({ -50,-3,0 });
+		
 		collMonedas[6] = collMonedas[0];
-		collMonedas[6].id = 6;
+		collMonedas[6].Load(6);
+		//collMonedas[6].id = 6;
 		monedas[6].SetCollider(collMonedas[6]);
 
 		monedas[7] = monedas[0];
 		monedas[7].SetPosition({ -56,-1,0 });
+		
 		collMonedas[7] = collMonedas[0];
-		collMonedas[7].id = 7;
+		//collMonedas[7].id = 7;
+		collMonedas[7].Load(7);
 		monedas[7].SetCollider(collMonedas[7]);
 
 		monedas[8] = monedas[0];
 		monedas[8].SetPosition({ -64,-6,0 });
+		
 		collMonedas[8] = collMonedas[0];
-		collMonedas[8].id = 8;
+		//collMonedas[8].id = 8;
+		collMonedas[8].Load(8);
 		monedas[8].SetCollider(collMonedas[8]);
 
 		monedas[9] = monedas[0];
 		monedas[9].SetPosition( { -77,-10,0 });
+		
 		collMonedas[9] = collMonedas[0];
-		collMonedas[9].id = 9;
+		//collMonedas[9].id = 9;
+		collMonedas[9].Load(9);
 		monedas[9].SetCollider(collMonedas[9]);
 
 		monedas[10] = monedas[0];
 		monedas[10].SetPosition({ -90,-6,0 });
+		
 		collMonedas[10] = collMonedas[0];
-		collMonedas[10].id = 10;
+		//collMonedas[10].id = 10;
+		collMonedas[10].Load(10);
 		monedas[10].SetCollider(collMonedas[10]);
 
 		monedas[11] = monedas[0];
 		monedas[11].SetPosition({ -96,-2,0 });
+		
 		collMonedas[11] = collMonedas[0];
-		collMonedas[11].id = 11;
+		//collMonedas[11].id = 11;
+		collMonedas[11].Load(11);
 		monedas[11].SetCollider(collMonedas[11]);
 
 		monedas[12] = monedas[0];
 		monedas[12].SetPosition({ -102,2,0 });
+		
 		collMonedas[12] = collMonedas[0];
-		collMonedas[12].id = 12;
+		//collMonedas[12].id = 12;
+		collMonedas[12].Load(12);
 		monedas[12].SetCollider(collMonedas[12]);
 
 		monedas[13] = monedas[0];
 		monedas[13].SetPosition({ -110,2,0 });
+		
 		collMonedas[13] = collMonedas[0];
-		collMonedas[13].id = 13;
+		//collMonedas[13].id = 13;
+		collMonedas[13].Load(13);
 		monedas[13].SetCollider(collMonedas[13]);
 
 		monedas[14] = monedas[0];
 		monedas[14].SetPosition({ -118,2,0 });
+		
 		collMonedas[14] = collMonedas[0];
-		collMonedas[14].id = 14;
+		//collMonedas[14].id = 14;
+		collMonedas[14].Load(14);
 		monedas[14].SetCollider(collMonedas[14]);
 	}
 	
@@ -341,7 +375,7 @@ void Plataformas::Begin() {
 
 	//texto1= FsText("Fonts/SpaceMission-rgyw9.otf", 50, "P r e s s  S p a c e", FsVector2(150, 500), FsVector3(1, 0, 1));
 	//texto3 = FsText("Fonts/SpaceMission-rgyw9.otf", 50, "A - D  t o  m o v e", FsVector2(150, 400), FsVector3(1, 0, 1));
-	texto2.Load("Fonts/waltographUI.ttf", 50, std::to_string(puntos), FsVector2(20, 520), FsVector3(1, 1, 1));
+	texto2.Load("Fonts/waltographUI.ttf", 50, std::to_string(puntos), FsVector3(20, 520,0), FsVector3(1, 1, 1));
 
 	//=================== imagenes======================
 	imgVidas[0].Load("Textures/vida1.png");
@@ -369,8 +403,10 @@ void Plataformas::Begin() {
 	luzDireccional.Load(
 		FsVector3(0.2f, -1, 0.2f),
 		FsVector3(0.2f, 0.2f, 0.2f),
+		//FsVector3(5,5,5),
 		FsVector3(0.2f, 0.2f, 0.2f),
 		FsVector3(0.2f, 0.2f, 0.2f));
+	//luzDireccional.on = false;
 	//luzDireccional.Load();
 	//luzDireccional.on = false;
 
@@ -397,20 +433,23 @@ void Plataformas::Begin() {
 }
 
 void Plataformas::Update(float deltaTime, float time) {
-
+	
+	if (gameReference->GetKeyPress(Keys::L)) {
+		//luzDireccional.SetAmbient(FsVector3(0,0,0));
+	}
 	//===========================FISICA================================
 	//detector colisiones---------------------------
 	for each (FsCollider var in collPlataformas)
 	{
 		if (jugador.GetCollider().CheckCollision(var)) {
-			indexCollision = var.id;
+			indexCollision = var.GetId();
 		} 
 	}
 	//colisiones moneadas
 	for each (FsCollider var in collMonedas)
 	{
 		if (jugador.GetCollider().CheckCollision(var)) {
-			indexCollisionMOnedas = var.id;
+			indexCollisionMOnedas = var.GetId();
 		}
 	}
 
@@ -642,7 +681,8 @@ void Plataformas::Update(float deltaTime, float time) {
 		if (jugador.GetCollider().CheckCollision(collItem)) {
 			powerJump = 32;
 			item.SetVisibility(false);
-			collItem.on = false;
+			//collItem.active = false;
+			collItem.SetActive(false);
 		}
 	}
 	if (powerJump == 32) {

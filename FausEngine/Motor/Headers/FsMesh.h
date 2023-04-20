@@ -16,10 +16,7 @@ namespace FausEngine {
 	class EXPORTDLL FsMesh
 	{
 	public:
-
 		FsMesh();
-		//FsMesh(std::string path);
-		~FsMesh();
 
 		void Load(std::string path);
 		void SetCollider(FsCollider&);
@@ -29,11 +26,12 @@ namespace FausEngine {
 		void SetPosition(FsVector3);
 		void SetScale(FsVector3);
 		void SetRotation(FsVector3);
+
 		FsTransform GetTransform();
 		bool GetVisibility();
 		void Render();
 
-		
+		~FsMesh();
 
 	private:
 		std::shared_ptr<FsShader> shader;
@@ -49,8 +47,7 @@ namespace FausEngine {
 		bool meshLoaded;
 		std::string path;
 		FsTransform transform;
-		
-		//FsLog logger;
+
 	};
 
 }

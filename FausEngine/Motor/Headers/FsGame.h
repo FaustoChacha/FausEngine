@@ -117,19 +117,14 @@ namespace FausEngine {
 		void Run(std::vector<FsScene*>);
 		//void Run(std::vector<std::shared_ptr<FsScene>>);
 		void SetScene(int);
-
 		void SetCamera(FsCamera&);
 		void SetSkybox(FsSkybox&);
 		void SetLog(std::string, int);
 		template<typename light> void LoadLight(light*);
-		//template<typename light> void LoadDLight(std::shared_ptr<light>);
-		//template<typename light> void LoadRLight(light&);
-		//template<typename light> void LoadLight(std::shared_ptr<light>);
 
 		static std::shared_ptr<FsGame> GetReference();
 		std::shared_ptr<FsShader> GetShader(int);
 		std::shared_ptr<FsCamera> GetCamera();
-		//std::shared_ptr<FsLog> GetLog();
 
 		//window
 		float GetMouseX();

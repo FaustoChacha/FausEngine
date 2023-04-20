@@ -12,8 +12,6 @@ namespace FausEngine {
 	{
 	public:
 		FsMaterial();
-		~FsMaterial();
-
 		void Load(FsVector3 ambient, FsVector3 specular, FsVector3 color, float shineness, std::string path,  bool bind);
 		void Load(FsVector3 color);
 
@@ -30,8 +28,7 @@ namespace FausEngine {
 		bool GetBind();
 		unsigned int GetTexture();
 		bool GetLit();
-
-
+		~FsMaterial();
 
 	private:
 		unsigned int textureID;

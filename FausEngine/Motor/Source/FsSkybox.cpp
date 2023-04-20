@@ -11,9 +11,24 @@ using namespace FausEngine;
 FsSkybox::FsSkybox()
 {
 	textureID = 0;
-    on = true;
+    active = true;
     colour = {1,1,1};
-    //logger.CreateLogger("FsLogger","log-FsSkybox");
+}
+
+void FsSkybox::SetColour(FsVector3 c) {
+    colour = c;
+}
+
+void FsSkybox::SetActive(bool a) {
+    active = a;
+}
+
+bool FsSkybox::GetActive() {
+    return active;
+}
+
+FsVector3 FsSkybox::GetColour() {
+    return colour;
 }
 
 void FsSkybox::Load(std::vector <std::string> caras)

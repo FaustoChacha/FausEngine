@@ -15,8 +15,8 @@ namespace FausEngine {
 
 	struct Character {
 		unsigned int texture; 
-		FsVector2 size; 
-		FsVector2 offset; 
+		FsVector3 size; 
+		FsVector3 offset; 
 		unsigned int advance;
 	};
 
@@ -24,25 +24,25 @@ namespace FausEngine {
 	{
 	public:
 		FsText();
-		void Load(std::string font, int size, std::string text, FsVector2 position, FsVector3 color);
-		void Render();
-		void SetPosition(FsVector2);
+		void Load(std::string font, int size, std::string text, FsVector3 position, FsVector3 color);
+		
+		void SetPosition(FsVector3);
 		void SetText(std::string);
 		void SetColor(FsVector3);
+
+		FsVector3 GetPosition();
 		FsVector3 GetColor();
-		FsVector2 GetPosition();
+		
+		void Render();
 		~FsText();
 
 	private:
-		//FsShader* shader;
 		std::shared_ptr<FsShader> shader;
 		std::string text;
 		FsVector3 color;
-		FsVector2 position;
+		FsVector3 position;
 
 		std::map<char, Character> Characters;
-
-		//FsLog logger;
 	};
 
 

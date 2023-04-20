@@ -30,8 +30,6 @@ namespace FausEngine {
 	{
 	public:
 		FsShader();
-		~FsShader();
-
 		bool Load(const char* vsFilename,const char* fsFilename);
 		void Compile(int, int);
 		void Use();
@@ -40,7 +38,7 @@ namespace FausEngine {
 		unsigned int GetUVariableLocation(uTypeVariables);
 		unsigned int GetUPointsLocation(uTypeVariables, int);
 		unsigned int GetUSpotLocation(uTypeVariables, int);
-
+		~FsShader();
 	private:
 		//uniforms variables
 		std::map<uTypeVariables, unsigned int> uVariablesLocation;

@@ -5,15 +5,6 @@
 
 namespace FausEngine {
 
-	struct EXPORTDLL FsVector2 final
-	{
-	public:
-		float x, y;
-
-		FsVector2();
-		FsVector2(float x, float y);
-	};
-
 	struct EXPORTDLL FsVector3 final
 	{
 	public:

@@ -141,6 +141,16 @@ void FsImage::SetScale(FsVector3 v) {
 	transform.scale = v;
 }
 
+FsVector3 FsImage::GetPosition() {
+	return transform.position;
+}
+FsVector3 FsImage::GetRotation() {
+	return transform.rotation;
+}
+FsVector3 FsImage::GetScale() {
+	return transform.scale;
+}
+
 FsImage::~FsImage()
 {
 	glDeleteTextures(1,&textureID);

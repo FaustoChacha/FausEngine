@@ -30,12 +30,10 @@ void FsDireciontalLight::Load(FsVector3 direction, FsVector3 ambient, FsVector3 
 	//FausEngine::FsGame::GetReference()->LoadDLight(std::make_shared<FsDireciontalLight>(this));
 }
 
-//FsVector3* FsDireciontalLight::GetDirection() {
-//	return &direction;
-//}
 
-std::shared_ptr<FsVector3> FsDireciontalLight::GetDirection() {
-	return std::make_shared<FsVector3>(direction);
+
+FsVector3 FsDireciontalLight::GetDirection() {
+	return direction;
 }
 
 void FsDireciontalLight::SetDirection(FsVector3 vector) {

@@ -52,11 +52,11 @@ void FsMesh::SetCollider(FsCollider& c) {
 	//collider = &c;
 	collider = std::shared_ptr<FsCollider>(&c);
 	//collider.reset(&c);
-	//tomo la posicion de la malla + la pos inicial del limite max/min del collider y allo la distancia entre el limiite y el centro de la malla
+	//tomo la posicion de la malla + la pos inicial del limite max/min del collider y hallo la distancia entre el limiite y el centro de la malla
 	distanceCollider[0] = collider->DistanceToPivot(transform.position, CollisionDirection::MAX);
 	distanceCollider[1] = collider->DistanceToPivot(transform.position, CollisionDirection::MIN);
-	distanceCollider[2] = collider->GetMax();
-	distanceCollider[3] = collider->GetMin();
+	distanceCollider[2] = collider->GetBoundMax();
+	distanceCollider[3] = collider->GetBoundMin();
 }
 
 void FsMesh::SetMaterial(FsMaterial& m) {
@@ -280,8 +280,8 @@ void FsMesh::Render()
 		//Collider---------------------------------------
 		if (collider) {
 			
-			collider->SetMax(transform.position + distanceCollider[0]);
-			collider->SetMin(transform.position - distanceCollider[1]);
+			collider->SetBoundMax(transform.position + distanceCollider[0]);
+			collider->SetBoundMin(transform.position - distanceCollider[1]);
 
 			//basicamente tomo la PRIMERA poscion de MAX-MIN y en el eje respectivo solo sumo mas un radio
 			//mientras en los otros calculo la mitad entre MAX-Min y ubico 

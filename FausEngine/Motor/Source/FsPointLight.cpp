@@ -13,18 +13,6 @@ FsPointLight::FsPointLight() : FsLight()
 	exponent = 0.2f;
 }
 
-//FsPointLight::FsPointLight(FsVector3 ambient, FsVector3 diffuse, FsVector3 specular,
-//	FsVector3 position, float constant, float linear, float exponent) :FsLight(ambient, diffuse, specular) 
-//{
-//	this->position = position;
-//	this->constant = constant;
-//	this->linear = linear;
-//	this->exponent = exponent;
-//	//*pointlightReference=*this;
-//	//pointlightReference = std::make_shared<FsPointLight>(*this);
-//	//pointlightReference.reset(this);
-//}
-
 void FsPointLight::Load(FsVector3 ambient, FsVector3 diffuse, FsVector3 specular,
 	FsVector3 position, float constant, float linear, float exponent) {
 	this->ambient = ambient;
@@ -44,51 +32,41 @@ void FsPointLight::Load(FsVector3 ambient, FsVector3 diffuse, FsVector3 specular
 	//FausEngine::FsGame::GetReference()->LoadDLight(pointlightReference);
 }
 
-//FsVector3* FsPointLight::GetPosition() 
-//{
-//	return &position;
-//}
 
-std::shared_ptr<FsVector3> FsPointLight::GetPosition()
+FsVector3 FsPointLight::GetPosition()
 {
-	return std::make_shared<FsVector3>(position);
+	return position;
 }
 
-//float* FsPointLight::GetConstant() 
-//{
-//	return &constant;
-//}
-//
-//float* FsPointLight::GetLinear()
-//{
-//	return &linear;
-//}
-//
-//float* FsPointLight::GetExponent() 
-//{
-//	return &exponent;
-//}
-
-
-std::shared_ptr<float> FsPointLight::GetConstant() {
-	return std::make_shared<float>(constant);
+float FsPointLight::GetConstant() {
+	return constant;
 }
 
-std::shared_ptr<float> FsPointLight::GetLinear() {
-	return std::make_shared<float>(linear);
+float FsPointLight::GetLinear() {
+	return linear;
 }
 
-std::shared_ptr<float> FsPointLight::GetExponent() {
-	return std::make_shared<float>(exponent);
+float FsPointLight::GetExponent() {
+	return exponent;
+}
+
+void FsPointLight::SetPosition(FsVector3 p) {
+	position = p;
+}
+
+void FsPointLight::SetConstant(float c) {
+	constant = c;
 }
 
 void FsPointLight::SetLinear(float l) {
 	linear = l;
 }
 
-void FsPointLight::SetPosition(FsVector3 p) {
-	position = p;
+void FsPointLight::SetExponent(float e) {
+	exponent = e;
 }
+
+
 
 FsPointLight::~FsPointLight()
 {
