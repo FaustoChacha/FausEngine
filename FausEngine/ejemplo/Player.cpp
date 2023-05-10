@@ -1,22 +1,26 @@
-#include"Jugador.h"
+#include"Player.h"
 
 
-Jugador::Jugador()
+Player::Player()
 {
 	//transform = &malla.transform;
 	//transform.reset(&mallaJugador.transform);
 	//gameReference = new UserGame;
-	gameReference.reset(new UserGame);
-	numeroVidas = 3;
-	coloresVida[0] = { 1,0,0 };
-	coloresVida[1] = { 1,1,0 };
-	coloresVida[2] = { 0,1,0 };
-	
+	gameReference.reset(new SpacePlataform);
+	numberLifes = 3;
+	color = {0,1,0};
+	speedPointLight = 2;
+	startPlayerPosition = { 0,3,0 };
+	activatePower = false;
+	jump = false;
+	timePowerJump = 0.0f;
+	intesityPowerJump = 22;
+	countSpaceKey = 0;
 }
 
-void Jugador::ControlFPS(float dt, float time) {
+void Player::ControlFPS(float dt, float time) {
 
-	CamaraFPS(dt, time);
+	CameraFPS(dt, time);
 
 	//Teclado
 	float velocidad = 3.0f;
@@ -49,10 +53,10 @@ void Jugador::ControlFPS(float dt, float time) {
 	}
 }
 
-void Jugador::ControlTPS( float dt, float t) {
+void Player::ControlTPS( float dt, float t) {
 
-	FsVector3* targetPos = &mallaJugador.GetTransform().position;
-	CamaraTPS(dt, t);
+	FsVector3* targetPos = &playerMesh.GetTransform().position;
+	CameraTPS(dt, t);
 	auto ca = gameReference->GetCamera();
 
 
@@ -91,65 +95,66 @@ void Jugador::ControlTPS( float dt, float t) {
 
 }
 
-void Jugador::Control2D(float dt, float t) {
+void Player::Control2D(float dt, float t) {
 	auto cam = gameReference->GetCamera();
 	
-	
-	FsVector3 pos = { mallaJugador.GetTransform().position.x, 0, -12 };
+	FsVector3 pos = { playerMesh.GetTransform().position.x, 0, -12 };
 	cam->SetPosition(pos);
 	//cam->SetTarget(mallaJugador.transform.position);
-	cam->SetTarget(mallaJugador.GetTransform().position);
+	cam->SetTarget(playerMesh.GetTransform().position);
 
 	if (gameReference->GetKeyPress(Keys::D)) { // D
 		//mallaJugador.transform.rotation.y -= 0.35f; // animacion
 		//mallaJugador.transform.position.x -= 5 * dt;
-		mallaJugador.SetRotation({ mallaJugador.GetTransform().rotation.x,
-			mallaJugador.GetTransform().rotation.y - 0.35f,
-			mallaJugador.GetTransform().rotation.z }); //animacion
+		playerMesh.SetRotation({ playerMesh.GetTransform().rotation.x,
+			playerMesh.GetTransform().rotation.y - 0.35f,
+			playerMesh.GetTransform().rotation.z }); //animacion
 		//mallaJugador.transform.position.x += 5 * dt;
-		mallaJugador.SetPosition({ mallaJugador.GetTransform().position.x - 5 * dt,
-			mallaJugador.GetTransform().position.y,
-			mallaJugador.GetTransform().position.z });
+		playerMesh.SetPosition({ playerMesh.GetTransform().position.x - 5 * dt,
+			playerMesh.GetTransform().position.y,
+			playerMesh.GetTransform().position.z });
 
 	}
 
 	if (gameReference->GetKeyPress(Keys::A)) { //A
 		//mallaJugador.transform.rotation.y += 0.35f; //animacion
-		mallaJugador.SetRotation({ mallaJugador.GetTransform().rotation.x, 
-			mallaJugador.GetTransform().rotation.y + 0.35f, 
-			mallaJugador.GetTransform().rotation.z }); //animacion
+		playerMesh.SetRotation({ playerMesh.GetTransform().rotation.x, 
+			playerMesh.GetTransform().rotation.y + 0.35f, 
+			playerMesh.GetTransform().rotation.z }); //animacion
 		//mallaJugador.transform.position.x += 5 * dt;
-		mallaJugador.SetPosition({mallaJugador.GetTransform().position.x + 5*dt, 
-			mallaJugador.GetTransform().position.y, 
-			mallaJugador.GetTransform().position.z});
+		playerMesh.SetPosition({playerMesh.GetTransform().position.x + 5*dt, 
+			playerMesh.GetTransform().position.y, 
+			playerMesh.GetTransform().position.z});
 
 	}
 
+	//Salto-------------
 	if (gameReference->GetKeyPress(Keys::SPACE)) { // space--+
 		if (colision) {
 			gameReference->SetKeyRelease(Keys::SPACE);
-			saltar = true;
-			timpoSalto = t + 0.5f;
-			contadorTeclaEspacio++;
-			if (contadorTeclaEspacio > 1)contadorTeclaEspacio = 0;
+			jump = true;
+			timeJump = t + 0.5f;
+			countSpaceKey++;
+			if (countSpaceKey > 1)countSpaceKey = 0;
 		}
 	}
-	if (saltar && contadorTeclaEspacio == 1) {
+
+	if (jump && countSpaceKey == 1) {
 		gameReference->SetKeyRelease(Keys::SPACE);
 		//transform->position.y += poderSalto * dt;
-		mallaJugador.SetPosition({ mallaJugador.GetTransform().position.x, 
-			mallaJugador.GetTransform().position.y + poderSalto * dt,
-			mallaJugador.GetTransform().position.z
+		playerMesh.SetPosition({ playerMesh.GetTransform().position.x, 
+			playerMesh.GetTransform().position.y + intesityPowerJump * dt,
+			playerMesh.GetTransform().position.z
 			});
-		if (t >= timpoSalto) {
-			saltar = false;
-			contadorTeclaEspacio = 0;
+		if (t >= timeJump) {
+			jump = false;
+			countSpaceKey = 0;
 		}
 	}
 
 }
 
-void Jugador::CamaraFPS( float dt, float t)
+void Player::CameraFPS( float dt, float t)
 {
 	auto cam = gameReference->GetCamera();
 	float velocidad = 0.2f;
@@ -175,10 +180,10 @@ void Jugador::CamaraFPS( float dt, float t)
 	cam->SetTarget(cam->GetPosition() + cam->GetForward());
 }
 
-void Jugador::CamaraTPS(float dt, float t)
+void Player::CameraTPS(float dt, float t)
 {
 	//FsVector3* targetPos = &mallaJugador.transform.position;
-	FsVector3* targetPos = &mallaJugador.GetTransform().position;
+	FsVector3* targetPos = &playerMesh.GetTransform().position;
 	auto cam = gameReference->GetCamera();
 	float velocidad = 8.0f;
 
@@ -199,60 +204,74 @@ void Jugador::CamaraTPS(float dt, float t)
 	cam->SetTarget(*targetPos);
 }
 
-void Jugador::OrbitarLuz(float offsetX, float offsetY, float dt, float t, float vel)
+void Player::OrbitMeshLight(float offsetX, float offsetY, float dt, float t, float vel)
 {
 	//ry=ry-n
 	//mallaLuzOrbital.transform.rotation.y -= FsVector3::toRadians(offsetX) * vel * dt;
 	//mallaLuzOrbital.transform.rotation.x -= FsVector3::toRadians(offsetY) * vel * dt;
-	mallaLuzOrbital.SetRotation(
-		{mallaLuzOrbital.GetTransform().rotation.x - FsVector3::toRadians(offsetY) * vel * dt,
-		mallaLuzOrbital.GetTransform().rotation.y- FsVector3::toRadians(offsetX) * vel * dt,
-		mallaLuzOrbital.GetTransform().rotation.z}
+	orbitalLightMesh.SetRotation(
+		{orbitalLightMesh.GetTransform().rotation.x - FsVector3::toRadians(offsetY) * vel * dt,
+		orbitalLightMesh.GetTransform().rotation.y- FsVector3::toRadians(offsetX) * vel * dt,
+		orbitalLightMesh.GetTransform().rotation.z}
 	);
 		
 	float distancia = 0.75f;
-	float posX = mallaJugador.GetTransform().position.x + distancia * cos(mallaLuzOrbital.GetTransform().rotation.x) * sin(mallaLuzOrbital.GetTransform().rotation.y);
-	float posY= mallaJugador.GetTransform().position.y + distancia * sin(mallaLuzOrbital.GetTransform().rotation.x);
-	float posZ = mallaJugador.GetTransform().position.z - distancia * cos(mallaLuzOrbital.GetTransform().rotation.x) * cos(mallaLuzOrbital.GetTransform().rotation.y);
-	mallaLuzOrbital.SetPosition({posX, posY, posZ });
+	float posX = playerMesh.GetTransform().position.x + distancia * cos(orbitalLightMesh.GetTransform().rotation.x) * sin(orbitalLightMesh.GetTransform().rotation.y);
+	float posY= playerMesh.GetTransform().position.y + distancia * sin(orbitalLightMesh.GetTransform().rotation.x);
+	float posZ = playerMesh.GetTransform().position.z - distancia * cos(orbitalLightMesh.GetTransform().rotation.x) * cos(orbitalLightMesh.GetTransform().rotation.y);
+	orbitalLightMesh.SetPosition({posX, posY, posZ });
 }
 
-void Jugador::SetColorLuz(FsVector3 color)
+void Player::SetMeshLightColor(FsVector3 color)
 {
-	//mallaLuzOrbital.material.color = color;
+	lightMaterial.SetColor(color);
+
 }
 
-void Jugador::SetPosition(FsVector3 v) {
-	mallaJugador.SetPosition(v);
+void Player::SetPosition(FsVector3 v) {
+	playerMesh.SetPosition(v);
 }
 
-FsVector3 Jugador::GetPosition() {
-	return mallaJugador.GetTransform().position;
+FsVector3 Player::GetPosition() {
+	return playerMesh.GetTransform().position;
 }
 
-void Jugador::Init(bool &col) {
-	colision = &col;
+void Player::ActivatePower(bool on) {
+	if (on) {
+		color = { 1,1,1 };
+		//matLuz.SetColor({1,1,1});
+		//luzPuntual.SetDiffuse({1,1,1});
+		intesityPowerJump = 32;
+		activatePower = true;
+	}
+	else {
+		intesityPowerJump = 22;
+		HandleColor();
+	}
+}
+
+void Player::Init() {
 
 	//jugador
-	posInicialPlayer = { 0,3,0 };
-	mallaJugador.Load("Models/player-ball.obj");
+	
+	playerMesh.Load("Models/player-ball.obj");
 	//mallaJugador.Load();
-	matJugador.Load({ 0.1f, 0.1f, 0.1f }, { 0.5f, 0.5f, 0.5f }, { 0.9f,1.0f,0.9f }, 0.5f, "Textures/player-ball.png", true);
-	mallaJugador.SetTransform({ posInicialPlayer, {-90,0,0},{0.8f,0.8f,0.8f} });
-	mallaJugador.SetMaterial(matJugador);
+	playerMaterial.Load({ 0.1f, 0.1f, 0.1f }, { 0.5f, 0.5f, 0.5f }, { 0.9f,1.0f,0.9f }, 0.5f, "Textures/player-ball.png", true);
+	playerMesh.SetTransform({ startPlayerPosition, {-90,0,0},{0.8f,0.8f,0.8f} });
+	playerMesh.SetMaterial(playerMaterial);
 	//collider jugador
 	collider.SetBoundMax({ 0.6f,0.75f,0.75f }); 
 	collider.SetBoundMin({ -0.6f, -0.8f, -0.75f });
-	mallaJugador.SetCollider(collider);
+	playerMesh.SetCollider(collider);
 
 	//malla luz orbital
-	mallaLuzOrbital.Load("Models/fSphere.obj");
-	matLuz.Load(coloresVida[2]);
-	mallaLuzOrbital.SetScale({ 0.5f,0.5f,0.5f });
-	mallaLuzOrbital.SetMaterial(matLuz);
+	orbitalLightMesh.Load("Models/fSphere.obj");
+	lightMaterial.Load(color);
+	orbitalLightMesh.SetScale({ 0.5f,0.5f,0.5f });
+	orbitalLightMesh.SetMaterial(lightMaterial);
 
 	//luz puntual
-	luzPuntual.Load(
+	pointLight.Load(
 		FsVector3(1, 1, 1),
 		FsVector3(0,1,0),
 		FsVector3(1.0f, 1.5f, 1.5f),
@@ -262,64 +281,78 @@ void Jugador::Init(bool &col) {
 	);
 }
 
-void Jugador::Update(bool pausa, float dt, float t, bool col) {
+
+
+void Player::Tick(bool pausa, float dt, float t, bool col) {
+	colision = col;
 
 	if (!pausa) {
 		Control2D(dt, t);
-		OrbitarLuz(-10, 10, dt, t, 20);
-
+		OrbitMeshLight(-10, 10, dt, t, 20);
 		
-		if (numeroVidas == 3) {
-			luzPuntual.SetLinear((sin(2 * t) / 4) + 0.25f);
-			luzPuntual.SetDiffuse({0,1,0});
-			matLuz.SetColor(coloresVida[2]);
-		}
-		if (numeroVidas == 2) {
-			luzPuntual.SetLinear((sin(4 * t) / 4) + 0.25f);
-			luzPuntual.SetDiffuse(coloresVida[1]);
-			matLuz.SetColor(coloresVida[1]);
-		}
-		if (numeroVidas == 1) {
-			luzPuntual.SetLinear((sin(6 * t) / 4) + 0.25f);
-			luzPuntual.SetDiffuse(coloresVida[0]);
-			matLuz.SetColor(coloresVida[0]);
-		}
-		if (numeroVidas == 0) {
-			exit(3);
+		pointLight.SetLinear((sin(speedPointLight * t) / 4) + 0.25f);
+		pointLight.SetDiffuse(color);
+		lightMaterial.SetColor(color);
+
+		//poder activado
+		if (activatePower) {
+			timePowerJump += 0.01f;
+			if (timePowerJump>16) {
+				activatePower = false;
+				ActivatePower(false);
+			}
 		}
 
 		//reinicio--------------
-		if (mallaJugador.GetTransform().position.y < -15) {
-			mallaJugador.SetPosition(posInicialPlayer);
-			numeroVidas--;
+		if (playerMesh.GetTransform().position.y < -15) {
+			//mallaJugador.SetPosition(posInicialPlayer);
+			playerMesh.SetPosition({-70, playerMesh.GetTransform().position.y + 10, playerMesh.GetTransform().position.z });
+			numberLifes--;
+			HandleColor();
 		}
 
 	}
 
-	luzPuntual.SetPosition(mallaJugador.GetTransform().position);
-	//if (gameReference->GetKeyPress(Keys::L)) { // tecla D
-	//	luzPuntual.SetAmbient(FsVector3(0,0,0));
-	//}
-	//std::cout << luzPuntual.GetAmbient().x << std::endl;
-	mallaLuzOrbital.Render();
-	mallaJugador.Render();
+	pointLight.SetPosition(playerMesh.GetTransform().position);
+	orbitalLightMesh.Render();
+	playerMesh.Render();
 }
 
-FsCollider Jugador::GetCollider() {
+void Player::HandleColor() {
+	switch (numberLifes)
+	{
+	case 3:
+		color = { 0,1,0 };
+		speedPointLight = 2;
+		break;
+	case 2:
+		color = { 1,1,0 };
+		speedPointLight = 4;
+		break;
+	case 1:
+		color = { 1,0,0 };
+		speedPointLight = 6;
+		break;
+	case 0:
+		exit(3);
+	}
+}
+
+FsCollider Player::GetCollider() {
 	return collider;
 }
 
-void Jugador::SetNumVidas(int n) {
-	numeroVidas = n;
+void Player::SetNumberLifes(int n) {
+	numberLifes = n;
 }
 
-int Jugador::GetNumVidas() {
-	return numeroVidas;
+int Player::GetNumberLifes() {
+	return numberLifes;
 }
 
 
 
-Jugador::~Jugador()
+Player::~Player()
 {
 	//delete gameReference;
 }

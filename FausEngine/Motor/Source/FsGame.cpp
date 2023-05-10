@@ -418,12 +418,12 @@ template<> void FsGame::LoadLight<FsSpotLight>(FsSpotLight* light) {
 
 //-----------------Getters--------------------
 
-std::shared_ptr<FsGame> FsGame::GetReference() {
+const std::shared_ptr<FsGame> FsGame::GetReference() {
 
     return game;
 }
 
-std::shared_ptr<FsCamera> FsGame::GetCamera() {
+const std::shared_ptr<FsCamera> FsGame::GetCamera() {
     //return std::shared_ptr<FsCamera>(camera); // igual que hacer: return camera;
     return camera;
 }
@@ -459,7 +459,7 @@ void FsGame::SetScene(int s) {
     begin = 0;
 }
 
-std::shared_ptr <FsShader> FsGame::GetShader(int n) {
+const std::shared_ptr <FsShader> FsGame::GetShader(int n) {
     if (n == 0) return MainShader;
     if (n == 1) return TextShader;
     if (n == 2) return ImageShader;

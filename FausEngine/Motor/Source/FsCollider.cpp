@@ -24,16 +24,8 @@ FsCollider::FsCollider()
 
 
 
-void FsCollider::Load(int i) {
+void FsCollider::SetId(int i) {
 	id = i;
-	//boundMax = { 1,1,1 };
-	//boundMin = { -1,-1,-1 };
-	//id = 0;
-	//right = { 0,0,0 };
-	//left = { 0,0,0 };
-	//down = { 0,0,0 };
-	//up = { 0,0,0 };
-	//active = true;
 }
 
 void FsCollider::SetActive(bool on) {

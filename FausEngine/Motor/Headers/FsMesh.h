@@ -38,7 +38,6 @@ namespace FausEngine {
 		std::shared_ptr<FsMaterial> mat;
 		std::shared_ptr<FsCollider> collider;
 
-		std::vector<float> elementosVertice;
 		std::vector<float> vertexElements;
 		FsVector3 distanceCollider[4];
 

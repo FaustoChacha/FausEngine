@@ -18,8 +18,7 @@ file(GLOB SrcUser ejemplo/*.cpp)
 
 add_executable (FausExe  
 	"Motor/Source/Window.cpp"
-	${SrcUser}
- )
+	${SrcUser})
  
 target_link_libraries(FausExe FausEngine) #${CONAN_LIBS
 

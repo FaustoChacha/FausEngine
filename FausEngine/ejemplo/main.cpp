@@ -1,20 +1,20 @@
 #include<vector>
-#include"UserGame.h"
-#include"Escenario.h"
+#include"SpacePlataform.h"
+#include"Scenes.h"
 
-UserGame juego;
+SpacePlataform game;
 
-std::vector<FsScene*> escenas;
+std::vector<FsScene*> scenes;
 
 int main() {
 
-	//escenas.push_back(new Inicio());
-	escenas.push_back(new Plataformas());
+	//escenas.push_back(new Intro());
+	scenes.push_back(new Level1());
 	//escenas.push_back(new Test);
 
 
-	if (juego.Construct(1080, 720, "Space Plataform", false)) {
-		juego.Run(escenas);
+	if (game.Construct(1080, 720, "Space Plataform", false)) {
+		game.Run(scenes);
 		//escenas[1].~shared_ptr();
 	}
 		

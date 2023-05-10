@@ -6,16 +6,11 @@
 
 using namespace FausEngine;
 
-class UserGame : public FsGame
+class SpacePlataform : public FsGame
 {
 public:
-	UserGame();
-	~UserGame();
-	bool PAUSA;
-	bool prueba;
-
-	void SetPausa(bool);
-	bool GetPausa();
+	SpacePlataform();
+	~SpacePlataform();
 
 private:
 	

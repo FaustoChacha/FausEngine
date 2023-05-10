@@ -23,8 +23,8 @@ namespace FausEngine {
 
 		bool CheckCollision(FsCollider&);
 		FsVector3 DistanceToPivot(FsVector3 pivot, CollisionDirection m);
-		void Load(int id);
-
+		
+		void SetId(int id);
 		void SetActive(bool);
 		void SetBoundMax(FsVector3);
 		void SetBoundMin(FsVector3);
@@ -49,7 +49,6 @@ namespace FausEngine {
 	private:
 		int id;
 		bool active;
-		bool colliderLoaded;
 
 		//bounds
 		FsVector3 boundMax, boundMin;
