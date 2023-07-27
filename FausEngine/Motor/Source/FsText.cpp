@@ -179,14 +179,14 @@ void FsText::Render() {
 		glBindTexture(GL_TEXTURE_2D, ch.texture);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-		// Use glBufferSubData and not glBufferData
+		// Usar glBufferSubData en vez de glBufferData
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		// Renderizo el cuadrante
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
-		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-		// Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
+		// Avanze el cursor para la siguiente letra o glifo, el avance es de 1/64 pixeles
+		// Cambio de bit ´pr 6 para obtener lo pixeles (2^6 = 64, entonces se divide 1/6)
 		textPos.x += (ch.advance >> 6) * scale;
 	}
 

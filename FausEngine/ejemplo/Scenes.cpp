@@ -66,10 +66,10 @@ void Level1::Begin() {
 
 void Level1::Update(float deltaTime, float time) {
 
-	plataforms.Tick(deltaTime, time, player, pause);
-	coins.Tick(deltaTime, time, player, pause);
+	//plataforms.Tick(deltaTime, time, player, pause);
+	//coins.Tick(deltaTime, time, player, pause);
 	player.Tick(pause, deltaTime, time, plataforms.PlayertoPlataformCollision());
-	item.Tick(deltaTime, time,player, pause);
+	//item.Tick(deltaTime, time,player, pause);
 	ui.Tick(plataforms, player, coins, pause);
 
 	if (gameReference->GetKeyPress(Keys::P)) {//p

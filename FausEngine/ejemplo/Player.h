@@ -14,12 +14,12 @@ class Player
 public:
 	Player();
 	void Init();
-	void Tick(bool, float, float, bool);
-	void ControlFPS(float, float);
-	void ControlTPS(float, float);
-	void Control2D(float, float);
-	void CameraFPS(float dt, float t);
-	void CameraTPS(float dt, float t);
+	void Tick(bool pause, float deltaTime, float time, bool collision);
+	void ControlFPS(float deltaTime, float time);
+	void ControlTPS(float deltaTime, float time);
+	void Control2D(float deltaTime, float time);
+	void CameraFPS(float deltaTime, float time);
+	void CameraTPS(float deltaTime, float time);
 	void OrbitMeshLight(float offsetX, float offsetY, float dt, float t, float vel);
 	void ActivatePower(bool);
 	void SetMeshLightColor(FsVector3 color);

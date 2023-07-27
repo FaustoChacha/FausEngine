@@ -11,7 +11,7 @@ Player::Player()
 	numberLifes = 3;
 	color = {0,1,0};
 	speedPointLight = 2;
-	startPlayerPosition = { 0,3,0 };
+	startPlayerPosition = { 0,0,0 }; // 
 	//startPlayerPosition = { -73,0,0 };
 
 	activatePower = false;
@@ -107,12 +107,9 @@ void Player::Control2D(float dt, float t) {
 	cam->SetTarget(playerMesh.GetTransform().position);
 
 	if (gameReference->GetKeyPress(Keys::D)) { // D
-		//mallaJugador.transform.rotation.y -= 0.35f; // animacion
-		//mallaJugador.transform.position.x -= 5 * dt;
 		playerMesh.SetRotation({ playerMesh.GetTransform().rotation.x,
 			playerMesh.GetTransform().rotation.y - 0.35f,
 			playerMesh.GetTransform().rotation.z }); //animacion
-		//mallaJugador.transform.position.x += 5 * dt;
 		playerMesh.SetPosition({ playerMesh.GetTransform().position.x - 5 * dt,
 			playerMesh.GetTransform().position.y,
 			playerMesh.GetTransform().position.z });
@@ -120,11 +117,9 @@ void Player::Control2D(float dt, float t) {
 	}
 
 	if (gameReference->GetKeyPress(Keys::A)) { //A
-		//mallaJugador.transform.rotation.y += 0.35f; //animacion
 		playerMesh.SetRotation({ playerMesh.GetTransform().rotation.x, 
 			playerMesh.GetTransform().rotation.y + 0.35f, 
 			playerMesh.GetTransform().rotation.z }); //animacion
-		//mallaJugador.transform.position.x += 5 * dt;
 		playerMesh.SetPosition({playerMesh.GetTransform().position.x + 5*dt, 
 			playerMesh.GetTransform().position.y, 
 			playerMesh.GetTransform().position.z});
@@ -132,14 +127,12 @@ void Player::Control2D(float dt, float t) {
 	}
 
 	//Salto-------------
-	if (gameReference->GetKeyPress(Keys::SPACE)) { // space--+
-		if (colision) {
-			gameReference->SetKeyRelease(Keys::SPACE);
-			jump = true;
-			timeJump = t + 0.5f;
-			countSpaceKey++;
-			if (countSpaceKey > 1)countSpaceKey = 0;
-		}
+	if (gameReference->GetKeyPress(Keys::SPACE) && colision) { // space--+
+		gameReference->SetKeyRelease(Keys::SPACE);
+		jump = true;
+		timeJump = t + 0.5f;
+		countSpaceKey++;
+		if (countSpaceKey > 1)countSpaceKey = 0;
 	}
 
 	if (jump && countSpaceKey == 1) {
@@ -255,10 +248,11 @@ void Player::ActivatePower(bool on) {
 
 void Player::Init() {
 
-	//jugador
+	//jugadorz
 	
 	playerMesh.Load("Models/player-ball.obj");
 	//mallaJugador.Load();
+	//playerMaterial.Load({ 1.1f, 1.1f, 1.1f }, { 1.5f, 1.5f, 1.5f }, { 0.9f,1.0f,0.9f }, 0.5f, "Textures/player-ball.png", false);
 	playerMaterial.Load({ 0.1f, 0.1f, 0.1f }, { 0.5f, 0.5f, 0.5f }, { 0.9f,1.0f,0.9f }, 0.5f, "Textures/player-ball.png", true);
 	playerMesh.SetTransform({ startPlayerPosition, {-90,0,0},{0.8f,0.8f,0.8f} });
 	playerMesh.SetMaterial(playerMaterial);
@@ -286,11 +280,27 @@ void Player::Init() {
 
 
 
-void Player::Tick(bool pausa, float dt, float t, bool col) {
+void Player::Tick(bool pause, float dt, float t, bool col) {
 	colision = col;
 
-	if (!pausa) {
-		Control2D(dt, t);
+	//if (gameReference->GetKeyPress(Keys::C)) {
+	//	ControlTPS(dt, t);
+	//}
+	//else
+	//{
+	//	Control2D(dt, t);
+	//}
+
+	if (!pause) {
+
+		if (gameReference->GetKeyPress(Keys::C)) {
+			ControlTPS(dt, t);
+		}
+		else
+		{
+		//Control2D(dt, t);
+		}
+
 		OrbitMeshLight(-10, 10, dt, t, 20);
 		
 		pointLight.SetLinear((sin(speedPointLight * t) / 4) + 0.25f);
@@ -308,8 +318,8 @@ void Player::Tick(bool pausa, float dt, float t, bool col) {
 
 		//reinicio--------------
 		if (playerMesh.GetTransform().position.y < -15) {
-			//mallaJugador.SetPosition(posInicialPlayer);
-			playerMesh.SetPosition({-70, playerMesh.GetTransform().position.y + 10, playerMesh.GetTransform().position.z });
+			playerMesh.SetPosition(startPlayerPosition);
+			//playerMesh.SetPosition({-70, playerMesh.GetTransform().position.y + 10, playerMesh.GetTransform().position.z });
 			numberLifes--;
 			HandleColor();
 		}

@@ -12,16 +12,22 @@ void Ui::Init() {
 	scoreText.Load("Fonts/waltographUI.ttf", 50, std::to_string(0), FsVector3(20, 520, 0), FsVector3(1, 1, 1));
 
 	//=================== imagenes======================
-	lifeImages[0].Load("Textures/vida1.png");
-	lifeImages[0].SetScale({ 0.15f,0.2f,1 });
+	//pruebaImg.Load("Textures/vida1.png");
+	//pruebaImg.SetPosition({1,0,0});
+	//pruebaImg.SetScale({0.15f,0.2f,1});
+
+	//pruebaText.Load("Fonts/SpaceMission-rgyw9.otf", 40, "Demo", {765,0,0}, FsVector3(1, 1, 1));
+
+	imgLife1.Load("Textures/vida1.png");
+	imgLife1.SetScale({ 0.15f,0.2f,1 });
 	float y = -0.7f;
-	lifeImages[0].SetPosition({ 0.3,y,0 });
+	imgLife1.SetPosition({ 0.3,y,0 });
+	
+	imgLife2 = imgLife1;
+	imgLife2.SetPosition({ 0.55,y,0 });
 
-	lifeImages[1] = lifeImages[0];
-	lifeImages[1].SetPosition({ 0.55, y,0 });
-
-	lifeImages[2] = lifeImages[0];
-	lifeImages[2].SetPosition({ 0.8, y,0 });
+	imgLife3 = imgLife1;
+	imgLife3.SetPosition({ 0.8, y,0 });
 
 	winImage.Load("Textures/ganaste.png");
 	winImage.SetScale({ 2,2,2 });
@@ -35,30 +41,39 @@ void Ui::Init() {
 }
 
 void Ui::Tick(Plataforms& plataforms, Player& jugador,Coins& coins, bool pause) {
+	//pruebaImg.Render();
+	//pruebaText.Render();
+
 	//pantallas
-	if (plataforms.FinishedLevel()) {
-		pause = true;
-		if ((int)time % 2 == 0) {
-			finishImage.Render();
-		}
-		winImage.Render();
-	}
+	//if (plataforms.FinishedLevel()) {
+	//	pause = true;
+	//	if ((int)time % 2 == 0) {
+	//		finishImage.Render();
+	//	}
+	//	winImage.Render();
+	//}
 
 	scoreText.Render();
 	scoreText.SetText(std::to_string(coins.GetScore()));
 
-	if (jugador.GetNumberLifes() == 3) {
-		lifeImages[0].Render();
-		lifeImages[1].Render();
-		lifeImages[2].Render();
-	}
-	if (jugador.GetNumberLifes() == 2) {
-		lifeImages[1].Render();
-		lifeImages[2].Render();
-	}
-	if (jugador.GetNumberLifes() == 1) {
-		lifeImages[2].Render();
-	}
+	//if (jugador.GetNumberLifes() == 3) {
+		//lifeImages[0].Render();
+		//lifeImages[1].Render();
+		//lifeImages[2].Render();
+		imgLife1.Render();
+		imgLife2.Render();
+		imgLife3.Render();
+	//}
+	//if (jugador.GetNumberLifes() == 2) {
+	//	//lifeImages[1].Render();
+	//	//lifeImages[2].Render();
+	//	imgLife2.Render();
+	//	imgLife3.Render();
+	//}
+	//if (jugador.GetNumberLifes() == 1) {
+	//	//lifeImages[2].Render();
+	//	imgLife3.Render();
+	//}
 
 	if (pause)pauseImage.Render();
 }

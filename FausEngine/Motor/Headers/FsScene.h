@@ -10,6 +10,7 @@ namespace FausEngine {
 	public:
 		FsScene();
 		~FsScene();
+		//virtual ~FsScene() = 0;
 
 		virtual void Begin() = 0;
 		virtual void Update(float deltaTime, float time) = 0;

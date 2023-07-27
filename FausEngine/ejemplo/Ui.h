@@ -19,9 +19,9 @@ public:
 	~Ui();
 
 private:
-	FsText scoreText;
-	FsImage lifeImages[3];
-	FsImage winImage, finishImage, pauseImage;
+	FsText scoreText, pruebaText;
+	FsImage imgLife1, imgLife2, imgLife3;
+	FsImage winImage, finishImage, pauseImage, pruebaImg;
 
 };
 

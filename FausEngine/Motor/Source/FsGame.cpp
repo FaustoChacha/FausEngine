@@ -33,13 +33,15 @@ int begin = 0;
 Window mainWindow;
 GLsizei width, height;
 std::shared_ptr<FsCamera> camera;
-FsSkybox* skybox;
+std::unique_ptr<FsSkybox> skybox(new FsSkybox);
+
 std::shared_ptr<FsShader> MainShader(new FsShader);
-FsShader SkyboxShader;
+std::shared_ptr<FsShader> SkyboxShader(new FsShader);
 std::shared_ptr<FsShader> TextShader(new FsShader);
 std::shared_ptr<FsShader> ImageShader(new FsShader);
 
 FsDireciontalLight* directionalLight;
+std::unique_ptr<FsDireciontalLight> smartDirectional(nullptr);
 std::vector<FsPointLight*> pointlights;
 std::vector<FsSpotLight*> spotLights;
 std::vector<int> tipoLog;
@@ -390,7 +392,8 @@ void FsGame::SetCamera(FsCamera& cam) {
 }
 
 void FsGame::SetSkybox(FsSkybox& sky) {
-    skybox = &sky;
+    //skybox = &sky;
+    *skybox = sky;
 }
 
 void FsGame::SetLog(std::string msg, int i) {
@@ -401,6 +404,9 @@ void FsGame::SetLog(std::string msg, int i) {
 template<> void FsGame::LoadLight<FsDireciontalLight>(FsDireciontalLight* light) {
 //template<> void FsGame::LoadLight<FsDireciontalLight>(std::shared_ptr<FsDireciontalLight> light) {
     directionalLight = light;
+    smartDirectional.reset();
+    //*smartDirectional = *light;
+    smartDirectional = std::make_unique<FsDireciontalLight>(*light);
 }
 
 
@@ -414,6 +420,7 @@ template<> void FsGame::LoadLight<FsPointLight>(FsPointLight* light) {
 template<> void FsGame::LoadLight<FsSpotLight>(FsSpotLight* light) {
 //template<> void FsGame::LoadLight<FsSpotLight>(std::shared_ptr<FsSpotLight> light) {
     spotLights.push_back(light);
+
 }
 
 //-----------------Getters--------------------
@@ -465,22 +472,24 @@ const std::shared_ptr <FsShader> FsGame::GetShader(int n) {
     if (n == 2) return ImageShader;
 }
 
+
+
 void FsGame::Run(std::vector<FsScene*> escena) {
-//void FsGame::Run(std::vector<std::shared_ptr<FsScene>> escena) {
+    //void FsGame::Run(std::vector<std::shared_ptr<FsScene>> escena) {
 
     ValidarVentana();
     ValidarCamara();
 
     MainShader->Load(EmitirShader(0), EmitirShader(1));
-    SkyboxShader.Load(EmitirShader(2), EmitirShader(3));
+    SkyboxShader->Load(EmitirShader(2), EmitirShader(3));
     TextShader->Load(EmitirShader(4), EmitirShader(5));
     ImageShader->Load(EmitirShader(6), EmitirShader(7));
-    
+
     unsigned int uPointLightCounter = 0;
     unsigned int uSpotLightCounter = 0;
 
     FsVector3 frustrum = camera->GetFrustrum();
-    glm::mat4 projection = glm::perspective(frustrum.x, (float)width/(float)height, frustrum.y, frustrum.z);
+    glm::mat4 projection = glm::perspective(frustrum.x, (float)width / (float)height, frustrum.y, frustrum.z);
 
     ////===================== sky box =====================
     unsigned int vao, ibo, vbo;
@@ -488,7 +497,7 @@ void FsGame::Run(std::vector<FsScene*> escena) {
     //===========================Texto===============================
     TextShader->Use();
     glm::mat4 ortoProjection = glm::ortho(0.0f, static_cast<float>(800), 0.0f, static_cast<float>(600));
-    glUniformMatrix4fv(TextShader->GetUVariableLocation(uTypeVariables::uOrtoProjection), 1,GL_FALSE,glm::value_ptr(ortoProjection));
+    glUniformMatrix4fv(TextShader->GetUVariableLocation(uTypeVariables::uOrtoProjection), 1, GL_FALSE, glm::value_ptr(ortoProjection));
 
     //==========================Log================
     auto logger = spdlog::basic_logger_mt("FausEngine", "Logs/Log.txt");
@@ -499,12 +508,12 @@ void FsGame::Run(std::vector<FsScene*> escena) {
             if (index_scene > escena.size() || index_scene < 0) exit(3);
 
             escena[index_scene]->Begin();
-            
+
             for (int i = 0; i < msgsLog.size(); i++) {
                 switch (tipoLog[i])
                 {
                 case 0:
-                    logger->info("Scene "+std::to_string(index_scene)+ ": " + msgsLog[i]);
+                    logger->info("Scene " + std::to_string(index_scene) + ": " + msgsLog[i]);
                     break;
                 case 1:
                     logger->warn("Scene " + std::to_string(index_scene) + ": " + msgsLog[i]);
@@ -519,7 +528,7 @@ void FsGame::Run(std::vector<FsScene*> escena) {
             }
 
             MainShader->Compile(pointlights.size(), spotLights.size());
-            SkyboxShader.Compile(0, 0);
+            SkyboxShader->Compile(0, 0);
             TextShader->Compile(0, 0);
             ImageShader->Compile(0, 0);
 
@@ -596,14 +605,14 @@ void FsGame::Run(std::vector<FsScene*> escena) {
         if (skybox) {
             if (skybox->GetActive()) {
                 glDepthMask(GL_FALSE);
-                SkyboxShader.Use();
+                SkyboxShader->Use();
                 //projection matrix
                 glUniformMatrix4fv(
-                    SkyboxShader.GetUVariableLocation(uTypeVariables::uProjection), 1, GL_FALSE, glm::value_ptr(projection));
+                    SkyboxShader->GetUVariableLocation(uTypeVariables::uProjection), 1, GL_FALSE, glm::value_ptr(projection));
                 //View matrix
                 glm::mat4 view = glm::mat4(glm::mat3(CalcularMatrizVista()));
                 glUniformMatrix4fv(
-                    SkyboxShader.GetUVariableLocation(uTypeVariables::uView), 1, GL_FALSE, glm::value_ptr(view));
+                    SkyboxShader->GetUVariableLocation(uTypeVariables::uView), 1, GL_FALSE, glm::value_ptr(view));
 
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->GetTextureID());
@@ -644,9 +653,20 @@ void FsGame::Run(std::vector<FsScene*> escena) {
             glUniform3f(MainShader->GetUVariableLocation(uTypeVariables::uDir_specular),
                 directionalLight->GetSpecular().x, directionalLight->GetSpecular().y, directionalLight->GetSpecular().z);
         }
-       
+        //if (smartDirectional && smartDirectional->GetActive()) {
+        //    glUniform3f(MainShader->GetUVariableLocation(uTypeVariables::uDir_direction),
+        //        smartDirectional->GetDirection().x, smartDirectional->GetDirection().y, smartDirectional->GetDirection().z);
+        //    glUniform3f(MainShader->GetUVariableLocation(uTypeVariables::uDir_ambient),
+        //        smartDirectional->GetAmbient().x, smartDirectional->GetAmbient().y, smartDirectional->GetAmbient().z);
+        //    glUniform3f(MainShader->GetUVariableLocation(uTypeVariables::uDir_diffuse),
+        //        smartDirectional->GetDiffuse().x, smartDirectional->GetDiffuse().y, smartDirectional->GetDiffuse().z);
+        //    glUniform3f(MainShader->GetUVariableLocation(uTypeVariables::uDir_specular),
+        //        smartDirectional->GetSpecular().x, smartDirectional->GetSpecular().y, smartDirectional->GetSpecular().z);
+        //}
+        
+
         //Point lights
-        glUniform1i(uPointLightCounter, pointlights.size());    
+        glUniform1i(uPointLightCounter, pointlights.size());
         for (int i = 0; i < pointlights.size(); i++)
         {
             if (pointlights[i]->GetActive()) {
@@ -691,6 +711,8 @@ void FsGame::Run(std::vector<FsScene*> escena) {
         glfwSwapBuffers(mainWindow.getWindowReference());
     }
 
+    //for (auto i = 0; i < escena.size(); i++)
+    //    delete escena[i];
     // ========== liberar memoria =================
     //delete skybox, camera, directionalLight, game;
 
@@ -701,6 +723,5 @@ void FsGame::Run(std::vector<FsScene*> escena) {
     //    delete pointlights[i];
 	
 }
-
 
 
