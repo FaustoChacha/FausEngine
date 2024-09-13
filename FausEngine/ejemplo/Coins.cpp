@@ -17,7 +17,7 @@ int Coins::GetScore() {
 void Coins::Init() {
 	meshes[0].Load("Models/dona.obj");
 	material.Load({ 0.9f,0.4f,0.19f });
-	meshes->SetMaterial(material);
+	meshes[0].SetMaterial(material);
 
 	meshes[0].SetTransform({ {-5, -3,0}, {0,90,0},{0.5f,0.5f,0.5f} });
 	colliders[0].SetId(0);
@@ -120,104 +120,18 @@ void Coins::Tick(float deltaTime, float time, Player& player, bool pausa) {
 			colliderId = var.GetId();
 		}
 	}
-
+	
 	//si colisiona con la moneda en cuestion por cualquier lado se suma puntos 
 	if (player.GetCollider().GetDirection(colliders[colliderId]) == CollisionDirection::RIGHT ||
 		player.GetCollider().GetDirection(colliders[colliderId]) == CollisionDirection::UP ||
 		player.GetCollider().GetDirection(colliders[colliderId]) == CollisionDirection::DOWN ||
 		player.GetCollider().GetDirection(colliders[colliderId]) == CollisionDirection::LEFT) {
-		if (colliderId == 0) {
-			if (meshes[0].GetVisibility()) {
-				score += 10;
-			}
-			meshes[0].SetVisibility(false);
-		}
-		if (colliderId == 1) {
-			if (meshes[1].GetVisibility()) {
-				score += 10;
-			}
-			meshes[1].SetVisibility(false);
-		}
-		if (colliderId == 2) {
-			if (meshes[2].GetVisibility()) {
-				score += 10;
-			}
-			meshes[2].SetVisibility(false);
-		}
-		if (colliderId == 3) {
-			if (meshes[3].GetVisibility()) {
-				score += 10;
-			}
-			meshes[3].SetVisibility(false);
-		}
-		if (colliderId == 4) {
-			if (meshes[4].GetVisibility()) {
-				score += 10;
-			}
-			meshes[4].SetVisibility(false);
-		}
-		if (colliderId == 5) {
-			if (meshes[5].GetVisibility()) {
-				score += 10;
-			}
-			meshes[5].SetVisibility(false);
-		}
-		if (colliderId == 6) {
-			if (meshes[6].GetVisibility()) {
-				score += 10;
-			}
-			meshes[6].SetVisibility(false);
-		}
-		if (colliderId == 7) {
-			if (meshes[7].GetVisibility()) {
-				score += 10;
-			}
-			meshes[7].SetVisibility(false);
-		}
-		if (colliderId == 8) {
-			if (meshes[8].GetVisibility()) {
-				score += 10;
-			}
-			meshes[8].SetVisibility(false);
-		}
-		if (colliderId == 9) {
-			if (meshes[9].GetVisibility()) {
-				score += 10;
-			}
-			meshes[9].SetVisibility(false);
-		}
-		if (colliderId == 10) {
-			if (meshes[10].GetVisibility()) {
-				score += 10;
-			}
-			meshes[10].SetVisibility(false);
-		}
-		if (colliderId == 11) {
-			if (meshes[11].GetVisibility()) {
-				score += 10;
-			}
-			meshes[11].SetVisibility(false);
-		}
-		if (colliderId == 12) {
-			if (meshes[12].GetVisibility()) {
-				score += 10;
-			}
-			meshes[12].SetVisibility(false);
-		}
-		if (colliderId == 13) {
-			if (meshes[13].GetVisibility()) {
-				score += 10;
-			}
-			meshes[13].SetVisibility(false);
-		}
-		if (colliderId == 14) {
-			if (meshes[14].GetVisibility()) {
-				score += 10;
-			}
-			meshes[14].SetVisibility(false);
-		}
 
-
+		if (meshes[colliderId].GetVisibility()) {
+			score += 10;
+		}
+		meshes[colliderId].SetVisibility(false);
+	
 	}
 
 	//animacion monedas y renderizado

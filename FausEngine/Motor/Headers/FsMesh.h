@@ -1,7 +1,7 @@
 #ifndef FSMESH
 #define FSMESH
 
-#include "FsDLL.h"
+#include "FsExport.h"
 #include "FsMaths.h"
 #include "FsMaterial.h"
 #include "FsCollider.h"
@@ -13,7 +13,7 @@
 
 namespace FausEngine {
 
-	class EXPORTDLL FsMesh
+	class FAUSENGINE_API  FsMesh
 	{
 	public:
 		FsMesh();

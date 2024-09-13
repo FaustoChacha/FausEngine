@@ -1,14 +1,14 @@
 #ifndef FSSKYBOX
 #define FSSKYBOX
 
-#include"FsDLL.h"
+#include"FsExport.h"
 #include"FsMaths.h"
 
 #include<string>
 #include<vector>
 
 namespace FausEngine {
-	class EXPORTDLL FsSkybox
+	class FAUSENGINE_API  FsSkybox
 	{
 	public:
 		FsSkybox();

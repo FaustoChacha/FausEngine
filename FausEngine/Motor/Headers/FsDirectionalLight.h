@@ -1,12 +1,12 @@
 #ifndef FSDIRECTIONALLIGHT
 #define FSDIRECTIONALLIGHT
 
-#include "FsDLL.h"
+#include "FsExport.h"
 #include "FsMaths.h"
 #include "FsLight.h"
 
 namespace FausEngine {
-	class EXPORTDLL FsDireciontalLight : public FsLight
+	class FAUSENGINE_API  FsDireciontalLight : public FsLight
 	{
 	public:
 		FsDireciontalLight();

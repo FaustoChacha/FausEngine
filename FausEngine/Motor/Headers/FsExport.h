@@ -3,10 +3,10 @@
 #define FSDLL
 
 #ifdef WIN32
-	#ifdef EXPORTDLL
-		#define EXPORTDLL __declspec(dllexport)
+	#ifdef FAUSENGINE_EXPORTS
+		#define FAUSENGINE_API  __declspec(dllexport)
 	#else 
-		#define EXPORTDLL __declspec(dllimport)
+		#define FAUSENGINE_API  __declspec(dllimport)
 	#endif // EXPORTDLL
 #else 
 	#define EXPORTDLL

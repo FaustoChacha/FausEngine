@@ -1,11 +1,11 @@
 #ifndef FSOBJECT
 #define FSOBJECT
 
-#include"FsDLL.h"
+#include"FsExport.h"
 
 namespace FausEngine {
 
-	class EXPORTDLL FsScene
+	class FAUSENGINE_API  FsScene
 	{
 	public:
 		FsScene();

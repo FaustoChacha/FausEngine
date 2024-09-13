@@ -1,8 +1,12 @@
-cmake_minimum_required(VERSION 3.21.0)
-#include(GenerateExportHeader)
+﻿# CMakeList.txt: archivo del proyecto de CMake de nivel superior, establezca la configuración global
+# e incluya los subproyectos aquí.
+#
+cmake_minimum_required (VERSION 3.8)
 
-project(FausEngine )
-#find_package(IntelDPCPP REQUIRED)
+project ("FausEngine")
+
+# Incluya los subproyectos.
+#add_subdirectory ("conanPr")
 
 ################# CONAN SETUP ###########################
 find_program(conan conan)
@@ -22,15 +26,4 @@ add_executable (FausExe
  
 target_link_libraries(FausExe FausEngine) #${CONAN_LIBS
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4251")
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17) 
-
-
-#[[
-add_custom_command(
-    TARGET FausExe POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${FSSHADERS}
-        ${CMAKE_BINARY_DIR}/bin/shaders
-   )
-   ]]
+# TODO: Agregue pruebas y destinos de instalación si es necesario.

@@ -21,7 +21,7 @@ public:
 private:
 	FsDireciontalLight directionalLight;
 	FsSpotLight spotLight;
-	vector<shared_ptr<FsPointLight>>pointLights;
+	vector<FsPointLight>pointLights{3};
 };
 
 

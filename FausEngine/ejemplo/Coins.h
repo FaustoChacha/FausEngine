@@ -15,12 +15,12 @@ public:
 	Coins();
 	~Coins();
 	void Init();
-	void Tick(float, float, Player&, bool);
+	void Tick(float deltaTime, float time, Player&, bool pause);
 	int GetScore();
 
 private:
-	FsMesh meshes[15];
-	FsCollider colliders[15];
+	std::vector<FsMesh> meshes{ 15 };
+	std::vector<FsCollider> colliders{ 15 };
 	FsMaterial material;
 	int score;
 	int colliderId;

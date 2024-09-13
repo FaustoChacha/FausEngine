@@ -293,13 +293,13 @@ void Player::Tick(bool pause, float dt, float t, bool col) {
 
 	if (!pause) {
 
-		if (gameReference->GetKeyPress(Keys::C)) {
-			ControlTPS(dt, t);
-		}
-		else
-		{
-		//Control2D(dt, t);
-		}
+		//if (gameReference->GetKeyPress(Keys::C)) {
+		//	ControlTPS(dt, t);
+		//}
+		//else
+		//{
+		Control2D(dt, t);
+		//}
 
 		OrbitMeshLight(-10, 10, dt, t, 20);
 		

@@ -1,13 +1,13 @@
 #ifndef FSIMAGE2D
 #define FSIMAGE2D
 
-#include"FsDLL.h"
+#include"FsExport.h"
 #include"FsShader.h"
 
 #include<iostream>
 
 namespace FausEngine {
-	class EXPORTDLL FsImage
+	class FAUSENGINE_API  FsImage
 	{
 	public:
 		FsImage();

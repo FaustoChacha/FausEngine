@@ -14,24 +14,22 @@ class Plataforms
 public:
 	Plataforms();
 	~Plataforms();
-	bool& PlayertoPlataformCollision();
-	bool FinishedLevel();
 	void Init();
-	void Tick(float dt, float t,Player&, bool& pause);
+	void Tick(float dt, float t, Player&, bool pause);
+	bool PlayertoPlataformCollision();
+	bool FinishedLevel();
 
 private:
 
-	//plataformas
-	FsMesh meshes[14];
+	std::vector<FsMesh> meshes{14};
 	FsMaterial material1, material2, material3, material4;
 	FsMesh complementMeshPlataform1;
-	FsCollider colliders[14];
+	std::vector<FsCollider> colliders{ 14 };
 	int colliderId = 0;
 	bool activateMovePlataforms;
 	float movePlataform;
 	bool collision;
 	bool finishedLevel;
-
 
 };
 

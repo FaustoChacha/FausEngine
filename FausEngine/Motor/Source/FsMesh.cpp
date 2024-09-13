@@ -257,21 +257,25 @@ void FsMesh::Render()
 		mModel = glm::scale(mModel, glm::vec3(transform.scale.x, transform.scale.y, transform.scale.z));
 		glUniformMatrix4fv(shader->GetUVariableLocation(uTypeVariables::uModel), 1, GL_FALSE, glm::value_ptr(mModel));
 
-		//Material setting
-		glUniform3f(shader->GetUVariableLocation(uTypeVariables::uAmbient),
-			mat->GetAmbient().x, mat->GetAmbient().y, mat->GetAmbient().z);
-		glUniform3f(shader->GetUVariableLocation(uTypeVariables::uSpecular),
-			mat->GetSpecular().x, mat->GetSpecular().y, mat->GetSpecular().z);
-		glUniform3f(shader->GetUVariableLocation(uTypeVariables::uColor),
-			mat->GetColor().x, mat->GetColor().y, mat->GetColor().z);
-		glUniform1f(shader->GetUVariableLocation(uTypeVariables::uShininess), mat->GetShine());
-		glUniform1i(shader->GetUVariableLocation(uTypeVariables::uTexture), 0);
-		glUniform1i(shader->GetUVariableLocation(uTypeVariables::uLit), mat->GetLit());
+		if (mat) {
+			//Material setting
+			glUniform3f(shader->GetUVariableLocation(uTypeVariables::uAmbient),
+				mat->GetAmbient().x, mat->GetAmbient().y, mat->GetAmbient().z);
+			glUniform3f(shader->GetUVariableLocation(uTypeVariables::uSpecular),
+				mat->GetSpecular().x, mat->GetSpecular().y, mat->GetSpecular().z);
+			glUniform3f(shader->GetUVariableLocation(uTypeVariables::uColor),
+				mat->GetColor().x, mat->GetColor().y, mat->GetColor().z);
+			glUniform1f(shader->GetUVariableLocation(uTypeVariables::uShininess), mat->GetShine());
+			glUniform1i(shader->GetUVariableLocation(uTypeVariables::uTexture), 0);
+			glUniform1i(shader->GetUVariableLocation(uTypeVariables::uLit), mat->GetLit());
 
-		//Use Texture
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mat->GetTexture());
+			//Use Texture
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, mat->GetTexture());
+		}
 
+		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+		 //glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 		//Mesh
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0,vertexElements.size()/8);

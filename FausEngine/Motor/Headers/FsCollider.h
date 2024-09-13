@@ -1,7 +1,7 @@
 #ifndef FSCOLLIDER
 #define FSCOLLIDER
 
-#include"FsDLL.h"
+#include"FsExport.h"
 #include"FsMaths.h"
 
 namespace FausEngine {
@@ -16,7 +16,7 @@ namespace FausEngine {
 		no
 	};
 
-	class EXPORTDLL FsCollider
+	class FAUSENGINE_API  FsCollider
 	{
 	public:
 		FsCollider();

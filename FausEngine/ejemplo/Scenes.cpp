@@ -1,4 +1,6 @@
 #include"Scenes.h"
+#include"GL/glew.h"
+#include"glm/gtc/type_ptr.hpp"
 
 Intro::Intro()
 {
@@ -66,10 +68,10 @@ void Level1::Begin() {
 
 void Level1::Update(float deltaTime, float time) {
 
-	//plataforms.Tick(deltaTime, time, player, pause);
-	//coins.Tick(deltaTime, time, player, pause);
+	plataforms.Tick(deltaTime, time, player, pause);
+	coins.Tick(deltaTime, time, player, pause);
 	player.Tick(pause, deltaTime, time, plataforms.PlayertoPlataformCollision());
-	//item.Tick(deltaTime, time,player, pause);
+	item.Tick(deltaTime, time,player, pause);
 	ui.Tick(plataforms, player, coins, pause);
 
 	if (gameReference->GetKeyPress(Keys::P)) {//p
@@ -80,6 +82,9 @@ void Level1::Update(float deltaTime, float time) {
 }
 
 //=============================== Test ================================
+
+
+
 
 Test::Test() {
 	gR.reset(new SpacePlataform());
@@ -94,10 +99,10 @@ void Test::Begin() {
 	//LUZCES================
 	luzDireccional.Load(
 		FsVector3(-0.9f, -1, 0.2f),
-		FsVector3(5, 5, 5),
+		FsVector3(10, 10, 10),
 		FsVector3(0.9f, 0.9f, 0.9f),
 		FsVector3(0.5f, 0.5f, 0.5f));
-	//luzDireccional.Load();
+	
 
 	std::vector<std::string> caras = {
 	"Textures/Sk_GalaxyRt.png",
@@ -107,7 +112,13 @@ void Test::Begin() {
 	"Textures/Sk_GalaxyBk.png",
 	"Textures/Sk_GalaxyFt.png"
 	};
-	sky.Load(caras);
+	//sky.Load(caras);
+	sky.SetActive(false);
+	sky.SetColour({ 1.0,0.0,0.0 });
+	gR->SetSkybox(sky);
+
+
+	texto.Load("Fonts/waltographUI.ttf", 50, "Holaaa", FsVector3(20, 520, 0), FsVector3(1, 1, 1));
 	//sky.Load();
 
 	//jugador.Init(colisionalguna);
@@ -126,14 +137,15 @@ void Test::Begin() {
 	//malla->material.color = { 1,1,1 };
 	//malla->transform.scale = { 0.5f,0.5f,0.5f };
 
-	matMalla.Load({0,0,1});
+	matMalla.Load({ 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f }, { 0.9f,1.0f,0.9f }, 0.5f, "Textures/player-ball.png", true);
 	
-	matMalla2.Load({1,1,1});
+	matMalla2.Load({0,1,0});
 	//matMalla.Load(/*{ 0.5f,0.5f ,0.5f }*/{1,1,1}, { 0.1f, 0.1f, 0.1f }, { 1.0f, 1.0f, 1.0f }, 1, "Textures/player-ball.png", false);
 	malla.Load("Models/player-ball.obj");
 	//malla.material = matMalla;
-	malla.SetMaterial(matMalla);
-	
+	malla.SetMaterial(matMalla2);
+	malla.SetPosition({0,0,0});
+
 }
 
 void Test::CamaraFPS(float dt, float t)
@@ -164,7 +176,7 @@ void Test::CamaraFPS(float dt, float t)
 
 void Test::ControlFPS(float dt, float time) {
 
-	//CamaraFPS(dt, time);
+	CamaraFPS(dt, time);
 
 	//Teclado
 	float velocidad = 3.0f;
@@ -202,7 +214,8 @@ void Test::Update(float deltaTime, float time) {
 	
 	//malla.transform.position = { 0,0,0 };
 	malla.Render();
-	
+	texto.Render();
+
 }
 
 Test::~Test() {}

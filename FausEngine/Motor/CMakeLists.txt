@@ -3,7 +3,7 @@ file(GLOB CODIGO Source/*.cpp )
 
 add_library(FausEngine SHARED ${CODIGO})
 set_target_properties(FausEngine PROPERTIES 
-	COMPILE_DEFINITIONS EXPORTDLL
+	COMPILE_DEFINITIONS FAUSENGINE_EXPORTS
 	)	
 
 target_link_libraries(FausEngine ${CONAN_LIBS})

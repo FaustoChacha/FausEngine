@@ -13,14 +13,14 @@ int main() {
 
 	//scenes.push_back(new Intro());
 	//scenes.push_back(intro.get());
-	scenes.push_back(level1.get());
-	//escenas1.push_back(new Test);
+	//scenes.push_back(level1.get());
+	scenes.push_back(new Test);
 
 	if (game.Construct(1080, 720, "Space Plataform", false)) {
 		game.Run(scenes);
 	}
 	
-	scenes.clear();
+	//scenes.clear();
 }
 
 

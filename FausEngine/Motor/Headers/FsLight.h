@@ -1,11 +1,11 @@
 #ifndef FSLIGHT
 #define FSLIGHT
 
-#include"FsDLL.h"
+#include"FsExport.h"
 #include "FsMaths.h"
 
 namespace FausEngine {
-	class EXPORTDLL FsLight
+	class FAUSENGINE_API  FsLight
 	{
 	public:
 		FsLight();

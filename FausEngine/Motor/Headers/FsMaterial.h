@@ -1,7 +1,7 @@
 #ifndef FSMATERIAL
 #define FSMATERIAL
 
-#include"FsDLL.h"
+#include"FsExport.h"
 #include"FsMaths.h"
 
 #include<iostream>
@@ -9,7 +9,7 @@
 
 namespace FausEngine {
 
-	class EXPORTDLL FsMaterial
+	class FAUSENGINE_API  FsMaterial
 	{
 	public:
 		FsMaterial();

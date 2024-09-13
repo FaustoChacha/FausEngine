@@ -1,7 +1,7 @@
 #ifndef FSWINDOW
 #define FSWINDOW
 
-#include "FsDLL.h"
+#include "FsExport.h"
 
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
@@ -9,7 +9,7 @@
 
 namespace FausEngine {
 
-	class EXPORTDLL Window
+	class FAUSENGINE_API  Window
 	{
 	public:
 		Window();

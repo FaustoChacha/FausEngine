@@ -1,11 +1,11 @@
 #ifndef FSSPOTLIGHT
 #define FSSPOTLIGHT
 
-#include"FsDLL.h"
+#include"FsExport.h"
 #include"FsPointLight.h"
 
 namespace FausEngine {
-	class EXPORTDLL FsSpotLight : public FsPointLight
+	class FAUSENGINE_API  FsSpotLight : public FsPointLight
 	{
 	public:
 		FsSpotLight();

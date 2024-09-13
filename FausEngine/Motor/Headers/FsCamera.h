@@ -1,13 +1,13 @@
 #ifndef FSCAMERA
 #define FSCAMERA
 
-#include "FsDLL.h"
+#include "FsExport.h"
 #include "FsMaths.h"
 #include <iostream>
 
 namespace FausEngine {
 
-	class EXPORTDLL FsCamera
+	class FAUSENGINE_API  FsCamera
 	{
 	public:
 		FsCamera();

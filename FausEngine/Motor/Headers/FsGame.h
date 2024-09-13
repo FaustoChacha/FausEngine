@@ -1,7 +1,7 @@
 #ifndef FSGAME
 #define FSGAME
 
-#include"FsDLL.h"
+#include"FsExport.h"
 #include"FsScene.h"
 #include"FsCamera.h"
 #include"FsShader.h"
@@ -103,7 +103,7 @@ namespace FausEngine {
 		MENU = 348,
 	};
 
-	class EXPORTDLL FsGame
+	class FAUSENGINE_API  FsGame
 	{
 	public:
 		FsGame();

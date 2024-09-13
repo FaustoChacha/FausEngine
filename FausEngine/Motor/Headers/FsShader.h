@@ -1,7 +1,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include "FsDLL.h"
+#include "FsExport.h"
 #include "FsMaths.h"
 
 #include<string>
@@ -25,7 +25,7 @@ namespace FausEngine {
 		utexture
 	};
 
-	class EXPORTDLL FsShader
+	class FAUSENGINE_API  FsShader
 	{
 	public:
 		FsShader();

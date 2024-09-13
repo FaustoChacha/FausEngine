@@ -1,7 +1,7 @@
 #ifndef FSTEXT
 #define FSTEXT
 
-#include"FsDLL.h"
+#include"FsExport.h"
 #include"FsMaths.h"
 #include"FsShader.h"
 
@@ -12,13 +12,13 @@
 namespace FausEngine {
 
 	struct Character {
-		unsigned int texture; 
+		unsigned int texture = {};
 		FsVector3 size; 
 		FsVector3 offset; 
 		unsigned int advance;
 	};
 
-	class EXPORTDLL FsText
+	class FAUSENGINE_API  FsText
 	{
 	public:
 		FsText();

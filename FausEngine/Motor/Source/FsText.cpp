@@ -102,8 +102,9 @@ void FsText::Load(std::string path, int size, std::string text, FsVector3 pos, F
 			texture,
 			FsVector3(face->glyph->bitmap.width, face->glyph->bitmap.rows,0),
 			FsVector3(face->glyph->bitmap_left, face->glyph->bitmap_top,0),
-			face->glyph->advance.x
+			static_cast<unsigned int>(face->glyph->advance.x)
 		};
+
 
 		Characters.insert(std::pair<GLchar, Character>(i, character));
 	}

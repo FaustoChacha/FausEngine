@@ -1,11 +1,11 @@
 #ifndef FMATHS
 #define FMATHS
 
-#include"FsDLL.h"
+#include"FsExport.h"
 
 namespace FausEngine {
 
-	struct EXPORTDLL FsVector3 final
+	struct FAUSENGINE_API  FsVector3 final
 	{
 	public:
 		float x, y, z;
@@ -28,7 +28,7 @@ namespace FausEngine {
 		~FsVector3();
 	};
 
-	struct EXPORTDLL FsTransform final
+	struct FAUSENGINE_API  FsTransform final
 	{
 
 	public:

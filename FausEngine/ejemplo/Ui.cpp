@@ -21,13 +21,13 @@ void Ui::Init() {
 	imgLife1.Load("Textures/vida1.png");
 	imgLife1.SetScale({ 0.15f,0.2f,1 });
 	float y = -0.7f;
-	imgLife1.SetPosition({ 0.3,y,0 });
+	imgLife1.SetPosition({ 0.3f,y,0 });
 	
 	imgLife2 = imgLife1;
-	imgLife2.SetPosition({ 0.55,y,0 });
+	imgLife2.SetPosition({ 0.55f,y,0 });
 
 	imgLife3 = imgLife1;
-	imgLife3.SetPosition({ 0.8, y,0 });
+	imgLife3.SetPosition({ 0.8f, y,0 });
 
 	winImage.Load("Textures/ganaste.png");
 	winImage.SetScale({ 2,2,2 });
@@ -45,35 +45,29 @@ void Ui::Tick(Plataforms& plataforms, Player& jugador,Coins& coins, bool pause) 
 	//pruebaText.Render();
 
 	//pantallas
-	//if (plataforms.FinishedLevel()) {
-	//	pause = true;
-	//	if ((int)time % 2 == 0) {
-	//		finishImage.Render();
-	//	}
-	//	winImage.Render();
-	//}
+	if (plataforms.FinishedLevel()) {
+		pause = true;
+		//if ((int)time % 2 == 0) {
+			finishImage.Render();
+		//}
+		winImage.Render();
+	}
 
 	scoreText.Render();
 	scoreText.SetText(std::to_string(coins.GetScore()));
 
-	//if (jugador.GetNumberLifes() == 3) {
-		//lifeImages[0].Render();
-		//lifeImages[1].Render();
-		//lifeImages[2].Render();
+	if (jugador.GetNumberLifes() == 3) {
 		imgLife1.Render();
 		imgLife2.Render();
 		imgLife3.Render();
-	//}
-	//if (jugador.GetNumberLifes() == 2) {
-	//	//lifeImages[1].Render();
-	//	//lifeImages[2].Render();
-	//	imgLife2.Render();
-	//	imgLife3.Render();
-	//}
-	//if (jugador.GetNumberLifes() == 1) {
-	//	//lifeImages[2].Render();
-	//	imgLife3.Render();
-	//}
+	}
+	if (jugador.GetNumberLifes() == 2) {
+		imgLife2.Render();
+		imgLife3.Render();
+	}
+	if (jugador.GetNumberLifes() == 1) {
+		imgLife3.Render();
+	}
 
 	if (pause)pauseImage.Render();
 }

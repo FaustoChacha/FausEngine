@@ -14,7 +14,7 @@ Plataforms::~Plataforms()
 {
 }
 
-bool& Plataforms::PlayertoPlataformCollision() {
+bool Plataforms::PlayertoPlataformCollision() {
 	
 	return collision;
 }
@@ -24,8 +24,8 @@ bool Plataforms::FinishedLevel() {
 }
 
 void Plataforms::Init() {
-	
-	//plataforma grande---------------------------------------------------------
+
+	//Plataformas grandes
 	meshes[0].Load("Models/plataforma1.obj");
 	material1.Load({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f }, { 1,1,1 }, 2.5f, "Textures/plataforma1.png", false);
 
@@ -48,7 +48,7 @@ void Plataforms::Init() {
 	colliders[7].SetBoundMin({ -7.75f, -4.0f, -4.0f });
 	meshes[7].SetCollider(colliders[7]);
 
-	//plataforma mediana piramidal-----------------------------------------------------------
+	//Plataforma medianas
 	meshes[1].Load("Models/plataforma2.obj");
 	material2.Load({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f }, { 1,1,1 }, 5, "Textures/plataforma2.png", false);
 
@@ -101,7 +101,7 @@ void Plataforms::Init() {
 	colliders[12].SetId(12);
 	meshes[12].SetCollider(colliders[12]);
 
-	//plataforma redonda pequena
+	//Plataforma en movimiento
 	meshes[4].Load("Models/plataforma3.obj");
 	material3.Load({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f }, { 0.5f,0.5f,0.5f }, 5, "Textures/plataforma3.png", true);
 
@@ -124,7 +124,7 @@ void Plataforms::Init() {
 	colliders[6].SetId(6);
 	meshes[6].SetCollider(colliders[6]);
 
-	//plataforma final------------------
+	//Plataforma final
 	meshes[13].Load("Models/plataforma4.obj");
 	material4.Load({ 0.1f,0.1f,0.1f }, { 0.1f,0.1f,0.1f }, { 0.5f,0.5f,0.5f }, 5, "Textures/plataforma4.png", true);
 
@@ -137,9 +137,9 @@ void Plataforms::Init() {
 
 }
 
-void Plataforms::Tick(float deltaTime, float time, Player& player, bool& pausa) {
+void Plataforms::Tick(float deltaTime, float time, Player& player, bool pausa) {
 
-	//Se detecta con que plataforma se esta colisionando y se avisa con indexCollision	
+	//Se detecta con que plataforma se esta colisionando 	
 	for each (FsCollider var in colliders)
 	{
 		if (player.GetCollider().CheckCollision(var)) {
@@ -147,7 +147,7 @@ void Plataforms::Tick(float deltaTime, float time, Player& player, bool& pausa) 
 		}
 	}
 
-	//segun la plataforma con la que colisiona (indexCollision) se aplican difenretes fuerzas 
+	//Segun la plataforma con la que colisiona se aplican difenretes fuerzas 
 	float repulsion = 5.0f;
 	if (player.GetCollider().GetDirection(colliders[colliderId]) == CollisionDirection::RIGHT) {
 		player.SetPosition({ player.GetPosition().x + repulsion * deltaTime,
@@ -201,7 +201,7 @@ void Plataforms::Tick(float deltaTime, float time, Player& player, bool& pausa) 
 	
 
 	if (!pausa) {
-		//movimiento ocsilaTORIO PLATAFORMAS 4,5,6
+		//movimiento oscilatorio para plataformas 4,5,6
 		if (activateMovePlataforms) {
 			movePlataform += 0.01f;
 		}
@@ -215,7 +215,7 @@ void Plataforms::Tick(float deltaTime, float time, Player& player, bool& pausa) 
 			activateMovePlataforms = false;
 		}
 
-		//Se aplica fuerza de GRAVEDAD y se avisa si hay alguna cvolision con "collision"
+		//Se aplica fuerza de GRAVEDAD y se avisa si hay alguna colision con "collision"
 		if (!player.GetCollider().CheckCollision(colliders[colliderId])) {
 			player.SetPosition({ player.GetPosition().x,
 				player.GetPosition().y - 15 * deltaTime,

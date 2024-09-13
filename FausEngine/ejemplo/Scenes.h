@@ -62,12 +62,13 @@ public:
 	~Test();
 
 private:
-
+	FsText texto;
 
 	unique_ptr<SpacePlataform> gR;
-	
+	FsMesh colliderLimitMesh, malla;
+	FsCollider playerCollider;
 	FsMaterial matMalla, matMalla2;
-	FsMesh malla;
+	FsMesh playerMesh;
 	FsSkybox sky;
 	FsDireciontalLight luzDireccional;
 
